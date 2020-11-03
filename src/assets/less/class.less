@@ -1,0 +1,151 @@
+
+input {
+	box-sizing: border-box;
+	padding: 7px 10px;
+	border-radius: 2px;
+	transition: all 0.5s;
+	border: 1px solid #e3e3e3;
+	&:focus {
+		border-color: @blue;
+	}
+}
+input::-webkit-input-placeholder {
+	color: #d3d3d3;
+}
+textarea::-webkit-input-placeholder {
+	color: #d3d3d3;
+}
+
+body {
+	overflow-x: hidden;
+}
+
+a {
+	transition: all 0.3s;
+	color: #333;
+	&:hover {
+		color: @blue;
+	}
+}
+
+.hover{
+	.hover;
+}
+
+.input_error_placeholder::-webkit-input-placeholder {
+	transition: all 0.5s;
+	color: @red !important;
+}
+
+//组件样式重置
+.van-button{
+	height: 40px;
+}
+.van-notify{
+	width: 40%;
+	top: 10%;
+	left: 30%;
+	border-radius: 5px;
+	
+}
+.van-collapse-item__content {
+	background: none;
+	color: #cbd0d3;
+
+	li {
+		padding: 5px;
+		.hover;
+	}
+
+	.active {
+		color: @blue;
+	}
+}
+.van-collapse-item--border::after {
+	display: none;
+}
+.van-collapse-item__title--expanded::after {
+	display: none;
+}
+
+.van-cell__right-icon {
+	color: white;
+}
+
+.van-dropdown-menu {
+	.van-dropdown-menu__bar {
+		background: none;
+		height: auto;
+		border: 1px solid #e3e3e3;
+		box-shadow: none;
+		padding: 7.5px;
+		padding-right: 15px;
+	}
+}
+
+
+.van-pagination{
+	display: block;
+	.clearfix;
+}
+.van-pagination__item{
+	float: left;
+	width: 32px;
+	height: 32px;
+	line-height: 32px;
+	box-sizing: border-box;
+	border: 1px solid #D3D3D3;
+	margin-left: 10px;
+	transition: all .5s;
+	border-radius: 3px;
+	min-width: auto;
+	color: rgba(102, 102, 102, 1);
+	display: block;
+}
+
+
+.van-pagination__item--active{
+	border-color: @blue;
+	background-color: @blue;
+	color: #fff;
+}
+.van-pagination__item::after{
+	display: none;
+}
+
+@media (min-width: 1023px) {
+	.van-dropdown-item--down {
+		position: absolute;
+		top: 110% !important;
+		height: 180px;
+		width: 160px;
+		.van-dropdown-item__content {
+			max-height: calc(100% - 2px);
+			width: calc(100% - 4px);
+			margin: 2px;
+			box-shadow: 0 0 1px 2px #eee;
+		}
+		.van-overlay {
+			display: none;
+		}
+		.van-cell__value {
+			width: 20px;
+			flex: none;
+		}
+	}
+
+	.van-dropdown-menu__item {
+		justify-content: left;
+		position: relative;
+	}
+	.van-dropdown-menu__title {
+		position: static;
+	}
+	.van-dropdown-menu__title::after {
+	}
+	
+	
+	
+	
+	
+}
