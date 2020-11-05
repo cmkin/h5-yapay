@@ -580,6 +580,13 @@ export default {
 				}
 			}
 		}
+		
+		.btn {
+			& > span {
+				color: rgba(179, 179, 179, 1);
+			}
+		}
+		
 	}
 
 	.page_change {

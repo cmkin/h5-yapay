@@ -1,7 +1,7 @@
 <template>
 	<div class="global_table" :ref="refDom">
 		<ul class="title" >
-			<li v-for="item in nowTitles" v-if="item.isShow" :class="{'hide':item.hide}" :style="{flex:item.flex}" v-html="item.title"></li>
+			<li v-for="item in nowTitles" v-if="item.isShow"  :style="{flex:item.flex}" v-html="item.title"></li>
 		</ul>
 		<ul class="item" v-for="item in datas">
 			<li v-for="child in nowTitles" v-if="child.isShow"  :style="{flex:child.flex}">
@@ -34,10 +34,10 @@
 			},
 		},
 		mounted() {
-			this.nowTitles = this.titles.map(item=>{
+			this.nowTitles =this.$tableCheakHide( this.titles.map(item=>{
 				item.isShow = true
 				return item
-			})
+			}) )
 		},
 		watch:{
 			'isPhone'(){
