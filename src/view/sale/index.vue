@@ -30,12 +30,17 @@
 			}
 		},
 		mounted() {
-			
-				this.headerH = this.$dom.getwh(".components_header .main") +'px'
+				setTimeout(()=>{
+					this.headerH = this.$dom.getwh(".components_header .main") +'px !important'
+				},300)
+				
 				window.addEventListener("resize",()=>{
-					this.headerH = this.$dom.getwh(".components_header .main") +'px'
+					this.headerH = this.$dom.getwh(".components_header .main") +'px !important'
 				})
 		
+			
+		},
+		beforeDestroy() {
 			
 		},
 		methods:{
@@ -49,7 +54,7 @@
 		.header{
 			position: fixed;
 			left: 0;
-			top: 0px;
+			top: -80px !important;
 			width: 100%;
 			transition: top 0.5s;
 			background: #fff;

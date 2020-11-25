@@ -59,7 +59,46 @@ const routes = [{
 					}
 				]
 			},
-
+			{
+				path: 'personal',
+				component: () => import('_v/personal/index'),
+				children: [{
+						path: '',
+						redirect: 'data'
+					},
+					{
+						path: 'data',
+						component: () => import('_v/personal/data/index'),
+						meta: {
+							title: "个人资料"
+						}
+					},
+					{
+						path: 'account',
+						component: () => import('_v/personal/account/index'),
+						children:[{
+								path: '',
+								redirect: 'security'
+							},
+							{
+								path: 'security',
+								component: () => import('_v/personal/account/security'),
+								meta: {
+									title: "账户安全"
+								}
+							},
+							{
+								path: 'identity',
+								component: () => import('_v/personal/account/identity'),
+								meta: {
+									title: "身份认证"
+								}
+							},
+						]
+						
+					}
+				]
+			}
 		]
 	}
 

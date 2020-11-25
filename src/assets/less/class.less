@@ -1,9 +1,12 @@
 
-input {
+input,textarea{
 	box-sizing: border-box;
 	padding: 7px 10px;
 	border-radius: 2px;
 	transition: all 0.5s;
+	display: inline-block;
+	width: 100%;
+	color: #333;
 	border: 1px solid #e3e3e3;
 	&:focus {
 		border-color: @blue;
@@ -11,9 +14,20 @@ input {
 }
 input::-webkit-input-placeholder {
 	color: #d3d3d3;
+	font-weight: 200;
+}
+input:disabled{
+	background-color: #E3E3E3 !important;
+	color: #333 !important;
+	font-weight: 200;
+}
+input:disabled::-webkit-input-placeholder{
+	color: #333 !important;
+	font-weight: 200;
 }
 textarea::-webkit-input-placeholder {
 	color: #d3d3d3;
+	
 }
 
 body {

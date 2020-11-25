@@ -1,34 +1,32 @@
 <template>
 	<div class="g_select" @click.stop>
 		<div class="icon_s" v-if="multiple">
-			<div class="title" @click="flag = !flag">
+			<div class="title" :class="{'disable':disable}" @click="open">
 				<span>{{ multipleTitle }}</span>
 				<van-icon :class="{ down: flag }" name="arrow-down" size="14" />
 			</div>
 			<transition name="top" mode="out-in">
-				
-					<ul v-if="flag" :style="{height:height}">
-						<vue-scroll :ops="ops"  ref="myscroll">
+				<ul v-if="flag" :style="{ height: height }">
+					<vue-scroll :ops="ops" ref="myscroll">
 						<li :class="sellPayClass(item.id)" @click="change(item.id)" v-for="(item, index) in lists">
 							<img :src="item.img" alt="" />
 							<span>{{ item[showKey] }}</span>
 							<van-icon name="success" />
 						</li>
-						</vue-scroll>
-					</ul>
-				
+					</vue-scroll>
+				</ul>
 			</transition>
 		</div>
 
 		<div class="icon_s" v-else-if="icon">
-			<div class="title" @click="flag = !flag">
-				<img :src="lists[sActive] ? lists[sActive].img : ''" alt="" />
-				<span>{{ lists[sActive] ? lists[sActive][showKey] : '' }}</span>
+			<div class="title" :class="{'disable':disable}"  @click="open">
+				<img :src="dTitle ? dTitle.img : ''" alt="" />
+				<span>{{ dTitle ? dTitle.title : '' }}</span>
 				<van-icon :class="{ down: flag }" name="arrow-down" size="14" />
 			</div>
 			<transition name="top" mode="out-in">
-				<ul v-if="flag" :style="{height:height}">
-					<vue-scroll :ops="ops"  ref="myscroll">
+				<ul v-if="flag" :style="{ height: height }">
+					<vue-scroll :ops="ops" ref="myscroll">
 						<li :class="{ active: sActive == item.id }" @click="change(item.id)" v-for="(item, index) in lists">
 							<img :src="item.img" alt="" />
 							<span>{{ item[showKey] }}</span>
@@ -39,13 +37,13 @@
 		</div>
 
 		<div class="defalut_s" v-else>
-			<div class="changed" :class="{ hover: hover }" @click="flag = !flag">
-				<span>{{ lists[sActive] ? lists[sActive][showKey] : '' }}</span>
+			<div class="changed" :class="{ hover: hover , 'disable':disable }" @click="open">
+				<span>{{ dTitle ? dTitle.title : '' }}</span>
 				<van-icon name="arrow-up" size="12" :class="{ c: flag }" />
 			</div>
 			<transition name="top" mode="out-in">
-				<ul v-if="flag" :style="{height:height}">
-					<vue-scroll :ops="ops"  ref="myscroll">
+				<ul v-if="flag" :style="{ height: height }">
+					<vue-scroll :ops="ops" ref="myscroll">
 						<li :class="{ active: item.id == sActive }" @click="change(item.id)" v-for="(item, index) in lists">{{ item[showKey] }}</li>
 					</vue-scroll>
 				</ul>
@@ -63,21 +61,19 @@ export default {
 			sActive: null,
 			ops: {
 				vuescroll: {
-					wheelScrollDuration:500
+					wheelScrollDuration: 500
 				},
-				scrollPanel: {
-					
-				},
+				scrollPanel: {},
 				rail: {},
 				bar: {
-					background:"#e3e3e3"
+					background: '#e3e3e3'
 				}
 			}
 		};
 	},
 	computed: {
 		multipleTitle() {
-			if (this.multiple && this.sActive) {
+			if (this.multiple && this.sActive != null) {
 				let arr = this.lists
 					.filter((item, index) => {
 						return this.sActive.some((tt, ii) => tt == item.id);
@@ -86,6 +82,24 @@ export default {
 
 				return arr.length ? arr.join(',') : '';
 			}
+		},
+		dTitle() {
+			if (this.sActive == null) {
+				return;
+			}
+			let item = this.lists.filter(item => item.id == this.sActive);
+
+			if (!item.length) {
+				return {
+					title: '',
+					img: ''
+				};
+			} else {
+				return {
+					title: item[0][this.showKey],
+					img: item[0].hasOwnProperty('img') ? item[0].img : ''
+				};
+			}
 		}
 	},
 	model: {
@@ -93,6 +107,10 @@ export default {
 		event: 'change'
 	},
 	props: {
+		disable:{
+			type:Boolean,
+			default:false
+		},
 		active: {
 			type: [String, Number, Array]
 		},
@@ -118,9 +136,9 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		height:{
-			type:[String,Number],
-			default:"auto"
+		height: {
+			type: [String, Number],
+			default: 'auto'
 		}
 	},
 	watch: {
@@ -142,6 +160,12 @@ export default {
 		});
 	},
 	methods: {
+		open(){
+			if(this.disable){
+				return
+			}
+			this.flag = !this.flag;
+		},
 		sellPayClass(id) {
 			return this.sActive.includes(id) ? 'sell_active' : '';
 		},
@@ -173,8 +197,11 @@ export default {
 	.icon_s {
 		.select_down_icon;
 	}
-	.max_height{
-		
+	.max_height {
+	}
+	.disable{
+		background-color: #E3E3E3 !important;
+		cursor: not-allowed !important;
 	}
 }
 </style>

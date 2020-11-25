@@ -155,6 +155,7 @@ export default {
 				padding: 10px 20px;
 				font-size: 14px;
 				border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+				position: relative;
 			}
 			.btns {
 				padding: 20px;

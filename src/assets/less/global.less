@@ -40,7 +40,7 @@
 @disabled-opacity: 0.5;
 @background-color: @gray-1;
 @background-color-light: #fafafa;
-@text-link-color: #576b95;
+@text-link-color: #0466C8;
 
 
 // Font
@@ -96,7 +96,7 @@
 @disabled-opacity: 0.5;
 @background-color: @gray-1;
 @background-color-light: #fafafa;
-@text-link-color: #576b95;
+@text-link-color: #0466C8;
 
 
 // Font
@@ -252,14 +252,18 @@
 
 .select_down_noicon(){
 	display: inline-block;
+	width: 100%;
 	position: relative;
 	.changed {
+		cursor: pointer;
 		//.hover;
 		i {
 			display: inline-block;
 			position: relative;
 			top: 1px;
 			transition: transform .3s;
+			float: right;
+			margin-top: 5px;
 		}
 		.c{
 			transform: rotate(180deg);
@@ -276,15 +280,17 @@
 			display: inline-block;
 		}
 	}
-
+	
 	& > ul {
 		z-index: 100;
-		width: 120px;
+		width: 100%;
+		min-width: 120px;
 		position: absolute;
 		top: 140%;
 		box-shadow: 0 0 1px 2px #eee;
 		border-radius: 0;
 		right: 0;
+		margin-bottom: 20px;
 		background: #fff;
 		color: #666;
 
@@ -292,9 +298,9 @@
 			color: #666;
 			width: 100%;
 			box-sizing: border-box;
-			border-right: 1px solid transparent;
+			border-right: 2px solid transparent;
 			padding: 10px;
-			text-align: center;
+			text-align: left;
 			.hover;
 		}
 
@@ -304,27 +310,30 @@
 			border-color: @blue;
 		}
 	}
+
+
 }
 
 .select_down_icon(){
 	position: relative;
 	.title {
 		cursor: pointer;
-	
 		img {
 			width: 16px;
 			height: 15px;
 			margin-right: 8px;
+			position: relative;
+			top: 2px;
 		}
 	
 		span {
-			position: relative;
-			top: -2px;
+			
 		}
 	
 		i {
 			float: right;
 			transition: all .3s;
+			top: 3px;
 		}
 	
 		.down {
@@ -339,9 +348,11 @@
 		left: 0.5%;
 		width: 99%;
 		z-index: 100;
+		margin-bottom: 20px;
 		box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
 	
 		li {
+			border-right: 2px solid transparent;
 			padding: 15px;
 			.hover;
 	
@@ -360,6 +371,7 @@
 	
 		.active {
 			background: #F1F9FF;
+			border-color: @blue;
 		}
 	
 		.sell_active {

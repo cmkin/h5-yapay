@@ -3,6 +3,8 @@ module.exports = {
 	global: {
 		logo: require("_a/img/logo.png"),
 		qsr: '请输入',
+		qxz: '请选择',
+		jyfl:'交易手续费费率:',
 		usdt:require("_a/img/usdt.png"),
 		cny:require("_a/img/cny.png"),
 		payType:[
@@ -32,7 +34,7 @@ module.exports = {
 			name: "YaPay",
 			meun: [{
 					title: "法币交易",
-					to: ''
+					to: '/index/sale/quickBuySell'
 				},
 				{
 					title: "行情",
@@ -55,7 +57,28 @@ module.exports = {
 				},
 			],
 			login: "登录",
-			reg: "注册"
+			reg: "注册",
+			loginOk:{
+				title:'资产管理',
+				list:[
+					{
+						text:'账户安全',
+						to:'/index/personal/account/security'
+					},
+					{
+						text:'身份认证',
+						to:''
+					},
+					{
+						text:'收付款账户设置',
+						to:''
+					},
+					{
+						text:'退出登录',
+						event:'logout'
+					}
+				]
+			}
 		},
 		fonter: {
 			name: "YAPAY",
@@ -154,7 +177,8 @@ module.exports = {
 			fbsx:"放币失效",
 			rzdj:"认证等级",
 			cdv:"成单/成单率",
-			csqx:"{}后超时取消"
+			csqx:"{}后超时取消",
+			sendCode:'发送验证码'
 		}
 	},
 	//首页
@@ -268,7 +292,8 @@ module.exports = {
 				fkfs:'付款方式',
 				ckdj:'参考单价',
 				ljgm:'立即购买',
-				sxf:'交易手续费费率'
+				sxf:'交易手续费费率',
+				km:'可买数量'
 			},
 			//卖
 			sell:{
@@ -520,7 +545,196 @@ module.exports = {
 			buy:{
 				ts:"交易说明",
 				tst:'转完账后顺手加支付宝好友</br>不实名转账退款收取10%的手续费。'
+			},
+			orderForm:{
+				dqpk:"当前盘口价格:",
+				wtlxt:'委托类型',
+				wtlx:[{title:'快捷委托单',id:1},{title:'自选委托单',id:2}],
+				//购买
+				jyjg:'交易价格(固定价格)',
+				srjy:'请输入交易价格',
+				gmsl:'购买数量',
+				gmje:'购买金额',
+				zdmr:'最低买入',
+				sjfw:'交易时间范围',
+				ks:'开始时间',
+				js:'结束时间',
+				fkfs:'付款方式',
+				jysm:'交易说明(选填)',
+				jysmp:'交易说明50字以内',
+				dsxz:'对手限制(选填)',
+				rzdj:'认证等级',
+				zcsj:'注册时间',
+				//出售
+				cssl:'出售数量',
+				csje:'出售金额',
+				zdcs:'最低出售',
+				skfs:'收款方式',
+				fksj:'付款时间',
+				
+				//确认发布-弹窗
+				okwt:{
+					buy:{
+						title:'确认购买',
+						list:[
+							{
+								name:'付款方式',
+								key:'payType'
+							},
+							{
+								name:'购买单价',
+								key:'price'
+							},
+							{
+								name:'购买数量',
+								key:'num'
+							},
+							{
+								name:'最低买入',
+								key:'lowBuy'
+							},
+							{
+								name:'交易时间',
+								key:'time'
+							},
+							{
+								name:'对手限制',
+								key:'limt'
+							}
+						]
+					},
+					sell:{
+						title:'确认出售',
+						list:[
+							{
+								name:'收款方式',
+								key:'skType'
+							},
+							{
+								name:'出售单价',
+								key:'skType'
+							},
+							{
+								name:'出售数量',
+								key:'skType'
+							},
+							{
+								name:'最低卖出',
+								key:'skType'
+							},
+							{
+								name:'付款时间',
+								key:'skType'
+							},
+							{
+								name:'交易时间',
+								key:'skType'
+							},
+							{
+								name:'对手限制',
+								key:'skType'
+							}
+						],
+						lowts:'您的出售价格低于当前盘口价格{}，是否继续发布？'
+					}
+				}
 			}
+		}
+		
+	},
+	
+	//个人中心
+	personal:{
+		title:'个人中心',
+		yhm:'用户名:',
+		tlists:[
+			{
+				text:'总成交单数',
+				key:''
+			},
+			{
+				text:'完成率',
+				key:''
+			},
+			{
+				text:'平均付款时间',
+				key:''
+			},
+			{
+				text:'平均放币时间',
+				key:''
+			}
+		],
+		//账户设置
+		account:{
+			title:'账号设置',
+			llists:[
+				{
+					text:'账户安全',
+					to:'security'
+				},
+				{
+					text:'身份认证',
+					to:'identity'
+				},
+				{
+					text:'收付款账户设置',
+					to:'security3'
+				}
+			],
+			//安全
+			security:{
+				title:"账户安全",
+				bd:'绑定',
+				xg:'修改',
+				lt:['低','中','高'],
+				ccs:[
+					{
+						t:'手机验证',
+						p:'用于登录、找回密码、修改安全设置时收取验证短信'
+					},
+					{
+						t:'邮箱验证',
+						p:'用于登录、找回密码、修改安全设置时收取验证短信'
+					},
+					{
+						t:'登录密码',
+						p:'用于保护账户安全'
+					},
+					{
+						t:'交易密码',
+						p:'用于保护资产安全'
+					}
+				],
+				
+				bdyx:'绑定邮箱',
+				bdtips:'邮箱绑定后，无法更换，请填写真实有效邮箱',
+				yx:'邮箱',
+				yxcode:'邮箱验证码',
+				
+				bdphone:'更换手机号',
+				ptips:'更换手机号后，下次登录可使用新手机号登录',
+				phone:'新手机号',
+				phoneCode:'手机验证码'
+				
+			},
+			//身份认证
+			identity:{
+				title:'身份认证',
+				qrz:'去认证',
+				lv1:'Lv.1基础认证',
+				lv1p:'认证后24小时内提币上限1000 USDT；24小时内交易上限3000 USDT',
+				lv2:'Lv.2视频认证',
+				lv2p:'认证后24小时内提币上限100000 USDT；24小时内交易上限300000 USDT',
+				dqrz:'当前认证等级：',
+				ky:'可用权限',
+				kys:[
+					'可以买币、卖币、充币、提币',
+					'24小时内提币限额{}usdt',
+					'24小时内交易限额{}usdt'
+				]
+			}
+			
 		}
 		
 	}

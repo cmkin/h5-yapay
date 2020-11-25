@@ -1,108 +1,12 @@
 <template>
 	<div class="view_quickSale_buy global_main">
 		<div class="main">
-			<van-tabs v-model="tabType" line-height="0" lazy-render animated>
+			<van-tabs v-model="tabType" swipeable line-height="0" lazy-render animated>
 				<van-tab :title="$t('quickSale.quickBuySell.buy.wym')">
-					<ul class="items" ref="buy">
-						<li>
-							<p class="t">
-								{{ $t('quickSale.quickBuySell.buy.mrsl') }}
-							</p>
-							<div class="input">
-								<input type="number" :error="$t('quickSale.quickBuySell.buy.mrsl')" v-model="buy.num" :placeholder="$t('global.qsr') + $t('quickSale.quickBuySell.buy.mrsl') ">
-								<span>
-									<img :src="$t('global.usdt')" alt="">
-									<b>USDT</b>
-								</span>
-							</div>
-						</li>
-						<li class="jh">
-							<svg t="1596700800611" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-							 p-id="8219" width="24" height="24">
-								<path d="M912 369.1c0 4.1-1.3 7.6-4 10.3L765.2 522.3c-2.7 2.7-6.1 4-10.3 4-3.8 0-7.2-1.4-10.1-4.2-2.8-2.8-4.2-6.2-4.2-10.1v-85.8H126.3c-3.8 0-7.2-1.4-10.1-4.2-2.8-2.8-4.2-6.2-4.2-10.1v-85.8c0-3.8 1.4-7.2 4.2-10.1 2.8-2.8 6.2-4.2 10.1-4.2h614.3V226c0-4.1 1.3-7.6 4-10.3 2.7-2.6 6.1-4 10.3-4 3.5 0 7.1 1.5 10.7 4.5L908 358.6c2.7 2.9 4 6.3 4 10.5z m0 242.9v85.8c0 3.8-1.4 7.2-4.2 10.1-2.8 2.8-6.2 4.2-10.1 4.2H283.4v85.8c0 3.8-1.4 7.2-4.2 10.1-2.8 2.8-6.2 4.2-10.1 4.2-3.5 0-7.1-1.5-10.7-4.5L116.1 664.9c-2.7-2.7-4-5.9-4-9.9 0-4.1 1.3-7.6 4-10.3L259 501.8c2.7-2.7 6.1-4 10.3-4 3.8 0 7.2 1.4 10.1 4.2s4.2 6.2 4.2 10.1v85.8h614.3c3.8 0 7.2 1.4 10.1 4.2 2.6 2.7 4 6 4 9.9z"
-								 p-id="8220"></path>
-							</svg>
-						</li>
-						<li>
-							<p class="t">
-								{{ $t('quickSale.quickBuySell.buy.mrje') }}
-							</p>
-							<div class="input">
-								<input type="number" :error="$t('quickSale.quickBuySell.buy.mrje')" v-model="buy.price" :placeholder="$t('global.qsr') + $t('quickSale.quickBuySell.buy.mrje') ">
-								<span>
-									<img :src="$t('global.cny')" alt="">
-									<b>CNY</b>
-								</span>
-							</div>
-						</li>
-						<li>
-							<p class="t">{{ $t('quickSale.quickBuySell.buy.fkfs') }}</p>
-							<div class="pay_type">		
-								<myselect v-model="buy.active" height="160px"  icon :lists="$t('global.payType')"></myselect>
-							</div>
-						</li>
-					</ul>
-					<div class="ckdj">
-						<span> {{ $t('quickSale.quickBuySell.buy.ckdj') }}:</span>
-						<i>7.03 CNY/USDT</i>
-					</div>
-					<div class="btn">
-						<van-button :disabled="!(buy.num>0 && buy.price>0)" @click="buySellM(1)" block type="info"> {{ $t('quickSale.quickBuySell.buy.ljgm') }} </van-button>
-						<p>{{ $t('quickSale.quickBuySell.buy.sxf') }}:0%</p>
-					</div>
+					<buy @okBuySell="okBuySellM"  ref="buy"></buy>
 				</van-tab>
 				<van-tab :title="$t('quickSale.quickBuySell.sell.wym')">
-					<ul class="items" ref="sell">
-						<li class="sell_num">
-							<p class="t">
-								{{ $t('quickSale.quickBuySell.sell.mrsl') }}
-							</p>
-							<div class="input">
-								<input type="number" v-model="sell.num" :error="$t('quickSale.quickBuySell.sell.mrsl')" :placeholder="$t('global.qsr') + $t('quickSale.quickBuySell.sell.mrsl') ">
-								<span>
-									<img :src="$t('global.usdt')" alt="">
-									<b>USDT</b>
-								</span>
-							</div>
-							<div class="num">
-								<span>{{ $t('quickSale.quickBuySell.sell.ky') }} 10.00</span>
-								<i> {{ $t('quickSale.quickBuySell.sell.zd') }}</i>
-							</div>
-						</li>
-						<li class="jh">
-							<svg t="1596700800611" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-							 p-id="8219" width="24" height="24">
-								<path d="M912 369.1c0 4.1-1.3 7.6-4 10.3L765.2 522.3c-2.7 2.7-6.1 4-10.3 4-3.8 0-7.2-1.4-10.1-4.2-2.8-2.8-4.2-6.2-4.2-10.1v-85.8H126.3c-3.8 0-7.2-1.4-10.1-4.2-2.8-2.8-4.2-6.2-4.2-10.1v-85.8c0-3.8 1.4-7.2 4.2-10.1 2.8-2.8 6.2-4.2 10.1-4.2h614.3V226c0-4.1 1.3-7.6 4-10.3 2.7-2.6 6.1-4 10.3-4 3.5 0 7.1 1.5 10.7 4.5L908 358.6c2.7 2.9 4 6.3 4 10.5z m0 242.9v85.8c0 3.8-1.4 7.2-4.2 10.1-2.8 2.8-6.2 4.2-10.1 4.2H283.4v85.8c0 3.8-1.4 7.2-4.2 10.1-2.8 2.8-6.2 4.2-10.1 4.2-3.5 0-7.1-1.5-10.7-4.5L116.1 664.9c-2.7-2.7-4-5.9-4-9.9 0-4.1 1.3-7.6 4-10.3L259 501.8c2.7-2.7 6.1-4 10.3-4 3.8 0 7.2 1.4 10.1 4.2s4.2 6.2 4.2 10.1v85.8h614.3c3.8 0 7.2 1.4 10.1 4.2 2.6 2.7 4 6 4 9.9z"
-								 p-id="8220"></path>
-							</svg>
-						</li>
-						<li>
-							<p class="t">
-								{{ $t('quickSale.quickBuySell.sell.mrje') }}
-							</p>
-							<div class="input">
-								<input type="number" v-model="sell.price" :error="$t('quickSale.quickBuySell.sell.mrje')" :placeholder="$t('global.qsr') + $t('quickSale.quickBuySell.sell.mrje') ">
-								<span>
-									<img :src="$t('global.cny')" alt="">
-									<b>CNY</b>
-								</span>
-							</div>
-						</li>
-						<li>
-							<p class="t">{{ $t('quickSale.quickBuySell.sell.fkfs') }}</p>
-							<div class="pay_type">
-								<myselect v-model="sell.active"  height="160px"  multiple :lists="$t('global.payType')"></myselect>
-							</div>
-						</li>
-					</ul>
-					<div class="ckdj">
-						<span> {{ $t('quickSale.quickBuySell.sell.ckdj') }}:</span>
-						<i>7.03 CNY/USDT</i>
-					</div>
-					<div class="btn">
-						<van-button :disabled="!(sell.num>0 && sell.price>0)" block @click="buySellM(2)" type="info"> {{ $t('quickSale.quickBuySell.sell.ljgm') }} </van-button>
-						<p>{{ $t('quickSale.quickBuySell.sell.sxf') }}:0%</p>
-					</div>
+					<sell @okBuySell="okBuySellM"  ref="sell"></sell>
 				</van-tab>
 			</van-tabs>
 		</div>
@@ -128,23 +32,12 @@
 </template>
 
 <script>
+	import buy from './buy'
+	import sell from './sell'
 	export default {
 		data() {
-			return {
-				
-				tabType: 0,
-				buy: {
-					flag: false,
-					active: null,
-					num:'',
-					price:''
-				},
-				sell: {
-					flag: false,
-					active: [],
-					num:'',
-					price:''
-				},
+			return {		
+				tabType: 0,				
 				//弹窗
 				okBuySell:{
 					show:false,
@@ -155,61 +48,14 @@
 				}
 			}
 		},
-		filters: {
-			sellPayType(arr) {
-				return arr.map(item => item.title).join(",")
-			}
-		},
+		components:{buy,sell},
 		mounted() {
-			this.buy.active = this.$t('global.payType')[0].id
-			this.sell.active = this.$t('global.payType').map(item=>item.id)
 			
 		},
-		watch:{
-			tabType(){
-				this.buy.flag = false
-				this.sell.flag = false
-			}
-		},
+		watch:{},
 		methods: {
-
-			buySellM(type){
-			
-				if(type==1){
-					let payType = this.$t('global.payType').filter(item=>item.id == this.buy.active)[0]
-					this.okBuySell={
-						show:this.$inputCheak(this.$refs.buy),
-						type:type,
-						title:this.$t('quickSale.quickBuySell.okBuy.title'),
-						lists:this.$t('quickSale.quickBuySell.okBuy.list'),
-						datas:{
-							payType:payType.title,
-							img:payType.img,
-							price:this.buy.price,
-							nums:this.buy.num,
-							allPrice:Number(this.buy.num * this.buy.price).toFixed(2)
-						}
-					}
-				}
-				
-				if(type==2){
-					
-					let payType = this.$t('global.payType').filter(item=>this.sell.active.some(tt=>tt==item.id))
-
-					this.okBuySell={
-						show:this.$inputCheak(this.$refs.sell),
-						type:type,
-						title:this.$t('quickSale.quickBuySell.okSell.title'),
-						lists:this.$t('quickSale.quickBuySell.okSell.list'),
-						datas:{
-							payType:payType.map(item => item.title).join(","),
-							price:this.sell.price,
-							nums:this.sell.num,
-							allPrice:Number(this.sell.num * this.sell.price).toFixed(2)
-						}
-					}
-				}
-				
+			okBuySellM(obj){
+				this.okBuySell = obj
 			},
 			okPay(){
 				let path = ''
@@ -228,7 +74,7 @@
 	}
 </script>
 
-<style lang="less" scoped="scoped">
+<style lang="less">
 	
 	.view_quickSale_buy {
 		overflow-y: hidden;
