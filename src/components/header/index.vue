@@ -22,10 +22,23 @@
 
 					<div class="loginok" v-else>
 						<div class="select defalut_s">
-							<div class="changed" @click.stop="loginok.flag = !loginok.flag">
+							<div class="changed" @click.stop="loginZc.flag = !loginZc.flag">
 								<span>{{ $t('global.header.loginOk.title') }}</span>
-								<van-icon name="arrow-up" size="12" :class="{ c: loginok.flag }" />
+								<van-icon name="arrow-up" size="12" :class="{ c: loginZc.flag }" />
 							</div>
+							<transition name="top" mode="out-in">
+								<ul v-if="loginZc.flag">
+									<li class="user" @click="goLink({to:'/index/personal'})">
+										<p>UID : HK57FG</p>
+										<p>用户昵称</p>
+									</li>
+									<li :class="{active:index==loginZc.active}" @click="goLink(item)" v-for="(item, index) in $t('global.header.loginOk.list')">{{ item.text }}</li>
+								</ul>
+							</transition>
+						</div>
+						
+						<div class="mine" >
+							<i class="iconfont icon-lianxiren" @click.stop="loginok.flag = !loginok.flag"></i>
 							<transition name="top" mode="out-in">
 								<ul v-if="loginok.flag">
 									<li class="user" @click="goLink({to:'/index/personal'})">
@@ -33,19 +46,6 @@
 										<p>用户昵称</p>
 									</li>
 									<li :class="{active:index==loginok.active}" @click="goLink(item)" v-for="(item, index) in $t('global.header.loginOk.list')">{{ item.text }}</li>
-								</ul>
-							</transition>
-						</div>
-						
-						<div class="mine">
-							<i class="iconfont icon-lianxiren"></i>
-							<transition name="top" mode="out-in">
-								<ul v-if="false">
-									<li class="user" @click="goLink({to:'/index/personal'})">
-										<p>UID : HK57FG</p>
-										<p>用户昵称</p>
-									</li>
-									<li :class="{active:index==loginok.active}" v-for="(item, index) in $t('global.header.loginOk.list')">{{ item.text }}</li>
 								</ul>
 							</transition>
 						</div>
@@ -104,6 +104,10 @@ export default {
 			phoneMuen: false,
 			activeNames: [],
 			loginok:{
+				flag:false,
+				active:0
+			},
+			loginZc:{
 				flag:false,
 				active:0
 			}
@@ -264,6 +268,9 @@ export default {
 				}
 				.mine{
 					.select_down_noicon;
+					&>ul{
+						width: 170px;
+					}
 					display: inline-block;
 					width: auto;
 					&>i{

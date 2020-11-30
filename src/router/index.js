@@ -94,6 +94,13 @@ const routes = [{
 									title: "身份认证"
 								}
 							},
+							{
+								path: 'payment',
+								component: () => import('_v/personal/account/payment'),
+								meta: {
+									title: "收付款账户设置"
+								}
+							}
 						]
 						
 					}

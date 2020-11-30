@@ -28,7 +28,7 @@
 		},
 		methods:{
 			setMainHeight(){
-				let mainHeight = ( document.documentElement.clientHeight || document.body.clientHeight ) - this.$dom.getwh(".components_header .clear_header") - this.$dom.getwh(".components_fonter")
+				let mainHeight = ( document.documentElement.clientHeight || document.body.clientHeight ) - this.$dom.getwh(".components_header .clear_header") 
 				document.querySelector(".components_index .components_index_main").style.minHeight = mainHeight +'px'
 			}
 		}

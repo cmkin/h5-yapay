@@ -15,8 +15,8 @@
 		</div>
 		<transition name="top" mode="out-in">
 			<div class="left_phone" :style="{top:tops+50+'px'}" v-if="leftPhone">
-				<ul>
-					<router-link tag="li" :to="item.to" v-for="item in $t('personal.account.llists')"> {{ item.text}} </router-link>
+				<ul @click="leftPhone = false">
+					<router-link  tag="li" :to="item.to" v-for="item in $t('personal.account.llists')"> {{ item.text}} </router-link>
 				</ul>
 			</div>
 		</transition>

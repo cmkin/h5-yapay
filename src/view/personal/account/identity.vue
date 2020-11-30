@@ -25,14 +25,28 @@
 				<div>
 					<i @click="showDialog(2)"> {{ $t('personal.account.identity.qrz') }} </i>
 				</div>
-			</li>
-			
-			
-			
-			
-			
+			</li>			
 		</ul>
 		
+		
+		<div class="rz_lv">
+			<div class="lv">
+				<span>{{ $t('personal.account.identity.dqrz') }}</span>
+				Lv.1 基础认证
+			</div>
+			<div class="if">张*灵  510************166</div>
+			<div class="kys">
+				<p>{{ $t('personal.account.identity.ky') }}</p>
+				<ul>
+					<li v-for="(item,index) in $t('personal.account.identity.kys')">
+						<span v-if="index==1" v-html="$options.filters.language(item,5)"></span>
+						<span v-else-if="index==2" v-html="$options.filters.language(item,50)"></span>
+						<span v-else>{{item}}</span>
+					</li>
+				</ul>
+				<div class="r">{{ $t('personal.account.identity.wcgr') }}</div>
+			</div>
+		</div>
 		
 	</div>
 </template>
@@ -77,6 +91,7 @@
 			padding: 0 20px;
 			&>li{
 				padding: 20px 0;
+				position: relative;
 				border-bottom: 1px solid #E3E3E3;
 				.clearfix;
 				.iconfont{
@@ -182,10 +197,70 @@
 				
 				
 			}
-			li:last-child{
-				border: none;
+			
+		}
+		.rz_lv{
+			padding: 20px;
+			.lv{
+				margin-bottom: 5px;
+				color: #666666;
+				span{
+					font-size: 16px;
+					color: #333;
+				}
+			}
+			.if{
+				font-size: 15px;
+				color: #666;
+				margin-bottom: 10px;
+			}
+			.kys{
+				position: relative;
+				&>p{
+					color: #B3B3B3;
+					margin-bottom: 15px;
+				}
+				ul{
+					li{
+						font-size: 14px;
+						color: #666666;
+						padding-left: 30px;
+						margin-bottom: 5px;
+						position: relative;
+						&::after{
+							content: '';
+							position: absolute;
+							top: 32%;
+							left: 18px;
+							width: 6px;
+							height: 6px;
+							border-radius: 50%;
+							background-color: @blue;
+						}
+					}
+				}
+				.r{
+					position: absolute;
+					right: 0;
+					bottom: -20px;
+					color: @blue;
+				}
 			}
 		}
 		
+	}
+	
+	@media (max-width:1023px) {
+		.view_personal_account_identity{		
+			&>ul{
+				&>li{
+					&>div:last-child{
+						position: absolute;
+						top: 20px;
+						right: 0;
+					}
+				}
+			}
+		}
 	}
 </style>

@@ -18,7 +18,7 @@
 </script>
 
 <style>
-	@import url("https://at.alicdn.com/t/font_2139670_39h4p02h4s9.css");
+	@import url("https://at.alicdn.com/t/font_2139670_8edqrvuacdd.css");
 	
 </style>
 <style lang="less">
