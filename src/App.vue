@@ -1,9 +1,10 @@
 <template>
 	<div id="app">
-
+		
 		<transition name="left" mode="out-in">
 			<router-view></router-view>
 		</transition>
+		
 
 	</div>
 </template>
@@ -13,12 +14,24 @@
 		name: 'App',
 		components: {
 
+		},
+		data(){
+			return{
+				
+			}
+		},
+		mounted() {
+			this.$nextTick(()=>{
+				setTimeout(()=>{
+					document.getElementById("oneLoading").remove()
+				},500)	
+			})		
 		}
 	}
 </script>
 
 <style>
-	@import url("https://at.alicdn.com/t/font_2139670_8edqrvuacdd.css");
+	@import url("https://at.alicdn.com/t/font_2139670_pho8pwri0is.css");
 	
 </style>
 <style lang="less">

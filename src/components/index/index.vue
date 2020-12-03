@@ -21,22 +21,25 @@
 		},
 		components:{headerx,footerx},
 		mounted() {
-			this.setMainHeight()
-			window.addEventListener("resize",()=>{
-				this.setMainHeight()
-			})
+			
 		},
 		methods:{
-			setMainHeight(){
-				let mainHeight = ( document.documentElement.clientHeight || document.body.clientHeight ) - this.$dom.getwh(".components_header .clear_header") 
-				document.querySelector(".components_index .components_index_main").style.minHeight = mainHeight +'px'
-			}
+			
 		}
 	}
 </script>
 
 <style lang="less" scoped="scoped">
 	.components_index{
-		
+		.components_index_main{
+			min-height: calc(100vh - 80px);
+		}
+	}
+	@media (max-width:1023px) {
+		.components_index{
+			.components_index_main{
+				min-height: calc(100vh - 61px);
+			}
+		}
 	}
 </style>

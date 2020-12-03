@@ -120,7 +120,7 @@
 		</div>
 		
 		<div class="table global_main">
-			<tablex :titles="titles" :datas="datas">
+			<tablex :titles="$t('index.tableTitle')" :datas="datas">
 				<template v-slot:fb="row">
 					<div class="fb">
 						<svg t="1596681534365" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +141,7 @@
 				</template>
 			</tablex>
 			<div class="show_more">
-				<span>查看更多行情</span>
+				<span>{{ $t('global.base.more') }} </span>
 			</div>
 		</div>
 		
@@ -152,7 +152,7 @@
 	export default {
 		data() {
 			return {
-				titles:this.$t("index.tableTitle"),
+				//titles:this.$t("index.tableTitle"),
 				datas:[
 					{
 						fb:'USD',
@@ -205,7 +205,7 @@
 			},
 			goQuickSale(){
 				this.$router.push({
-					path:'/index/sale/quickBuySell',
+					path:'/sale/quickBuySell',
 					query:{}
 				})
 			}
@@ -262,6 +262,7 @@
 						float: left;
 						position: relative;
 						width: 60%;
+						display: flex;
 						.input {
 							position: relative;
 							display: inline-block;

@@ -27,7 +27,7 @@
 		
 		<div class="input_buttom clearfix">
 			
-			<textarea class="input" v-model="input" name="" id="" cols="30" rows="10" :placeholder="$t('global.base.qsrnr')"></textarea>
+			<input class="input" v-model="input" name="" id="" cols="30" rows="10" :placeholder="$t('global.base.qsrnr')" />
 			<div class="btns">
 				<van-button :type="input?'info':'default'">{{ $t('global.base.send') }}</van-button>
 				<div>
@@ -153,18 +153,22 @@
 		}
 		.input_buttom{
 			padding: 15px;
+			box-sizing: border-box;
 			border-top: 1px solid #E3E3E3;
+			display: flex;
 			.input{
-				float: left;
-				height: 30px;
-				width: 55%;
+				width: 100%;
 				border: none;
 				position: relative;
 				top: 3px;
-				resize:none
+				resize:none;
+				padding:0;
+				padding-right: 20px;
 			}
 			.btns{
+				width: 140px;
 				float: right;
+			
 				&>div{
 					margin-left: 20px;
 					cursor: pointer;
@@ -203,6 +207,8 @@
 			height: auto;
 			line-height: 100%;
 			padding: 8px 12px;
+			position: relative;
+			top: -5px;
 		}
 		.van-button--info{
 			font-size: 12px;
@@ -210,6 +216,8 @@
 			height: auto;
 			line-height: 100%;
 			padding: 8px 12px;
+			position: relative;
+			top: -5px;
 		}
 	}
 </style>

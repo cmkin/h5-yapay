@@ -205,7 +205,7 @@
 	@media (max-width:768px) {
 		.view_quickSale_buy {
 			.main {
-				margin: 36px auto;
+				margin: 25px auto;
 			}
 		}
 	}

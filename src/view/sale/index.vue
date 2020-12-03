@@ -1,6 +1,6 @@
 <template>
 	<div class="view_quickSale_index">
-		<div class="header" :style="{top:headerH}">
+		<div class="header">
 			<div class="main clearfix global_main">
 				<ul class="left clearfix">
 					<router-link v-for="item,index in $t('quickSale.meun')" :key="index" :to="item.to" tag="li">{{item.title}}</router-link>
@@ -13,7 +13,7 @@
 				</router-link>
 			</div>
 		</div>
-		<div :style="{height:headerH}"></div>
+		<div style="height: 64px;"></div>
 		
 		<transition name="left" mode="out-in">
 			<router-view></router-view>
@@ -26,19 +26,11 @@
 	export default {
 		data(){
 			return{
-				headerH:0
+				
 			}
 		},
 		mounted() {
-				setTimeout(()=>{
-					this.headerH = this.$dom.getwh(".components_header .main") +'px !important'
-				},300)
-				
-				window.addEventListener("resize",()=>{
-					this.headerH = this.$dom.getwh(".components_header .main") +'px !important'
-				})
-		
-			
+
 		},
 		beforeDestroy() {
 			
@@ -54,7 +46,7 @@
 		.header{
 			position: fixed;
 			left: 0;
-			top: -80px !important;
+			top: 80px;
 			width: 100%;
 			transition: top 0.5s;
 			background: #fff;
@@ -115,5 +107,12 @@
 			}
 		}
 		
+	}
+	@media (max-width:1023px) {
+		.view_quickSale_index{
+			.header{
+				top: 61px;
+			}
+		}
 	}
 </style>

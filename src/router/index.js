@@ -4,10 +4,6 @@ Vue.use(vueRouter)
 
 const routes = [{
 		path: '',
-		redirect: '/index'
-	},
-	{
-		path: '/index',
 		component: () => import('_c/index/index'),
 		children: [{
 				path: '',
@@ -76,7 +72,7 @@ const routes = [{
 					{
 						path: 'account',
 						component: () => import('_v/personal/account/index'),
-						children:[{
+						children: [{
 								path: '',
 								redirect: 'security'
 							},
@@ -102,7 +98,61 @@ const routes = [{
 								}
 							}
 						]
-						
+
+					}
+				]
+			},
+			{
+				path: 'assets',
+				component: () => import('_v/assets/index'),
+				meta: {
+					title: "我的资产"
+				},
+				children: [{
+						path: '',
+						redirect: 'assets'
+					},
+					{
+						path: 'assets',
+						component: () => import('_v/assets/assets'),
+						meta: {
+							title: "个人资料"
+						}
+					},
+					{
+						path: 'payment',
+						component: () => import('_v/assets/payment'),
+						meta: {
+							title: "付款"
+						}
+					},
+					{
+						path: 'paymentRecords',
+						component: () => import('_v/assets/paymentRecords'),
+						meta: {
+							title: "付款记录"
+						}
+					},
+					{
+						path: 'bill',
+						component: () => import('_v/assets/bill'),
+						meta: {
+							title: "账单"
+						}
+					},
+					{
+						path: 'collection',
+						component: () => import('_v/assets/collection'),
+						meta: {
+							title: "收款"
+						}
+					},
+					{
+						path: 'recharge',
+						component: () => import('_v/assets/recharge'),
+						meta: {
+							title: "充币"
+						}
 					}
 				]
 			}
@@ -113,12 +163,16 @@ const routes = [{
 
 
 
-/**
- * 重写路由的replace方法
- */
-let routerPush = vueRouter.prototype.replace
+
+// 解决vue-router在3.0版本以上重复点菜单报错问题
+const originalPush = vueRouter.prototype.push
+vueRouter.prototype.push = function push(location) {
+	return originalPush.call(this, location).catch(err => err)
+}
+
+const originalreplace = vueRouter.prototype.replace
 vueRouter.prototype.replace = function replace(location) {
-	return routerPush.call(this, location).catch(error => error)
+	return originalreplace.call(this, location).catch(err => err)
 }
 
 export default new vueRouter({

@@ -1,14 +1,14 @@
 <template>
 	<div class="view_personal global_main">
 		
-		<div class="header" :style="{top:headerH}">
+		<div class="header">
 			<div class="main clearfix global_main">
 				<ul class="left clearfix">
 					<li class="router-link-active">{{ $t('personal.title') }}</li>
 				</ul>
 			</div>
 		</div>
-		<div :style="{height:headerH}"></div>
+		<div style="height: 64px;"></div>
 		
 		<div class="infos">
 			<div class="tx">
@@ -36,17 +36,11 @@
 	export default {
 		data(){
 			return{
-				headerH:0
+				
 			}
 		},
 		mounted() {
-				setTimeout(()=>{
-					this.headerH = this.$dom.getwh(".components_header .main") +'px !important'
-				},300)
 				
-				window.addEventListener("resize",()=>{
-					this.headerH = this.$dom.getwh(".components_header .main") +'px !important'
-				})
 		
 			
 		},
@@ -64,7 +58,8 @@
 		&>.header{
 			position: fixed;
 			left: 0;
-			top: -80px !important;
+			height: 64px;
+			top: 80px;
 			width: 100%;
 			transition: top 0.5s;
 			background: #fff;
@@ -107,7 +102,7 @@
 			box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.16);
 			text-align: center;
 			padding: 30px;
-			margin-top: 10px;
+			margin-top: 20px;
 			margin-bottom: 20px;
 			.tx{
 				img{
@@ -167,6 +162,9 @@
 	
 	@media (max-width: 1023px) {
 		.view_personal{
+			&>.header{
+				top: 61px;
+			}
 			&>.infos{
 				margin-top: 20px;
 				ul{

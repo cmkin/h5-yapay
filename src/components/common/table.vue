@@ -3,7 +3,8 @@
 		<ul class="title" >
 			<li v-for="item in nowTitles" v-if="item.isShow"  :style="{flex:item.flex}" v-html="item.title"></li>
 		</ul>
-		<ul class="item" v-for="item in datas">
+		
+		<ul class="item" v-for="item in datas" v-if="datas.length">
 			<li v-for="child in nowTitles" v-if="child.isShow"  :style="{flex:child.flex}">
 				<div v-if="child.slot">
 					<slot :name="child.slot" :item="item"></slot>
@@ -11,6 +12,7 @@
 				<div v-else v-html="item[child.id]"></div>
 			</li>
 		</ul>
+		<div class="nodata" v-if="!datas.length"> {{ $t('global.base.zusj') }}</div>
 	</div>
 </template>
 
@@ -19,8 +21,7 @@
 		name:"tablex",
 		data(){
 			return{
-				refDom:'table'+Math.ceil(Math.random()*1000),
-				nowTitles:[]
+				refDom:'table'+Math.ceil(Math.random()*1000)
 			}
 		},
 		props:{
@@ -33,16 +34,23 @@
 				default:()=> []
 			},
 		},
+		computed:{
+			nowTitles(){
+				let nowTitles = this.$tableCheakHide( this.titles.map(item=>{
+					item.isShow = true
+					return item
+				}) )
+				if(this.isPhone || !this.isPhone){
+					nowTitles = this.$tableCheakHide(nowTitles)
+				}
+				return nowTitles
+			}
+		},
 		mounted() {
-			this.nowTitles =this.$tableCheakHide( this.titles.map(item=>{
-				item.isShow = true
-				return item
-			}) )
+			
 		},
 		watch:{
-			'isPhone'(){
-				this.nowTitles = this.$tableCheakHide(this.nowTitles)
-			}
+			
 		},
 		
 		methods:{
@@ -54,6 +62,11 @@
 <style lang="less" scoped="scoped">
 	.global_table{
 		.global_table_pc;
+		.nodata{
+			text-align: center;
+			padding: 15px 0;
+			border-bottom: 1px solid #f3f3f3;
+		}
 	}
 	@media (max-width:768px) {
 		.global_table{

@@ -72,6 +72,9 @@ export default {
 		};
 	},
 	computed: {
+		listsData(){
+			return this.lists
+		},
 		multipleTitle() {
 			if (this.multiple && this.sActive != null) {
 				let arr = this.lists
@@ -142,12 +145,12 @@ export default {
 		}
 	},
 	watch: {
-		lists: {
+		/* listsData: {
 			deep: true,
 			handle: (news, olds) => {
 				this.sActive = this.active;
 			}
-		},
+		}, */
 		active(n) {
 			this.sActive = this.active;
 		},
@@ -160,11 +163,16 @@ export default {
 		});
 	},
 	methods: {
-		open(){
+		open(flag,send=true){
 			if(this.disable){
 				return
 			}
-			this.flag = !this.flag;
+			
+			this.flag = flag.clientX  ? !this.flag  : flag;
+			
+			if(send){
+				this.$emit('flag',this.flag)
+			}
 		},
 		sellPayClass(id) {
 			return this.sActive.includes(id) ? 'sell_active' : '';

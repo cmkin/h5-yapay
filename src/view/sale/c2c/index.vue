@@ -1,37 +1,41 @@
 <template>
 	<div class="view_quickSale_c2c global_main">
-		<div class="dhl clearfix">
-			<div class="type">
-				<span @click="changeType(index)" :class="{ active: typeActive == index }" v-for="(item, index) in $t('quickSale.c2c.typeTitle')">{{ item }}</span>
-			</div>
+		<div class="dhl  clearfix">
+			<div class="global_main">
+				<div class="type">
+					<span @click="changeType(index)" :class="{ active: typeActive == index }" v-for="(item, index) in $t('quickSale.c2c.typeTitle')">{{ item }}</span>
+				</div>
 
-			<div class="min_input hide_s">
-				<input v-model="minMoney" :placeholder="$t('quickSale.c2c.zx')" type="number" />
-				<span>CNY</span>
-			</div>
+				<div class="min_input hide_s">
+					<input v-model="minMoney" :placeholder="$t('quickSale.c2c.zx')" type="number" />
+					<span>CNY</span>
+				</div>
 
-			<div class="type_change hide_s">
-				<van-dropdown-menu active-color="#0466C8">
-					<van-dropdown-item v-model="payType" :options="payTypes" get-container=".view_quickSale_c2c .type_change" />
-				</van-dropdown-menu>
-			</div>
+				<div class="type_change hide_s">
+					<van-dropdown-menu active-color="#0466C8">
+						<van-dropdown-item v-model="payType" :options="payTypes" get-container=".view_quickSale_c2c .type_change" />
+					</van-dropdown-menu>
+				</div>
 
-			<div class="fb hide_s" @click="openOrderForm">
-				<svg t="1601171811581" class="icon" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3156" width="20" height="20">
-					<path
-						d="M352.376267 760.009763C350.834511 761.551537 344.542685 764.999821 342.477506 765.457002L180.527334 801.308566 222.635043 843.416258 258.486607 681.466086C258.968311 679.290121 262.315961 673.185192 263.933828 671.567325L802.537066 132.964087C816.326621 119.17455 816.326621 96.817276 802.537066 83.027721 788.747511 69.238184 766.390237 69.238184 752.6007 83.027721L213.997462 621.630958C202.867871 632.76055 192.923842 650.894883 189.535232 666.202041L153.683668 828.152232C148.102938 853.36177 170.581839 875.840671 195.791378 870.259924L357.74155 834.40836C372.932502 831.045473 391.255217 821.003546 402.312651 809.94613L940.915871 271.34291C954.705426 257.553355 954.705426 235.196081 940.915871 221.406543 927.126334 207.616989 904.769059 207.616989 890.979505 221.406543L352.376267 760.009763ZM414.64915 72.685568 51.729426 72.685568C23.157654 72.685568 0 95.845588 0 124.414994L0 972.214166C0 1000.785938 23.16002 1023.943592 51.729426 1023.943592L899.528598 1023.943592C928.10037 1023.943592 951.258041 1000.783572 951.258041 972.214166L951.258041 609.294442 951.258041 427.83458C951.258041 408.333224 935.449053 392.524235 915.947697 392.524235 896.446323 392.524235 880.637352 408.333224 880.637352 427.83458L880.637352 609.294442 880.637352 972.214166C880.637352 961.782466 889.096033 953.322902 899.528598 953.322902L51.729426 953.322902C62.161143 953.322902 70.62069 961.781601 70.62069 972.214166L70.62069 124.414994C70.62069 134.846711 62.162008 143.306258 51.729426 143.306258L414.64915 143.306258 596.109012 143.306258C615.610386 143.306258 631.419357 127.497269 631.419357 107.995913 631.419357 88.494539 615.610386 72.685568 596.109012 72.685568L414.64915 72.685568ZM1008.873949 203.384814C1029.040658 183.218105 1029.030682 150.678581 1008.912031 130.559929L951.147855 72.795754 893.383662 15.031561C873.350038-5.002063 840.660092-5.031671 820.558777 15.069643L752.6007 83.027721C738.811145 96.817276 738.811145 119.17455 752.6007 132.964087 766.390237 146.753642 788.747511 146.753642 802.537066 132.964087L870.495144 65.006009C862.997098 72.504055 850.972531 72.49318 843.447296 64.967927L901.211489 122.73212 958.975665 180.496296C951.522074 173.042706 951.518349 160.867699 958.937582 153.448448L890.979505 221.406543C877.18995 235.196081 877.18995 257.553355 890.979505 271.34291 904.769059 285.132447 927.126334 285.132447 940.915871 271.34291L1008.873949 203.384814Z"
-						p-id="3157"
-					></path>
-				</svg>
-				<span>{{ $t('quickSale.c2c.fbwt') }}</span>
-			</div>
+				<div class="fb hide_s" @click="openOrderForm">
+					<svg t="1601171811581" class="icon" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3156" width="20" height="20">
+						<path
+							d="M352.376267 760.009763C350.834511 761.551537 344.542685 764.999821 342.477506 765.457002L180.527334 801.308566 222.635043 843.416258 258.486607 681.466086C258.968311 679.290121 262.315961 673.185192 263.933828 671.567325L802.537066 132.964087C816.326621 119.17455 816.326621 96.817276 802.537066 83.027721 788.747511 69.238184 766.390237 69.238184 752.6007 83.027721L213.997462 621.630958C202.867871 632.76055 192.923842 650.894883 189.535232 666.202041L153.683668 828.152232C148.102938 853.36177 170.581839 875.840671 195.791378 870.259924L357.74155 834.40836C372.932502 831.045473 391.255217 821.003546 402.312651 809.94613L940.915871 271.34291C954.705426 257.553355 954.705426 235.196081 940.915871 221.406543 927.126334 207.616989 904.769059 207.616989 890.979505 221.406543L352.376267 760.009763ZM414.64915 72.685568 51.729426 72.685568C23.157654 72.685568 0 95.845588 0 124.414994L0 972.214166C0 1000.785938 23.16002 1023.943592 51.729426 1023.943592L899.528598 1023.943592C928.10037 1023.943592 951.258041 1000.783572 951.258041 972.214166L951.258041 609.294442 951.258041 427.83458C951.258041 408.333224 935.449053 392.524235 915.947697 392.524235 896.446323 392.524235 880.637352 408.333224 880.637352 427.83458L880.637352 609.294442 880.637352 972.214166C880.637352 961.782466 889.096033 953.322902 899.528598 953.322902L51.729426 953.322902C62.161143 953.322902 70.62069 961.781601 70.62069 972.214166L70.62069 124.414994C70.62069 134.846711 62.162008 143.306258 51.729426 143.306258L414.64915 143.306258 596.109012 143.306258C615.610386 143.306258 631.419357 127.497269 631.419357 107.995913 631.419357 88.494539 615.610386 72.685568 596.109012 72.685568L414.64915 72.685568ZM1008.873949 203.384814C1029.040658 183.218105 1029.030682 150.678581 1008.912031 130.559929L951.147855 72.795754 893.383662 15.031561C873.350038-5.002063 840.660092-5.031671 820.558777 15.069643L752.6007 83.027721C738.811145 96.817276 738.811145 119.17455 752.6007 132.964087 766.390237 146.753642 788.747511 146.753642 802.537066 132.964087L870.495144 65.006009C862.997098 72.504055 850.972531 72.49318 843.447296 64.967927L901.211489 122.73212 958.975665 180.496296C951.522074 173.042706 951.518349 160.867699 958.937582 153.448448L890.979505 221.406543C877.18995 235.196081 877.18995 257.553355 890.979505 271.34291 904.769059 285.132447 927.126334 285.132447 940.915871 271.34291L1008.873949 203.384814Z"
+							p-id="3157"
+						></path>
+					</svg>
+					<span>{{ $t('quickSale.c2c.fbwt') }}</span>
+				</div>
 
-			<div class="hide_xs phone_icon">
-				<i class="iconfont icon-bianji" @click="openOrderForm"></i>
-				<i class="iconfont icon-shaixuan" @click="payTypePhoneFlag = true"></i>
+				<div class="hide_xs phone_icon">
+					<i class="iconfont icon-bianji" @click="openOrderForm"></i>
+					<i class="iconfont icon-shaixuan" @click="payTypePhoneFlag = true"></i>
+				</div>
 			</div>
 		</div>
-
+		
+		<div style="height: 80px;"></div>
+		
 		<van-tabs :swipeable="true" v-model="typeActive" animated>
 			<van-tab v-for="(item, index) in 2" :key="index">
 				<div class="" :class="isPhone ? 'tables_phone' : 'tables_pc'">
@@ -463,17 +467,17 @@
 		</dialogx>
 		
 		
-		<!-- 确认发布弹窗 -->
+		<!-- 确认交易弹窗 -->
 		
 		<dialogx v-model="orderForm.okOrder.show && orderForm.okOrder.type == 0" :onOk="orderFormOk" :title="orderForm.okOrder.title">
 			<!-- 购买 -->
 			<template v-slot:content>
 				<ul class="ok_buy">
-					<li v-for="item in okBuySell.lists">
+					<li v-for="item in orderForm.okOrder.lists">
 						<span>{{item.name}}</span>
 						<span class="r" :style="{color:item.key=='allPrice'?'red':'#333'}">
-							<img :src="okBuySell.datas.img" alt="" v-if="okBuySell.type==1 && item.key=='payType'">
-							{{okBuySell.datas[item.key]}} 
+							<img :src="orderForm.okOrder.datas.img" alt="" v-if="orderForm.okOrder.type==0 && item.key=='payType'">
+							{{orderForm.okOrder.datas[item.key]}} 
 							<i v-if="item.key=='nums'">USDT</i>
 							<i v-if="item.key=='price' || item.key=='allPrice' ">CNY</i>
 						</span>
@@ -511,7 +515,7 @@
 		
 		<!-- 时间弹窗 -->
 		<van-popup v-model="timeShow" :position="isPhone ? 'bottom' : 'center'">
-			<van-datetime-picker v-model="currentTime" type="time" title="选择时间" :min-hour="0" :max-hour="23" @cancel="timeShow = false" @confirm="timeOk" />
+			<van-datetime-picker v-model="currentTime" type="time" :formatter="formatter" title="" :min-hour="0" :max-hour="23" @cancel="timeShow = false" @confirm="timeOk" />
 		</van-popup>
 	</div>
 </template>
@@ -520,6 +524,7 @@
 export default {
 	data() {
 		return {
+			oldtops:0,
 			ops: {
 				vuescroll: {
 					wheelScrollDuration: 500
@@ -603,6 +608,15 @@ export default {
 		this.init();
 		this.buy.active = this.orderForm.buy.payType = this.$t('global.payType')[0].id;
 		this.sell.active = this.orderForm.sell.payType = this.$t('global.payType').map(item => item.id);
+		
+		
+		this.oldtops = 0
+		document.addEventListener("scroll",this.scroll)
+		
+	},
+	beforeRouteLeave(to,from,next) {
+		document.removeEventListener("scroll",this.scroll)
+		next()
 	},
 	watch: {
 		$route(n) {
@@ -618,8 +632,50 @@ export default {
 		}
 	},
 	methods: {
+		formatter(type,val){
+			switch(type){
+				case 'hour':
+					return `${val}`+this.$t('global.base.hou')
+				case 'minute':
+					return `${val}`+this.$t('global.base.min')	
+			}
+
+		},
 		init() {
 			this.typeActive = this.$route.query.hasOwnProperty('type') ? Number(this.$route.query.type) : 0;
+		},
+		scroll(e){
+			let tops = document.documentElement.scrollTop || document.body.scrollTop
+			let dhl = document.querySelector(".view_quickSale_c2c .dhl")
+			
+			let min = this.isPhone ? 61 : 80
+			let max = this.isPhone ? 130 : 150
+				if(tops==0){
+					dhl.style.top = max +'px'
+					dhl.style.boxShadow = "none"
+					return
+				}
+				if(tops>this.oldtops){
+					//向下
+					dhl.style.boxShadow = "0px 1px 2px rgba(0, 0, 0, 0.16)"
+					if(dhl.offsetTop <=min ){
+						dhl.style.top = min +'px'
+						return
+					}
+					dhl.style.top = (dhl.offsetTop - (tops-this.oldtops)) + 'px'
+				}else{
+					//向上
+					if(dhl.offsetTop >=max ){
+						dhl.style.top = max +'px'
+						dhl.style.boxShadow = "none"
+						return
+					}
+					
+					
+					dhl.style.top = (dhl.offsetTop - (tops-this.oldtops)) + 'px'
+				}
+				
+			this.oldtops = tops	
 		},
 		changeType(index) {
 			this.typeActive = index;
@@ -718,8 +774,13 @@ export default {
 <style lang="less" scoped="scoped">
 .view_quickSale_c2c {
 	.dhl {
-		padding: 20px 0;
-
+		padding: 15px 0;
+		position: fixed;
+		top: 150px;
+		left: 0;
+		width: 100%;
+		z-index: 801;
+		background-color: #fff;
 		.type {
 			float: left;
 			border: 1px solid #e3e3e3;
@@ -1315,6 +1376,14 @@ export default {
 	
 
 }
+
+@media (max-width: 1023px) {
+	.view_quickSale_c2c{
+		.dhl{
+			top: 130px;
+		}
+	}
+}
 </style>
 <style lang="less">
 .view_quickSale_c2c {
@@ -1433,6 +1502,7 @@ export default {
 
 @media (max-width: 1023px) {
 	.view_quickSale_c2c {
+		
 		.buy_alert {
 			.van-dialog {
 				width: 90%;

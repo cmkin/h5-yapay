@@ -13,7 +13,7 @@
 					</ul>
 				</div>
 				<div class="right clearfix">
-					<div class="language"><myselect v-model="language.active" @change="changeLanguage" hover :lists="$t('global.header.language')"></myselect></div>
+					<div class="language"><myselect @flag="languageFlag" ref="headerselect" v-model="language.active" @change="changeLanguage" hover :lists="$t('global.header.language')"></myselect></div>
 
 					<div class="login" v-if="false">
 						<span>{{ $t('global.header.login') }}</span>
@@ -22,30 +22,27 @@
 
 					<div class="loginok" v-else>
 						<div class="select defalut_s">
-							<div class="changed" @click.stop="loginZc.flag = !loginZc.flag">
+							<div class="changed" @click.stop="loginZcFlag()">
 								<span>{{ $t('global.header.loginOk.title') }}</span>
 								<van-icon name="arrow-up" size="12" :class="{ c: loginZc.flag }" />
 							</div>
 							<transition name="top" mode="out-in">
 								<ul v-if="loginZc.flag">
-									<li class="user" @click="goLink({to:'/index/personal'})">
-										<p>UID : HK57FG</p>
-										<p>用户昵称</p>
-									</li>
-									<li :class="{active:index==loginZc.active}" @click="goLink(item)" v-for="(item, index) in $t('global.header.loginOk.list')">{{ item.text }}</li>
+									<router-link tag="li"  :to="item.to" v-for="(item, index) in $t('global.header.loginZc.list')">{{ item.text }}</router-link>
 								</ul>
 							</transition>
 						</div>
 						
 						<div class="mine" >
-							<i class="iconfont icon-lianxiren" @click.stop="loginok.flag = !loginok.flag"></i>
+							<i class="iconfont icon-lianxiren" @click.stop="loginOkFlag()"></i>
 							<transition name="top" mode="out-in">
 								<ul v-if="loginok.flag">
-									<li class="user" @click="goLink({to:'/index/personal'})">
+									<li class="user" @click="goLink({to:'/personal'})">
 										<p>UID : HK57FG</p>
 										<p>用户昵称</p>
 									</li>
-									<li :class="{active:index==loginok.active}" @click="goLink(item)" v-for="(item, index) in $t('global.header.loginOk.list')">{{ item.text }}</li>
+									<router-link v-if="item.to" tag="li"   :to="item.to" v-for="(item, index) in $t('global.header.loginOk.list')">{{ item.text }}</router-link>
+									<li v-else @click.stop="goLink(item)"> {{item.text}}</li>
 								</ul>
 							</transition>
 						</div>
@@ -120,15 +117,23 @@ export default {
 		window.addEventListener('resize', () => {
 			this.$dom.setwh('.components_header .clear_header', this.$dom.getwh('.components_header .main'));
 		});
-		document.addEventListener("click",()=>{
+		document.addEventListener("click",(e)=>{
 			this.loginok.flag = false
+			this.loginZc.flag = false		
 		})
 		//已经登录成功之后的数据
 		
 	},
+
 	methods: {
 		changeLanguage(id) {
 			this.language.active = id;
+			
+			if(id==0){
+				this.$i18n.locale='zh'
+			}else{
+				this.$i18n.locale='en'
+			}
 			return;
 
 			let obj = {};
@@ -140,14 +145,37 @@ export default {
 				this.language.active = index;
 			}
 		},
+		languageFlag(){
+			this.loginok.flag = false
+			this.loginZc.flag = false
+		},
+		loginOkFlag(){
+			this.loginok.flag = !this.loginok.flag
+			this.loginZc.flag = false
+			this.$refs.headerselect.open(false,false)
+		},
+		loginZcFlag(){
+			this.loginZc.flag = !this.loginZc.flag
+			this.loginok.flag = false
+			this.$refs.headerselect.open(false,false)
+		},
 		changeLogMeun(){
 			
 		},
 		goLink(item){
+			console.log(item)
+			if(item.to){
+				this.$router.push({
+					path:item.to
+				})
+			}
+			switch(item.event){
+				case "logout":
+					//退出登录
+					
+				break;
+			}
 			
-			this.$router.push({
-				path:item.to
-			})
 		}
 	}
 };
@@ -254,7 +282,25 @@ export default {
 						width: 170px;
 						top: 260%;
 						margin-bottom: 0;
-						.user{
+						
+						.router-link-active{
+							border-color: @blue;
+							color: @blue;
+							background-color: #F1F9FF;
+						}
+					}
+				}
+				.mine{
+					.select_down_noicon;
+					&>ul{
+						width: 170px;
+						top: 260%;
+						.router-link-active{
+							border-color: @blue;
+							color: @blue;
+							background-color: #F1F9FF;
+						}
+						li.user{
 							border-bottom: 1px solid  rgba(0, 0, 0, 0.06);
 							&:hover{
 								color: #666;
@@ -264,12 +310,6 @@ export default {
 								font-size: 13px;
 							}
 						}
-					}
-				}
-				.mine{
-					.select_down_noicon;
-					&>ul{
-						width: 170px;
 					}
 					display: inline-block;
 					width: auto;

@@ -169,20 +169,62 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /*left*/
-.left-enter-active,
-.left-leave-active {
-	transition: all .2s;
-}
+
 
 .left-enter {
-	transform: translateX(10%);
-
+	position: relative;
 }
 
 .left-leave-to {
-	transform: translateX(-1%);
-	opacity: 0;
+	position: relative;
 }
+
+.left-enter-active {
+ animation: bounce-out .3s linear;
+ position: relative;
+}
+.left-leave-active {
+  animation: bounce-in .3s linear;
+}
+
+@keyframes bounce-in {
+  0% {
+    left: 0px;
+	opacity: 0.8;
+  }
+  30%{
+	left: 15px;
+	opacity: 0.6;  
+  }
+  50% {
+    left: 30px;
+	opacity: 0.3;
+  }
+  100% {
+    left: 40px;
+	opacity: 0.2;
+  }
+}
+
+@keyframes bounce-out {
+  0% {
+    left: 60px;
+	opacity: 0.2;
+  }
+  30%{
+	left: 40px;
+	opacity: 0.4;  
+  }
+  50% {
+    left: 30px;
+	opacity: 0.8;
+  }
+  100% {
+    left: 0px;
+	opacity: 1;
+  }
+}
+
 
 /*top*/
 .top-enter-active,
