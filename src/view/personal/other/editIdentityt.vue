@@ -1,17 +1,19 @@
 <template>
-	<div class="view_assets_index">
-		<transition name="left" mode="out-in">
-			<router-view></router-view>
-		</transition>
+	<div class="">
+		<iden :type="2"></iden>
 	</div>
 </template>
 
 <script>
+	import iden from './editIdentity.vue'
 	export default {
 		data(){
 			return{
 				
 			}
+		},
+		components:{
+			iden
 		},
 		mounted() {
 			
@@ -22,6 +24,6 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped="scoped">
 	
 </style>

@@ -12,7 +12,7 @@
 				<div> {{ $t('personal.account.identity.lv1p') }} </div>
 				<div>
 					
-					<i @click="showDialog(1)"> {{ $t('personal.account.identity.qrz') }} </i>
+					<i @click="goRz(1)"> {{ $t('personal.account.identity.qrz') }} </i>
 				</div>
 			</li>
 			
@@ -23,7 +23,7 @@
 				</div>
 				<div> {{ $t('personal.account.identity.lv2p') }} </div>
 				<div>
-					<i @click="showDialog(2)"> {{ $t('personal.account.identity.qrz') }} </i>
+					<i @click="goRz(2)"> {{ $t('personal.account.identity.qrz') }} </i>
 				</div>
 			</li>			
 		</ul>
@@ -74,7 +74,18 @@
 			
 		},
 		methods:{
-			
+			goRz(type){
+				if(type==1){
+					this.$router.push({
+						path:'/editIdentity'
+					})
+				}else{
+					this.$router.push({
+						path:'/editIdentityt',
+					})
+				}
+				
+			}
 		}
 	}
 </script>

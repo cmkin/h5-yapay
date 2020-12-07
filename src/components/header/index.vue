@@ -163,7 +163,6 @@ export default {
 			
 		},
 		goLink(item){
-			console.log(item)
 			if(item.to){
 				this.$router.push({
 					path:item.to
@@ -172,9 +171,21 @@ export default {
 			switch(item.event){
 				case "logout":
 					//退出登录
-					
+					this.$dialog.confirm({
+					  title: this.$t('global.base.wxts'),
+					  message:this.$t('global.header.logout'),
+					  cancelButtonText:this.$t('global.base.cancel'),
+					  confirmButtonText:this.$t('global.base.ok'),
+					})
+					  .then(() => {
+					    // on confirm
+					  })
+					  .catch(() => {
+					    // on cancel
+					  });
 				break;
 			}
+			this.loginok.flag = false
 			
 		}
 	}

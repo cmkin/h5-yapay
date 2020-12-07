@@ -153,8 +153,51 @@ const routes = [{
 						meta: {
 							title: "充币"
 						}
+					},
+					{
+						path: 'withdraw',
+						component: () => import('_v/assets/withdraw'),
+						meta: {
+							title: "提币"
+						}
 					}
 				]
+			},
+			//其他子级
+			{
+				path: 'editLPwd',
+				component: () => import('_v/personal/other/editLPwd'),
+				meta: {
+					title: "修改登录密码"
+				}
+			},
+			{
+				path: 'editJPwd',
+				component: () => import('_v/personal/other/editJPwd'),
+				meta: {
+					title: "修改交易密码"
+				}
+			},
+			{
+				path: 'editIdentity',
+				component: () => import('_v/personal/other/editIdentity'),
+				meta: {
+					title: "基础认证"
+				}
+			},
+			{
+				path: 'editIdentityt',
+				component: () => import('_v/personal/other/editIdentityt'),
+				meta: {
+					title: "视频认证"
+				}
+			},
+			{
+				path:'paymentMethod',
+				component: () => import('_v/personal/other/paymentMethod'),
+				meta: {
+					title: "收付款账户设置"
+				}
 			}
 		]
 	}

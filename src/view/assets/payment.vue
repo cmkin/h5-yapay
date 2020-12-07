@@ -1,17 +1,7 @@
 <template>
 	<div class="view_assets_payment">
-		<div class="header">
-			<div class="main clearfix global_main">
-				<ul class="left clearfix">
-					<li class="router-link-active">{{ $t('payment.title') }}</li>
-				</ul>
-				<div class="right">
-					<router-link tag="span" to="/">{{ $t('payment.titler') }}</router-link>
-				</div>
-			</div>
-		</div>
-		<div style="height: 64px;"></div>
 		
+		<header-top :title="$t('payment.title')" rlink='/' :rtitle="$t('payment.titler')"></header-top>
 		
 		<div class="top">
 			<div class="main global_main">

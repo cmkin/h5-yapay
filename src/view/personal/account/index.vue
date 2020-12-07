@@ -34,11 +34,15 @@ export default {
 		};
 	},
 	mounted() {
+		var getTop = ()=>{
+			this.tops = document.querySelector('.view_personal_account_icon').offsetTop + 5;
+		}
 		this.$nextTick(() => {
-			this.tops = document.querySelector('.view_personal_account_icon').offsetTop + 24;
-			window.addEventListener('resize', () => {
-				this.tops = document.querySelector('.view_personal_account_icon').offsetTop + 5;
-			});
+			setTimeout(()=>{
+				getTop()
+			},500)
+			window.addEventListener('resize', getTop);
+			window.removeEventListener("resize",getTop)
 		});
 	},
 	methods: {}
@@ -57,7 +61,7 @@ export default {
 	& > .left {
 		border-radius: 2px;
 		width: 260px;
-		height: 150px;
+		height: 143px;
 		.title {
 			padding: 5px 20px;
 			font-size: 16px;
@@ -68,9 +72,9 @@ export default {
 			}
 		}
 		ul {
-			padding: 5px 0;
+		
 			li {
-				padding: 5px 0;
+				padding: 6px 0;
 				font-size: 16px;
 				border-right: 2px solid transparent;
 				padding-left: 40px;
@@ -101,8 +105,9 @@ export default {
 		z-index: 10;
 		top: 78%;
 		ul {
+			box-shadow: 0 0 1px 2px #eee;
 			background-color: #fff;
-			padding: 5px 0;
+			padding: 0;
 			li {
 				padding: 5px 20px;
 				font-size: 16px;

@@ -40,7 +40,7 @@
 						<li></li>
 						<li></li>
 					</ul>
-					<i> {{ $t('personal.account.security.xg') }} </i>
+					<i @click="goLink('lpwd')"> {{ $t('personal.account.security.xg') }} </i>
 				</div>
 			</li>
 			
@@ -51,7 +51,7 @@
 				</div>
 				<div> {{ $t('personal.account.security.ccs[3].p') }} </div>
 				<div>
-					<i> {{ $t('personal.account.security.bd') }} </i>
+					<i @click="goLink('jpwd')"> {{ $t('personal.account.security.bd') }} </i>
 				</div>
 			</li>
 			
@@ -123,7 +123,7 @@
 	export default {
 		data(){
 			return{
-				citys:[],
+				
 				dialog:{
 					show:false,
 					title:'',
@@ -150,16 +150,20 @@
 					lv:lv,
 					class:className[lv]
 				}
-			}
+			},
+			citys(){
+				let citysD = []
+				citys.Citylist.map(item=>{
+					item.data.map(tt=>{
+						this.$i18n.locale == 'zh' ? citysD.push(`+${tt.num}-${tt.cityName}`) : citysD.push(`+${tt.num}-${tt.en}`)
+						
+					})
+				})
+				return citysD
+			},
 		},
 		mounted() {
-			let citysD = []
-			citys.Citylist.map(item=>{
-				item.data.map(tt=>{
-					citysD.push(`+${tt.num}-${tt.cityName}`)
-				})
-			})
-			this.citys = citysD
+			
 		},
 		methods:{
 			showDialog(type){
@@ -180,7 +184,20 @@
 			//选择电话
 			phoneOk(value){
 				console.log(value.split("-"))
-			}
+			},
+			
+			//
+			goLink(type){
+				switch(type){
+					case 'lpwd':
+						this.$router.push('/editLPwd')
+					break;
+					case 'jpwd':
+						this.$router.push('/editJPwd')
+					break;
+				}
+			},
+			
 		}
 	}
 </script>

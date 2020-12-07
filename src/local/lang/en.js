@@ -8,22 +8,22 @@ module.exports = {
 		usdt: require("_a/img/usdt.png"),
 		cny: require("_a/img/cny.png"),
 		payType: [{
-				title: '支付宝',
+				title: '123',
 				id: 0,
 				img: require("_a/img/zfb.png")
 			},
 			{
-				title: '微信',
+				title: '213',
 				id: 1,
 				img: require("_a/img/wx.png")
 			},
 			{
-				title: '银行卡',
+				title: '12',
 				id: 2,
 				img: require("_a/img/yhk.png")
 			},
 			{
-				title: 'PayPal',
+				title: '123',
 				id: 3,
 				img: require("_a/img/PayPal.png")
 			},

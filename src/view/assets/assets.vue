@@ -1,14 +1,7 @@
 <template>
 	<div class="view_assets_assets">
-		<div class="header">
-			<div class="main clearfix global_main">
-				<ul class="left clearfix">
-					<li class="router-link-active">{{ $t('assets.title') }}</li>
-				</ul>
-			</div>
-		</div>
-		<div style="height: 64px;"></div>
 		
+		<header-top :title="$t('assets.title')"></header-top>
 		
 		<div class="top">
 			<div class="main global_main">

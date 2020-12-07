@@ -46,8 +46,9 @@ import dialog from '_c/common/dialog'
 import copy from '_c/common/copy'
 import chat from '_c/common/chat'
 import select from '_c/common/select'
+import headerTop from '_c/common/headerTop'
 
-const components = [tablex, dialog, copy, chat, select]
+const components = [tablex, dialog, copy, chat, select,headerTop]
 components.forEach(item => {
 	Vue.component(item.name, item)
 })

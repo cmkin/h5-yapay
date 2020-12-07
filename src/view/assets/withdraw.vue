@@ -1,12 +1,12 @@
 <template>
 	<div class="view_assets_recharge">
 		
-		<header-top :title="$t('recharge.title')" rlink='/' :rtitle="$t('recharge.titler')"></header-top>
+		<header-top :title="$t('withdraw.title')" rlink='/' :rtitle="$t('withdraw.titler')"></header-top>
 		
 		
 		<div class="top global_main">
 			<div class="wh">
-				<div class="t">{{ $t('recharge.title') }}</div>
+				<div class="t">{{ $t('withdraw.title') }}</div>
 				<p class="l">{{ $t('recharge.lmc') }}</p>
 				<div class="tts">
 					<span @click="changet(item.id)" :class="{active:item.id==lid}" v-for="item in $t('recharge.llists')">{{item.id}}</span>
@@ -14,16 +14,38 @@
 				<div class="xq" v-if="ldetails">
 					{{ ldetails.xq }}
 				</div>
-				<div class="addr" v-if="ldetails">
-					<span>{{ $t('recharge.an') }}</span>
-					<div>
-						<span>32apAqXbZeKGVJa8nsLvA2NvS7saVsTywyaVsTywyaVsTywyaVsTywy</span>
-						<span>
-							<copy content="213123"></copy>
-							<i class="iconfont icon-erweima"></i>
-						</span>
-					</div>
+				
+				<div class="tbs">
+					<ul>
+						<li>
+							<span>{{ $t('withdraw.an') }}</span>
+							<input :placeholder="$t('withdraw.ant')" type="text" />
+						</li>
+						<li class="sl">
+							<span class="tl">{{ $t('withdraw.tl') }}</span>
+							<div class="i">
+								<input :placeholder="$t('withdraw.tlt') + 10" type="text" />
+								<span class="a"> USDT <i>{{ $t('withdraw.at') }}</i> </span>
+							</div>
+							<div class="s">
+								<span> {{ $t('withdraw.ky') }} 9000.0000 USDT </span>
+								<span> {{ $t('withdraw.xe') }} 9000.0000 USDT <i>{{ $t('withdraw.ts') }}</i> </span>
+							</div>
+						</li>
+						<li class="sl">
+							<span>{{ $t('withdraw.sxf') }}</span>
+							<div class="i">
+								<input disabled="disabled" :placeholder="0.0000" type="text" />
+								<span class="a">USDT</span>
+							</div>
+							<div class="s">
+								{{ $t('withdraw.yq') }} 9000.0000 USDT
+							</div>
+						</li>
+					</ul>
 				</div>
+				
+				
 				<div class="zysx" v-if="ldetails">
 					<span>{{ $t('recharge.zlt') }}</span>
 					<ul>
@@ -35,8 +57,8 @@
 		
 		
 		<div class="table global_main">
-			<div class="t">{{$t('recharge.titler')}}</div>
-			<tablex :titles="$t('recharge.tableTitle')" :datas="datas">
+			<div class="t">{{$t('withdraw.titler')}}</div>
+			<tablex :titles="$t('withdraw.tableTitle')" :datas="datas">
 			
 			</tablex>
 			<div class="show_more">
@@ -118,40 +140,63 @@
 				color: #B3B3B3;
 				margin-bottom: 20px;
 			}
-			.addr{
-				margin-bottom: 20px;
-				&>span{
-					display: block;
-					margin-bottom: 10px;
+			
+			.tbs{
+				li{
+					margin-bottom: 20px;
+					&>span:first-child{
+						display: block;
+						color: #666666;
+						font-size: 12px;
+						margin-bottom: 5px;
+					}
 				}
-				&>div{
-					display: flex;
-					position: relative;
-					padding-right: 50px;
-					span:last-child{
-						width: 50px;
-						position: absolute;
-						right: 0;
-						top: 50%;
-						transform: translateY(-50%);
-						text-align: right;
-						i{
-							color: @blue;
-							cursor: pointer;
-							display: inline-block;
-							margin-left: 12px;
-							font-size: 18px;
+				.sl{
+					.i{
+						position: relative;
+						input{
+							padding-right: 130px;
 						}
-						.global_copy{
-							position: relative;
-							top: 1px;
+						.a{
+							position: absolute;
+							right: 10px;
+							top: 50%;
+							transform: translateY(-50%);
+							i{
+								color: @blue;
+								display: inline-block;
+								position: relative;
+								padding-left: 10px;
+								margin-left: 10px;
+								cursor: pointer;
+								&::after{
+									content: '';
+									position: absolute;
+									left: 0;
+									top: 20%;
+									height: 60%;
+									width: 1px;
+									background-color: #D3D3D3;
+								}
+							}
 						}
 					}
-					span:first-child{
-						width: 100%;
-						color: #666;
-						word-wrap: break-word;
-						word-break: normal;
+					.s{
+						font-size: 12px;
+						margin-top: 5px;
+						color: #666666;
+						span:first-child{
+							color: @blue;
+						}
+						span:last-child{
+							float: right;
+							i{
+								display: inline-block;
+								color: @blue;
+								margin-left: 10px;
+								cursor: pointer;
+							}
+						}
 					}
 				}
 			}

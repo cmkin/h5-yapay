@@ -11,10 +11,13 @@
 					<span>CNY</span>
 				</div>
 
-				<div class="type_change hide_s">
-					<van-dropdown-menu active-color="#0466C8">
+				<div class="type_change min_input hide_s">
+					<!-- <van-dropdown-menu active-color="#0466C8">
 						<van-dropdown-item v-model="payType" :options="payTypes" get-container=".view_quickSale_c2c .type_change" />
-					</van-dropdown-menu>
+					</van-dropdown-menu> -->
+					
+					<myselect v-model="payType"   :lists="$t('global.payType')"></myselect>
+					
 				</div>
 
 				<div class="fb hide_s" @click="openOrderForm">
@@ -829,6 +832,7 @@ export default {
 			display: inline-block;
 			width: 160px;
 			margin-left: 20px;
+			padding: 0;
 		}
 
 		.fb {
@@ -1371,9 +1375,6 @@ export default {
 		
 	}
 	
-	
-	
-	
 
 }
 
@@ -1390,7 +1391,13 @@ export default {
 	& > .van-tabs--line .van-tabs__wrap {
 		display: none;
 	}
-
+	.dhl{
+		.type_change{
+			.changed{
+				padding: 8px;
+			}
+		}
+	}
 	.buy_alert {
 		.van-dialog {
 			overflow: inherit;

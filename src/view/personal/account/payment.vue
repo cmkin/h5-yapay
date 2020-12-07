@@ -4,19 +4,19 @@
 			{{ $t('personal.account.payment.title') }}
 			<span> {{ $t('personal.account.payment.ttips') }} </span>
 		</div>
-		<div class="add">
+		<div class="add" @click="paymentMethod">
 			<i class="iconfont icon-weibiaoti1"></i>
 			{{ $t('personal.account.payment.add') }}
 		</div>
 		
-		<ul>
+		<ul v-if="false">
 			<li>
 				<div>
 					<img src="../../../assets/img/yhk.png" alt="">
 					<span>银行卡</span>
 				</div>
 				<div> <span>张灵灵</span> <span>622 4651 1235 61387</span> <span>中国工商银行</span> </div>
-				<div>
+				<div @click="paymentMethod">
 					<i> {{ $t('personal.account.security.xg') }} </i>
 				</div>
 			</li>
@@ -26,11 +26,16 @@
 					<span>银行卡</span>
 				</div>
 				<div> <span>张灵灵</span> <span>622 4651 1235 61387</span> <span>中国工商银行</span> </div>
-				<div>
+				<div @click="paymentMethod">
 					<i> {{ $t('personal.account.security.xg') }} </i>
 				</div>
 			</li>
 		</ul>
+		<div class="no_data">
+			<img src="../../../assets/img/pnodata.jpg" alt="">
+			<p>{{ $t('personal.account.payment.ndata') }}</p>
+			<van-button @click="paymentMethod" type="info">{{ $t('personal.account.payment.qadd') }}</van-button>
+		</div>
 		
 	</div>
 </template>
@@ -46,7 +51,11 @@
 			
 		},
 		methods:{
-			
+			paymentMethod(){
+				this.$router.push({
+					path:'/paymentMethod'
+				})
+			}
 		}
 	}
 </script>
@@ -138,7 +147,15 @@
 			}
 			
 		}
-		
+		.no_data{
+			text-align: center;
+			padding: 50px 0;
+			p{
+				padding: 10px 0;
+				margin-bottom: 10px;
+				color: #B3B3B3;
+			}
+		}
 	}
 	
 	@media (max-width:1023px) {

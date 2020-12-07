@@ -1,16 +1,7 @@
 <template>
 	<div class="view_assets_collection">
-		<div class="header">
-			<div class="main clearfix global_main">
-				<ul class="left clearfix">
-					<li class="router-link-active">{{ $t('collection.title') }}</li>
-				</ul>
-				<div class="right">
-					<router-link tag="span" to="/">{{ $t('collection.titlel') }}</router-link>
-				</div>
-			</div>
-		</div>
-		<div style="height: 64px;"></div>
+	
+		<header-top :title="$t('collection.title')" rlink='/' :rtitle="$t('collection.titlel')"></header-top>
 		
 		
 		<div class="top">
