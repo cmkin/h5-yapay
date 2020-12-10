@@ -273,6 +273,7 @@
 								padding: 9px 20px;
 								padding-right: 60px;
 								border: 1px solid rgba(227, 227, 227, 1);
+								border-right: 0;
 								display: inline-block;
 								width: 100%;
 								&:focus {
@@ -300,7 +301,10 @@
 							span {
 								font-size: 12px;
 							}
-
+							button{
+								border-radius: 0 2px 2px 0;
+								height: 41px;
+							}
 							.van-icon {
 								margin-left: 3px;
 							}
@@ -488,14 +492,24 @@
 							float: none;
 							width: 100%;
 							margin-bottom: 20px;
+							display: flex;
 							.input{
 								width: calc(100% - 85.7px);
+								input{
+									border-radius: 2px 0 0 2px;
+									border-right-color: transparent;
+								}
+							}
+							button{
+								border-radius: 0;
+								height: 41px;
 							}
 						}
 						.right{
 							float: none;
 							button{
 								width: 100%;
+								
 							}
 						}
 					}

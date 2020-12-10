@@ -21,6 +21,7 @@
 			}
 		},
 		mounted() {
+			
 			this.$nextTick(()=>{
 				setTimeout(()=>{
 					document.getElementById("oneLoading").remove()
@@ -31,7 +32,7 @@
 </script>
 
 <style>
-	@import url("https://at.alicdn.com/t/font_2139670_imorhniiy7m.css");
+	@import url("https://at.alicdn.com/t/font_2139670_td1jqs9wxn.css");
 	
 </style>
 <style lang="less">

@@ -96,7 +96,7 @@ export default {
 	},
 	methods: {
 		remove(e){
-			document.querySelector(".view_assets_identity .tip").remove()
+			document.querySelector(".view_personal_paymentMethod .tip").remove()
 		},
 		afterRead(file) {
 			file.status = 'uploading';
@@ -118,6 +118,7 @@ export default {
 		.tip {
 			.tips-org;
 			max-width: 550px;
+			padding: 10px;
 			span {
 				width: 100%;
 			}

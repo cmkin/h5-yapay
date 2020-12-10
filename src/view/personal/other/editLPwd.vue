@@ -58,6 +58,7 @@
 			max-width: 460px;
 			.tips{
 				.tips-org;
+				padding: 10px;
 				span{
 					width: 100%;
 				}

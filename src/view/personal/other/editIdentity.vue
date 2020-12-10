@@ -197,6 +197,7 @@
 			}
 			.tip{
 				.tips-org;
+				padding: 10px;
 				max-width: 550px;
 				span{
 					width: 100%;

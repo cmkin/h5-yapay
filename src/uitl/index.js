@@ -32,6 +32,10 @@ Object.keys(filters).forEach(key => {
 //全局混入
 import '../mixin/index'
 
+//axios
+
+import '../request/index'
+
 //vuex
 import store from '../store/index'
 
@@ -47,8 +51,9 @@ import copy from '_c/common/copy'
 import chat from '_c/common/chat'
 import select from '_c/common/select'
 import headerTop from '_c/common/headerTop'
+import sendCode from '_c/common/sendCode'
 
-const components = [tablex, dialog, copy, chat, select,headerTop]
+const components = [tablex, dialog, copy, chat, select,headerTop,sendCode]
 components.forEach(item => {
 	Vue.component(item.name, item)
 })

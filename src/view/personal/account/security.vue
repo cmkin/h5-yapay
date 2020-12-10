@@ -51,7 +51,7 @@
 				</div>
 				<div> {{ $t('personal.account.security.ccs[3].p') }} </div>
 				<div>
-					<i @click="goLink('jpwd')"> {{ $t('personal.account.security.bd') }} </i>
+					<i @click="goLink('jpwd')"> {{ $t('personal.account.security.sz') }} </i>
 				</div>
 			</li>
 			
@@ -85,7 +85,7 @@
 				
 				<!-- 邮箱 2-->
 				<div class="dia_email" v-if="dialog.type==2">
-					<p class="tips"> {{ $t('personal.account.security.bdtips') }} </p>
+					<!-- <p class="tips"> {{ $t('personal.account.security.bdtips') }} </p> -->
 					<ul>
 						<li>
 							<span> {{ $t('personal.account.security.yx') }} </span>
@@ -108,6 +108,8 @@
 			 <van-picker
 			  title=""
 			  show-toolbar
+			  :confirm-button-text="$t('global.base.ok')"
+			  :cancel-button-text="$t('global.base.cancel')"
 			  :columns="citys"
 			  @confirm="phoneOk"
 			  @cancel=" phoneDlg.show = false "

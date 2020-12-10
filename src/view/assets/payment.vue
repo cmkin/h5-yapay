@@ -239,6 +239,7 @@
 				&>.r{
 					margin-left: 5px;
 					color: #666;
+					float: right;
 					img{
 						width: 16px;
 						height: 16px;
@@ -308,6 +309,9 @@
 							display: block;
 							border: none !important;
 							padding: 0 !important;
+						}
+						span:first-child{
+							display: none;
 						}
 					}
 				}

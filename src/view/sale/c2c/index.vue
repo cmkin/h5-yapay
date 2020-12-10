@@ -16,7 +16,7 @@
 						<van-dropdown-item v-model="payType" :options="payTypes" get-container=".view_quickSale_c2c .type_change" />
 					</van-dropdown-menu> -->
 					
-					<myselect v-model="payType"   :lists="$t('global.payType')"></myselect>
+					<myselect v-model="payType"   :lists="payTypes" showKey="text"></myselect>
 					
 				</div>
 
@@ -115,7 +115,7 @@
 						<li class="all_pay">
 							<div class="t">{{ $t('quickSale.c2c.zffs') }}</div>
 							<ul class=" clearfix">
-								<li @click="changePayType(item)" :class="{ active: item.value == payType }" v-for="item in payTypes">{{ item.text }}</li>
+								<li @click="changePayType(item)" :class="{ active: item.id == payType }" v-for="item in payTypes">{{ item.text }}</li>
 							</ul>
 						</li>
 					</ul>
@@ -599,7 +599,7 @@ export default {
 			return arr.map(item => {
 				return {
 					text: item.title,
-					value: Number(item.id + 1)
+					id: Number(item.id + 1)
 				};
 			});
 		},
@@ -684,7 +684,7 @@ export default {
 			this.typeActive = index;
 		},
 		changePayType(item) {
-			this.payType = item.value;
+			this.payType = item.id;
 		},
 		buySellM() {
 			let path = '';
@@ -951,7 +951,9 @@ export default {
 		}
 		.item {
 			display: flex;
-			margin-bottom: 20px;
+			padding: 10px 0;
+			padding-top: 20px;
+			border-bottom: 1px solid #f3f3f3;
 			div {
 				flex: 1;
 			}
@@ -987,7 +989,11 @@ export default {
 				}
 			}
 		}
-
+		
+		.item:nth-child(2){
+			padding-top: 0;
+		}
+		
 		.btn {
 			& > span {
 				color: rgba(179, 179, 179, 1);

@@ -6,7 +6,7 @@
 			 	<router-view></router-view>
 			 </transition>
 		 </div>
-		<footerx></footerx>
+		<footerx v-if="isFooter"></footerx>
 	</div>
 </template>
 
@@ -16,15 +16,27 @@
 	export default {
 		data(){
 			return{
-				
+				isFooter:true
+			}
+		},
+		watch:{
+			$route(n){
+				this.isf(n)
 			}
 		},
 		components:{headerx,footerx},
 		mounted() {
-			
+			this.isf(this.$route)
 		},
 		methods:{
-			
+			isf(n){
+				let no = ['/login-register']
+				if(no.includes(n.path)){
+					this.isFooter = false
+				}else{
+					this.isFooter = true
+				}
+			}
 		}
 	}
 </script>

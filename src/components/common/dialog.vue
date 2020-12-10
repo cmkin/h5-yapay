@@ -179,7 +179,7 @@ export default {
 		padding: 0;
 	}
 
-	@media (max-width: 321px) {
+	@media (max-width: 1023px) {
 		.van-dialog {
 			width: 90%;
 		}

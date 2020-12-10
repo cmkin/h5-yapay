@@ -17,6 +17,20 @@ const routes = [{
 				}
 			},
 			{
+				path: 'message',
+				component: () => import('_v/message/index'),
+				meta: {
+					title: "消息中心"
+				}
+			},
+			{
+				path: 'login-register',
+				component: () => import('_v/login/index'),
+				meta: {
+					title: "登录"
+				}
+			},
+			{
 				path: 'sale',
 				component: () => import('_v/sale/index'),
 				children: [{
@@ -160,10 +174,24 @@ const routes = [{
 						meta: {
 							title: "提币"
 						}
+					},
+					{
+						path: 'order',
+						component: () => import('_v/assets/order'),
+						meta: {
+							title: "我的订单"
+						}
 					}
 				]
 			},
 			//其他子级
+			{
+				path: 'entrust',
+				component: () => import('_v/sale/c2c/entrust'),
+				meta: {
+					title: "我的委托单"
+				}
+			},
 			{
 				path: 'editLPwd',
 				component: () => import('_v/personal/other/editLPwd'),

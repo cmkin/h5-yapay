@@ -15,12 +15,12 @@
 				<div class="right clearfix">
 					<div class="language"><myselect @flag="languageFlag" ref="headerselect" v-model="language.active" @change="changeLanguage" hover :lists="$t('global.header.language')"></myselect></div>
 
-					<div class="login" v-if="false">
-						<span>{{ $t('global.header.login') }}</span>
-						<span>{{ $t('global.header.reg') }}</span>
+					<div class="login">
+						<span @click="login(0)">{{ $t('global.header.login') }}</span>
+						<span @click="login(2)">{{ $t('global.header.reg') }}</span>
 					</div>
 
-					<div class="loginok" v-else>
+					<div class="loginok" >
 						<div class="select defalut_s">
 							<div class="changed" @click.stop="loginZcFlag()">
 								<span>{{ $t('global.header.loginOk.title') }}</span>
@@ -50,13 +50,30 @@
 					</div>
 
 					<div class="icons">
-						<svg t="1596524462854" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8570" width="20" height="20">
+						<svg @click.stop="messageFlag" t="1596524462854" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8570" width="20" height="20">
 							<path
 								d="M849.6 713.4c8.4-0.4 16.7 1.8 23.8 6.4-28.9-18.5-46.4-50.4-46.3-84.8V436c0-145.9-105.7-267.6-246.9-297.5v-7.2c0-37.1-30.1-67.1-67.2-67.1h-0.1c-37.1 0-67.3 30.1-67.3 67.2v7C304.3 168.4 198.7 290 198.7 436v199.1c0 35.7-18.6 66.9-46.4 84.8 7-4.6 15.4-6.9 23.8-6.4-24.7-0.9-45.5 18.4-46.4 43.1-0.9 24.7 18.4 45.5 43.1 46.4h676.6c24.7 0.1 44.8-20 44.9-44.7 0.1-24.8-19.9-44.9-44.7-44.9zM513 959.8c62 0 112.2-50.2 112.2-111.9H400.7c0 61.7 50.2 111.9 112.3 111.9z"
 								fill="#ffffff"
 								p-id="8571"
 							></path>
 						</svg>
+						<transition name=""  mode="out-in">
+							<ul class="message_alert" v-if="message.flag">
+								<li class="t">
+									{{$t('message.title')}}
+								</li>
+								<li @click="messagem(index)" v-for="item,index in 3">
+									<div class="top">
+										<span>[{{$t('message.tabs')[index].text }}]</span>
+										<i>六一节特别活动：交易，人人有好礼</i>
+									</div>
+									<div class="time">2020/12/10  12:03</div>
+								</li>
+								<li class="all" @click="messagem(0)">
+									{{$t('message.all')}}
+								</li>
+							</ul>
+						</transition>
 					</div>
 
 					<div class="phone_muen"><van-icon name="wap-nav" @click="phoneMuen = true" size="30" /></div>
@@ -72,11 +89,34 @@
 					<span>{{ $t('global.header.login') }}</span>
 					<span>{{ $t('global.header.reg') }}</span>
 				</div>
-				<ul class="meun clearfix">
-					<router-link v-for="(item, index) in $t('global.header.meun')" :key="index" :to="item.to" tag="li">{{ item.title }}</router-link>
+				<ul class="meun clearfix" >
+					<li @click="phoneGoLink(item)" v-for="(item, index) in $t('global.header.meun')">
+						{{ item.title }}
+					</li>
+					<!-- <router-link @click="phoneMuen = false" v-for="(item, index) in $t('global.header.meun')" :key="index" :to="item.to" tag="li">{{ item.title }}</router-link> -->
 				</ul>
 
 				<van-collapse :border="false" v-model="activeNames">
+					
+					<van-collapse-item title="用户名" name="3">
+						<ul>
+							<li @click="phoneGoLink({to:'/personal/data'})">
+								{{ $t('personal.title') }}
+							</li>
+							<li @click="phoneGoLink(item)" v-for="(item, index) in $t('global.header.loginOk.list')">
+								{{ item.text }}
+							</li>
+						</ul>
+					</van-collapse-item>
+					
+					<van-collapse-item :title="$t('global.header.loginOk.title')" name="2">
+						<ul>
+							<li @click="phoneGoLink(item)" v-for="(item, index) in $t('global.header.loginZc.list')">
+								{{ item.text }}
+							</li>
+						</ul>
+					</van-collapse-item> 
+					
 					<van-collapse-item :title="$t('global.header.language')[language.active] ? $t('global.header.language')[language.active].title : ''" name="1">
 						<ul>
 							<li :class="{ active: item.id == language.active }" @click="changeLanguage(item.id)" v-for="(item, index) in $t('global.header.language')">
@@ -84,7 +124,11 @@
 							</li>
 						</ul>
 					</van-collapse-item>
+					
+						
+					
 				</van-collapse>
+				
 			</div>
 		</van-popup>
 	</div>
@@ -107,6 +151,9 @@ export default {
 			loginZc:{
 				flag:false,
 				active:0
+			},
+			message:{
+				flag:false
 			}
 		};
 	},
@@ -119,13 +166,30 @@ export default {
 		});
 		document.addEventListener("click",(e)=>{
 			this.loginok.flag = false
-			this.loginZc.flag = false		
+			this.loginZc.flag = false	
+			this.message.flag = false
 		})
 		//已经登录成功之后的数据
 		
 	},
 
 	methods: {
+		messagem(type){
+			this.$router.push({
+				path:'/message',
+				query:{
+					type:type
+				}
+			})
+		},
+		login(type){
+			this.$router.push({
+				path:"/login-register",
+				query:{
+					type:type
+				}
+			})
+		},
 		changeLanguage(id) {
 			this.language.active = id;
 			
@@ -145,18 +209,27 @@ export default {
 				this.language.active = index;
 			}
 		},
+		messageFlag(){
+			this.loginok.flag = false
+			this.loginZc.flag = false
+			this.message.flag = !this.message.flag
+			this.$refs.headerselect.open(false,false)
+		},
 		languageFlag(){
 			this.loginok.flag = false
 			this.loginZc.flag = false
+			this.message.flag = false
 		},
 		loginOkFlag(){
 			this.loginok.flag = !this.loginok.flag
 			this.loginZc.flag = false
+			this.message.flag = false
 			this.$refs.headerselect.open(false,false)
 		},
 		loginZcFlag(){
 			this.loginZc.flag = !this.loginZc.flag
 			this.loginok.flag = false
+			this.message.flag = false
 			this.$refs.headerselect.open(false,false)
 		},
 		changeLogMeun(){
@@ -171,22 +244,40 @@ export default {
 			switch(item.event){
 				case "logout":
 					//退出登录
-					this.$dialog.confirm({
-					  title: this.$t('global.base.wxts'),
-					  message:this.$t('global.header.logout'),
-					  cancelButtonText:this.$t('global.base.cancel'),
-					  confirmButtonText:this.$t('global.base.ok'),
-					})
-					  .then(() => {
-					    // on confirm
-					  })
-					  .catch(() => {
-					    // on cancel
-					  });
+					this.logout()
 				break;
 			}
 			this.loginok.flag = false
 			
+		},
+		phoneGoLink(item){
+			this.phoneMuen = false
+			if(item.to){
+				this.$router.push({
+					path:item.to
+				})
+			}
+			switch(item.event){
+				case "logout":
+					//退出登录
+					this.logout()
+				break;
+			}
+		},
+		//退出登录
+		logout(){
+			this.$dialog.confirm({
+			  title: this.$t('global.base.wxts'),
+			  message:this.$t('global.header.logout'),
+			  cancelButtonText:this.$t('global.base.cancel'),
+			  confirmButtonText:this.$t('global.base.ok'),
+			})
+			  .then(() => {
+			    // on confirm
+			  })
+			  .catch(() => {
+			    // on cancel
+			  });
 		}
 	}
 };
@@ -261,7 +352,6 @@ export default {
 				border: 1px solid #fff;
 				padding: 4px 8px;
 				border-radius: 5px;
-
 				span {
 					.hover;
 				}
@@ -335,9 +425,56 @@ export default {
 				display: inline-block;
 				position: relative;
 				top: 5px;
-
 				svg {
 					.hover(@blue, true);
+				}
+				.message_alert{
+					position: absolute;
+					top: 220%;
+					right: 0;
+					width: 288px;
+					background: #FFFFFF;
+					box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+					opacity: 1;
+					border-radius: 2px;
+					color: #666;
+					.t{
+						color: #B3B3B3;
+						background-color: #fff !important;
+						cursor: default !important;
+					}
+					li{
+						text-align: left;
+						padding: 10px 15px;
+						transition: all 0.5s;
+						cursor: pointer;
+						border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+						.top{
+							display: flex;
+							span{
+								width: 120px;
+								font-size: 16px;
+								color: #333333;
+								font-weight: bold;
+							}
+							i{
+								color: #666666;
+							}
+						}
+						.time{
+							color: #B3B3B3;
+							font-size: 12px;
+							padding-top: 10px;
+						}
+						&:hover{
+							background-color: #F1F9FF;
+						}
+					}
+					.all{
+						text-align: center;
+						cursor: pointer;
+						.hover;
+					}
 				}
 			}
 
@@ -386,7 +523,7 @@ export default {
 		}
 
 		.van-popup__close-icon {
-			color: white;
+			color: rgba(255,255,255,0.8);
 		}
 
 		.phone_muen_content {
@@ -395,12 +532,12 @@ export default {
 			.login {
 				margin-right: 30px;
 				display: inline-block;
-				border: 1px solid #fff;
+				border: 1px solid  rgba(255,255,255,0.8);
 				padding: 4px 8px;
 				border-radius: 5px;
-
 				span {
 					.hover;
+					color:rgba(255,255,255,0.8)
 				}
 
 				span:last-child {
@@ -414,7 +551,7 @@ export default {
 						height: 10px;
 						left: -10px;
 						top: 2px;
-						background: white;
+						background: rgba(255,255,255,0.5);
 					}
 				}
 			}
@@ -423,6 +560,7 @@ export default {
 				li {
 					margin-top: 20px;
 					font-size: 16px;
+					color: rgba(255,255,255,0.8);
 				}
 			}
 		}
@@ -435,7 +573,7 @@ export default {
 	.phone_muen_content {
 		.van-cell {
 			background: none;
-			color: white;
+			color: rgba(255,255,255,0.8);
 			font-size: 16px;
 			padding: 0;
 			margin-top: 10px;
@@ -443,11 +581,13 @@ export default {
 
 		.van-collapse-item__content {
 			background: none;
-			color: white;
-			font-size: 14px;
+			color: rgba(255,255,255,0.8);
+			font-size: 16px;
 
 			li {
 				padding: 5px;
+				color: #808eb6;
+				font-size: 15px;
 				.hover;
 			}
 
@@ -461,12 +601,12 @@ export default {
 		}
 
 		.van-cell__right-icon {
-			color: white;
+			color: rgba(255,255,255,0.8);
 		}
 	}
 
 	.van-popup__close-icon {
-		color: white;
+		color: rgba(255,255,255,0.8);
 	}
 	.language{
 		.defalut_s ul{

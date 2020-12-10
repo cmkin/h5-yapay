@@ -89,6 +89,10 @@
 		},
 		methods:{
 			changet(id){
+				if(id=='TRC20'){
+					this.$toast(this.$t('withdraw.whz'))
+					return
+				}
 				this.lid = id
 			}
 		}
