@@ -14,9 +14,6 @@
 			<li>
 				<span> {{ $t('login.yx') }} </span>
 				<input type="number" :placeholder="$t('global.qsr') + $t('login.yx')" />
-				<i>
-					<send-code></send-code>
-				</i>
 			</li>
 			
 			<li>
@@ -29,7 +26,10 @@
 			<li>
 				<span style="letter-spacing: 0;padding-right: 5px;">{{ $t('global.base.yzm') }}</span>
 				<input type="number" :placeholder="$t('global.qsr') + $t('global.base.yzm')" />
-				<i style="color: #0466C8;">{{ $t('global.base.sendCode') }}</i>
+				<!-- <i style="color: #0466C8;">{{ $t('global.base.sendCode') }}</i> -->
+				<i>
+					<send-code></send-code>
+				</i>
 			</li>
 			
 		</ul>

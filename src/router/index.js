@@ -17,6 +17,13 @@ const routes = [{
 				}
 			},
 			{
+				path: 'quotation',
+				component: () => import('_v/quotation/index'),
+				meta: {
+					title: "行情"
+				}
+			},
+			{
 				path: 'message',
 				component: () => import('_v/message/index'),
 				meta: {

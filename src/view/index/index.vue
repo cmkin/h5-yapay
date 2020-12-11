@@ -1,7 +1,7 @@
 <template>
 	<div class="view_index">
 		<div class="banner">
-			<div class="main">
+			<div class="main global_main">
 				<div class="bg">
 					<img :src="$t('index.bg')" alt="">
 				</div>
@@ -38,112 +38,65 @@
 				</div>
 			</div>
 		</div>
-
-
-		<div class="hq global_main">
-			<h1 class="title"> {{ $t('index.hq') }}</h1>
-			<div class="tab">
-				<van-tabs v-model="hq.tabActive" animated swipeable lazy-render background="#F3F3F3" line-height="0"
-				 :swipe-threshold="swipeThreshold">
-					<van-tab :title="item.name" :key="index" v-for="item,index in $t('index.hb')">
-						<div class="main">
-							<div class="num">
-								<svg t="1596681534365" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-								 p-id="2786" width="13" height="16">
-									<path d="M968.625624 448.106489l-442.995008-442.995008c-6.815308-6.815308-17.03827-6.815308-23.853578 0l-442.995008 442.995008c-3.407654 3.407654-6.815308 13.630616-3.407654 17.03827 0 10.222962 6.815308 13.630616 13.630616 13.630615h255.574043v528.186356c0 10.222962 6.815308 17.03827 17.038269 17.03827h340.765392c10.222962 0 17.03827-6.815308 17.038269-17.03827V478.775374H954.995008c6.815308 0 13.630616-3.407654 17.03827-10.222961 0-6.815308 0-13.630616-3.407654-20.445924z"
-									 fill="" p-id="2787"></path>
-								</svg>
-								<b>{{ tabActiveItem.fh }}1.00</b>
-							</div>
-
-							<div class="items clearfix">
-								<ul class="item">
-									<li>
-										<span> {{ $t('index.r') }} </span>
-										<i>
-											(+0.05)
-											<font style="width: 5px;display: inline-block;"></font> 
-											+0.05% 
-										</i>
-									</li>
-									<li>
-										<span> {{ $t('index.z') }} </span>
-										<i>
-											(+0.05)
-											<font style="width: 5px;display: inline-block;"></font> 
-											+0.05% 
-										</i>
-									</li>
-									<li>
-										<span> {{ $t('index.y') }} </span>
-										<i>
-											(+0.05)
-											<font style="width: 5px;display: inline-block;"></font> 
-											+0.05% 
-										</i>
-									</li>
-								</ul>
-								<ul class="item">
-									<li>
-										<span> {{ $t('index.open') }} </span>
-										<i>{{ tabActiveItem.fh }}1.00</i>
-									</li>
-									<li>
-										<span> {{ $t('index.last') }} </span>
-										<i>{{ tabActiveItem.fh }}1.00</i>
-									</li>
-									<li>
-										<span> {{ $t('index.higt') }} </span>
-										<i>{{ tabActiveItem.fh }}1.00</i>
-									</li>
-								</ul>
-								<ul class="item">
-									<li>
-										<span> {{ $t('index.mkt') }} </span>
-										<i>{{ tabActiveItem.fh }}1.00</i>
-									</li>
-									<li>
-										<span> {{ $t('index.vol') }} </span>
-										<i>{{ tabActiveItem.fh }}1.00</i>
-									</li>
-									<li>
-										<span> {{ $t('index.low') }} </span>
-										<i>{{ tabActiveItem.fh }}1.00</i>
-									</li>
-								</ul>
-							</div>
-
-						</div>
-					</van-tab>
-				</van-tabs>
+		
+		
+		<div class="tabs global_main">
+			<ul class="clearfix">
+				<router-link tag="li" :to="item.to" v-for="item in $t('index.tabs')">
+					<img :src="item.img" alt="">
+					<span>{{item.text}}</span>
+				</router-link>
+			</ul>
+		</div>
+		
+		<div class="lpk global_main clearfix">
+			<div class="left">
+				<div class="title">
+					{{$t('index.lpk')}}
+				</div>
+				<div class="t2">
+					{{$t('index.kzhy')}}
+				</div>
+				<p class="nj"> {{$t('index.nkyj')}} </p>
+				<span class="lj"> {{$t('index.ljty')}} </span>
+			</div>
+			<div class="right">
+				<img src="../../assets/img/index5.png" alt="">
 			</div>
 		</div>
 		
-		<div class="table global_main">
-			<tablex :titles="$t('index.tableTitle')" :datas="datas">
-				<template v-slot:fb="row">
-					<div class="fb">
-						<svg t="1596681534365" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-						 p-id="2786" width="13" height="16">
-							<path d="M968.625624 448.106489l-442.995008-442.995008c-6.815308-6.815308-17.03827-6.815308-23.853578 0l-442.995008 442.995008c-3.407654 3.407654-6.815308 13.630616-3.407654 17.03827 0 10.222962 6.815308 13.630616 13.630616 13.630615h255.574043v528.186356c0 10.222962 6.815308 17.03827 17.038269 17.03827h340.765392c10.222962 0 17.03827-6.815308 17.038269-17.03827V478.775374H954.995008c6.815308 0 13.630616-3.407654 17.03827-10.222961 0-6.815308 0-13.630616-3.407654-20.445924z"
-							 fill="" p-id="2787"></path>
-						</svg>
-						<span>
-							{{row.item.fb}}<i>/USDT</i>
-						</span>
-					</div>
-				</template>
-				<template v-slot:zdf="row">
-					<div class="zdf">
-						<p>{{row.item.zdf.bfb}}</p>
-						<p>{{row.item.zdf.num}}</p>
-					</div>
-				</template>
-			</tablex>
-			<div class="show_more">
-				<span>{{ $t('global.base.more') }} </span>
+		<div class="lc_wrap">
+			<div class="lc global_main">
+				<div class="t" v-html="$t('index.lc')"></div>
+				<div class="t2" v-html="$t('index.zg')"></div>
+				<ul>
+					<li v-for="item in $t('index.lcTabs')">
+						<img :src="item.img" alt="">
+						<span v-html="item.text"></span>
+						<img src="../../assets/img/indexj.png" alt="">
+					</li>
+				</ul>
 			</div>
 		</div>
+		
+		
+		<div class="lpk dgl global_main clearfix">
+			<div class="right">
+				<img src="../../assets/img/index1.png" alt="">
+			</div>
+			<div class="left">
+				<div class="title">
+					{{$t('index.dgl')}}
+				</div>
+				<div class="t2">
+					{{$t('index.szzf')}}
+				</div>
+				<p class="nj"> {{$t('index.yhk')}} </p>
+				<span class="lj"> {{$t('index.ljty')}} </span>
+			</div>
+		</div>
+		
+
 		
 	</div>
 </template>
@@ -153,30 +106,10 @@
 		data() {
 			return {
 				//titles:this.$t("index.tableTitle"),
-				datas:[
-					{
-						fb:'USD',
-						price:'$1.00',
-						zdf:{
-							num:'0.11',
-							bfb:'50%'
-						}
-					},
-					{
-						fb:'USD',
-						price:'$1.00',
-						zdf:{
-							num:'0.11',
-							bfb:'50%'
-						}
-					},
-				],
+				
 				buyType: 0,
 				buyFlag: false,
-				swipeThreshold:10,
-				hq: {
-					tabActive: 0
-				}
+				
 			}
 		},
 		computed: {
@@ -190,13 +123,7 @@
 
 		},
 		mounted() {
-			//tab数量
-			let w = ( document.documentElement.clientWidth || document.body.clientWidth )
-				w<=768 ? this.swipeThreshold = 5 : this.swipeThreshold = 10
-				window.addEventListener("resize",()=>{
-					let w = ( document.documentElement.clientWidth || document.body.clientWidth )
-						w<=768 ? this.swipeThreshold = 5 : this.swipeThreshold = 10
-				})
+			
 		},
 		methods: {
 			changeType(type) {
@@ -221,52 +148,50 @@
 
 			.main {
 				position: relative;
-				background: white;
-				max-width: 744px;
+				
 				margin: auto;
 				box-sizing: border-box;
-				padding: 96px 80px;
-				box-shadow: 0px 20px 40px rgba(4, 102, 200, 0.2);
+				
 
 				.bg {
 					position: absolute;
-					right: 0;
-					top: 0;
+					right: 20px;
+					top: 20px;
 
 					opacity: .1;
 
 					img {
-						width: 340px;
-						height: 340px;
+						width: 300px;
+						height: 300px;
 						transform: translate(20%, -20%);
 					}
 				}
 
 				&>h1 {
-					color: @blue;
-					margin-bottom: 48px;
+					color: #fff;
+					margin-bottom: 38px;
 					font-size: 32px;
 				}
 
 				&>p {
-					color: @blue;
+					color: #fff;
 					font-size: 16px;
-					margin-bottom: 96px;
+					margin-bottom: 66px;
 				}
 
 				.buy {
 					position: relative;
 					z-index: 10;
-
+					margin-bottom: 70px;
 					.left {
-						float: left;
+						max-width: 384px;
 						position: relative;
-						width: 60%;
+						margin-bottom: 30px;
 						display: flex;
 						.input {
 							position: relative;
 							display: inline-block;
-							width: 75%;
+							width: 77%;
 							input {
 								border: none;
 								transition: all .3s;
@@ -342,8 +267,7 @@
 					}
 
 					.right {
-						float: right;
-
+						
 						button {
 							font-size: 12px;
 							padding: 0 30px;
@@ -352,121 +276,183 @@
 				}
 			}
 		}
-
-		.hq {
-			h1.title {
-				text-align: center;
-				font-size: 24px;
-				font-weight: normal;
-				font-family: 'sy-m';
-				padding: 40px 0;
-			}
-
-			.tab {
-				.van-tab--active {
-					background: #E3E3E3;
+		
+		.tabs{
+			transform: translateY(-50%);
+			ul{
+				display: flex;
+				box-shadow: -2px 8px 5px rgba(189, 199, 209, 0.5);
+				li{
+					cursor: pointer;
+					padding: 15px 0;
+					background-color: #fff;
+					flex: 1;
+					img{
+						width: 80px;
+						height: 80px;
+						display: block;
+						margin: auto;
+					}
+					span{
+						display: block;
+						text-align: center;
+						font-size: 16px;
+					}
 				}
-
-				.main {
-					
-					.num {
-						padding: 48px 0;
-						color: @green;
-						font-size: 32px;
-						svg {
-							display: inline-block;
-							margin-right: 10px;
-
-							path {
-								fill: @green;
-							}
-						}
-					}
-					.items{
-						border-bottom: 1px solid rgba(211,211,211,1);
-						margin-bottom: 30px;
-						.item{
-							float: left;
-							width: 33%;
-							li{
-								padding-left: 5%;
-								margin-bottom: 30px;
-								display: flex;
-								span{
-									color: #B3B3B3;
-									flex: 1;
-								}
-								i{
-									flex: 1;
-								}
-							}
-						}
-						.item:nth-child(3){
-							i{
-								text-align: right;
-							}
-						}
-						.item:nth-child(2){
-							position: relative;
-							&::after,&::before{
-								content: '';
-								position: absolute;
-								top: 50%;
-								left: 0;
-								height: 60%;
-								width: 1px;
-								background: #E3E3E3;
-								transform: translateY(-70%);
-							}
-							&::before{
-								left: auto;
-								right: 0;
-								
-							}
-						}
-						.item:nth-child(1){
-							i{
-								color: @green;
-							}
-						}
-						
-					}
+				li:nth-child(2){
+					color: #fff;
+					background: linear-gradient(270deg, #BDC7D1 0%, #718AA2 100%);
+				}
+				li:nth-child(3){
+					color: #fff;
+					background: linear-gradient(269deg, #4769A8 0%, #183B7A 100%);
 				}
 			}
 		}
 		
-		.table{
-			padding-top: 30px;
-			.fb{
-				svg{
-					path{
-						fill: @green;
-					}
+		.lpk{
+			.left{
+				float: left;
+				padding-top: 8%;
+				padding-right: 10%;
+				box-sizing: border-box;
+				width: 60%;
+				.title{
+					padding: 15px 0;
+					font-size: 24px;
+					color: #333;
+					font-weight: bold;
+					border-bottom: 2px solid #E3E3E3;
+					margin-bottom: 20px;
 				}
-				span{
-					margin-left: 5px;
-					i{
-						font-size: 12px;
-						color: #B3B3B3;
-					}
+				.t2{
+					font-size: 16px;
+					color: #333;
+					font-weight: bold;
+					margin-bottom: 10px;
+				}
+				.nj{
+					color: #666666;
+					margin-bottom: 20px;
+				}
+				.lj{
+					background-color: @blue;
+					color: #fff;
+					padding: 5px 10px;
+					display: inline-block;
+					border-radius: 2px;
+					cursor: pointer;
 				}
 			}
-			.zdf{
-				color: @green;
-				line-height: 150%;
+			.right{
+				width: 40%;
+				float: left;
+				img{
+					display: block;
+					width: 100%;
+				}
 			}
-			.show_more{
+		}
+		
+		.lc_wrap{
+			margin-top: 50px;
+			background-color: @blue;
+			color: #fff;
+			padding: 50px 0;
+			.t{
 				text-align: center;
-				padding: 15px 0;
-				border-bottom: 1px solid #f3f3f3;
-				margin-bottom: 60px;
-				color: @blue;
+				font-size: 22px;
+				font-weight: bold;
+			}
+			.t2{
+				text-align: center;
 				font-size: 16px;
-				.hover;
+				padding-top: 20px;
+			}
+			ul{
+				padding-top: 50px;
+				display: flex;
+				li{
+					text-align: left;
+					flex: 1;
+					position: relative;
+					img:first-child{
+						display: block;
+						width: 120px;
+						height: 120px;
+						margin: auto;
+					}
+					span{
+						display: block;
+						text-align: center;
+						padding-top: 20px;
+						color: rgba(255,255,255,0.8);
+					}
+					img:last-child{
+						position: absolute;
+						right: 0;
+						top: 30%;
+						transform: translateY(-50%);
+						width: 40px;
+					}
+				}
+				li:last-child{
+					img:last-child{
+						display: none;
+					}
+				}
+			}
+		}
+		.dgl{
+			padding: 100px 20px;
+			.left{
+				padding: 0;
+				padding-left: 5%;
 			}
 		}
 	}
-	
+	@media (max-width:1023px) {
+		.view_index{
+			.tabs{
+				
+				ul{
+					li{
+						img{
+							width: 60px;
+							height: 60px;
+						}
+					}
+				}
+			}
+			.lpk{
+				.left{
+					width: 100%;
+					padding: 0;
+				}
+				.right{
+					display: none;
+				}
+			}
+			.lc_wrap{
+				ul{
+					display: block;
+					li{
+						margin-bottom: 20px;
+						img:last-child{
+							display: none;
+						}
+						span{
+							padding-top: 10px;
+						}
+					}
+				}
+			}
+			.dgl{
+				margin: 30px 0;
+				padding: 0 20px;
+			}
+		}
+	}
 	@media (max-width:768px) {
 		.view_index{
 			.banner{
@@ -515,34 +501,6 @@
 					}
 				}
 			}
-			.hq{
-				.tab{
-					.main{
-						.items{
-							.item{
-								margin-bottom: 20px;
-								width: 100%;
-								border-bottom: 1px solid #d3d3d3;
-								li{
-									margin-bottom: 20px;
-								}
-								i{
-									text-align: right;
-								}
-							}
-							.item:nth-child(2){
-								&::after,&::before{
-									display: none;
-								}
-							}
-							.item:last-child{
-								border: none;
-								margin-bottom: 0;
-							}
-						}
-					}
-				}
-			}
 			
 		}
 	}
@@ -557,35 +515,6 @@
 			}
 		}
 	}
-</style>
-<style lang="less">
-	.view_index {
-		.hq {
-			.tab {
-				.van-tab {
-					.hover;
-				}
 
-				.van-tab--active {
-					background: #E3E3E3;
-					color: #333 !important;
-				}
-
-				.van-tabs__wrap {
-					width: 60%;
-				}
-			}
-		}
-	}
-	@media (max-width:768px) {
-		.view_index{
-			.hq {
-				.tab {
-					.van-tabs__wrap {
-						width: 100%;
-					}
-				}
-			}
-		}
-	}
 </style>
+

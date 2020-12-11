@@ -55,7 +55,7 @@ module.exports = {
 				},
 				{
 					title: "行情",
-					to: ''
+					to: '/quotation'
 				},
 				{
 					title: "活动",
@@ -287,13 +287,65 @@ module.exports = {
 	//首页
 	index: {
 		bg: require('_a/img/usdt.png'),
-		kj: '快捷买币',
+		kj: '充值',
 		aq: '快捷、安全、便捷的数字货币支付平台</br>懂支付，更懂你！',
 		gm: '购买',
 		a: '按',
 		sl: "数量",
 		je: '金额',
 		lj: '立即购买',
+		
+		
+		tabs:[
+			{
+				img:require("@/assets/img/index2.png"),
+				text:'付款',
+				to:'/assets/payment'
+			},
+			{
+				img:require("@/assets/img/index3.png"),
+				text:'收款',
+				to:'/assets/collection'
+			},
+			{
+				img:require("@/assets/img/index4.png"),
+				text:'提现',
+				to:'/sale/c2c?type=1'
+			},
+		],
+		
+		lpk:'礼品卡兑换',
+		kzhy:'馈赠好友不二之选',
+		nkyj:'您可以将自己的USDT打包生成兑换码，发放给好友或输入获取的兑换码领取他人赠送的USDT',
+		ljty:'立即体验',
+		
+		lc:'低门槛&nbsp;&nbsp;高效率&nbsp;&nbsp;支付更轻松!',
+		zg:'整个支付过程仅需 5-8S',
+		lcTabs:[
+			{
+				img:require("@/assets/img/payshop.png"),
+				text:'商户在keypay</br>开通商户服务'
+			},
+			{
+				img:require("@/assets/img/pay.png"),
+				text:'消费者在商户充值或付</br>款时选择数字货币支付'
+			},
+			{
+				img:require("@/assets/img/paycode.png"),
+				text:'拉起keypay支付或打开</br>keypay客端扫码支付'
+			},
+			{
+				img:require("@/assets/img/payok.png"),
+				text:'消费者完成支付</br>交易成功'
+			}
+		],
+		
+		dgl:'多公链底层智能钱包',
+		szzf:'数字支付离你更近一步',
+		yhk:'用户可通过keypay钱包，随时随地管理数字资产，更棒的是用户可以通过我们的钱包向支持数字货币的商户支付，在真实世界进行消费，数字货币不再只是数字',
+		
+		
+		
 		hq: 'USDT行情',
 		hb: [{
 				key: 'USD',

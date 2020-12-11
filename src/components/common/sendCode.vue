@@ -21,16 +21,19 @@
 		mounted() {
 			
 		},
+		beforeDestroy() {
+			clearInterval(this.set)
+		},
 		methods:{
 			star(){
 				this.setp = 1
 				setTimeout(()=>{
 					this.setp = 2
-					
 					this.set = setInterval(()=>{
 						this.nums--
 						if(this.nums<=0){
 							clearInterval(this.set)
+							this.nums = 120
 							this.setp = 3
 						}
 					},1000)
