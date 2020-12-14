@@ -21,7 +21,6 @@
 			}
 		},
 		mounted() {
-			
 			this.$nextTick(()=>{
 				setTimeout(()=>{
 					document.getElementById("oneLoading").remove()

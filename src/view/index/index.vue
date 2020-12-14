@@ -123,7 +123,7 @@
 
 		},
 		mounted() {
-			
+			this.$http.login({a:1,b:1}).then((res)=>{})
 		},
 		methods: {
 			changeType(type) {

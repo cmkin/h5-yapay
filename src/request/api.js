@@ -1,7 +1,12 @@
-import request from './request'
+import {post,get} from './request'
 
 
 
 export default {
-	//abc:request.post
+	login:function(data){
+		return get("/login",{
+			data:data,
+			token:false
+		})
+	}
 }
