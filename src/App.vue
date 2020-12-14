@@ -21,11 +21,28 @@
 			}
 		},
 		mounted() {
+			this.appInit()
 			this.$nextTick(()=>{
 				setTimeout(()=>{
-					document.getElementById("oneLoading").remove()
+					if(document.getElementById("oneLoading")){
+						document.getElementById("oneLoading").remove()
+					}
 				},500)	
 			})		
+		},
+		methods:{
+			//所有接口，数据等 初始化
+			appInit(){
+				
+				this.getrate()
+			},
+			//获取汇率
+			getrate(){
+				this.$http.getExchangeRate().then((res)=>{
+					
+				})
+			}
+			
 		}
 	}
 </script>

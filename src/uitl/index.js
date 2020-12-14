@@ -43,6 +43,7 @@ import store from '../store/index'
 import i18n from '../local/index'
 import router from '../router/index'
 
+
 ///////////////////自定义组件////////////////
 
 import tablex from '_c/common/table'
@@ -102,7 +103,11 @@ Vue.prototype.$inputCheak = function(doms, error) {
 	return flag
 }
 
+//检查错误
 
+Vue.prototype.$cheakError = function(code,isall){
+	this.$notify( this.$t( isall ? code : 'error.ERROR_'+code  ) )
+}
 
 //table隐藏检查
 

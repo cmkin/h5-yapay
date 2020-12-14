@@ -8,34 +8,34 @@
 				<myselect  v-model="language.active"  :lists="$t('global.header.language')"></myselect>
 			</li>
 			<li class="select">
-				<myselect  v-model="hbType.active" showKey="text"  :lists="$t('global.hbType')"></myselect>
+				<myselect  v-model="form.currency" showKey="text"  :lists="$t('global.hbType')"></myselect>
 			</li>
 			
 			<li>
 				<span> {{ $t('login.yx') }} </span>
-				<input type="number" :placeholder="$t('global.qsr') + $t('login.yx')" />
+				<input type="email" v-model="form.email" :placeholder="$t('global.qsr') + $t('login.yx')" />
 			</li>
 			
 			<li>
 				<span>{{ $t('login.mm') }}</span>
-				<input :type="isshowPwd?'text':'password'" :placeholder=" $t('login.mts')" />
+				<input v-model="form.password" :type="isshowPwd?'text':'password'" :placeholder=" $t('login.mts')" />
 				<i @click="isshowPwd = !isshowPwd" class="iconfont" :class="isshowPwd?'icon-Eyesopen':'icon-biyan'"></i>
 			</li>
 			
 			
 			<li>
 				<span style="letter-spacing: 0;padding-right: 5px;">{{ $t('global.base.yzm') }}</span>
-				<input type="number" :placeholder="$t('global.qsr') + $t('global.base.yzm')" />
+				<input type="number" v-model="form.verifyCode" :placeholder="$t('global.qsr') + $t('global.base.yzm')" />
 				<!-- <i style="color: #0466C8;">{{ $t('global.base.sendCode') }}</i> -->
 				<i>
-					<send-code></send-code>
+					<send-code :urlType="2" :data="{ account:form.email,regionCode:$parent.regionCode,type:4 }" ></send-code>
 				</i>
 			</li>
 			
 		</ul>
 		
 		<div class="btns">
-			<van-button type="info">{{ $t('login.lj') }}</van-button>
+			<van-button @click="submit" :disabled="isSend" :loading="submitLoading" type="info">{{ $t('login.lj') }}</van-button>
 		</div>
 		<div class="other">
 			{{ $t('login.yzh') }}? <span @click="$parent.pageChange(0)">{{ $t('login.ljd') }} <i class="iconfont icon-arrowRight"></i></span>
@@ -59,16 +59,55 @@
 				},
 				hbType:{
 					active:null
-				}
+				},
+				
+				submitLoading:false,
+				
+				form:{
+					currency:1,
+					password:'',
+					email:'',
+					verifyCode:''
+				},
+				
 			}
 		},
-		
+		computed:{
+			isSend(){
+				for(let i in this.form){
+					if(this.form[i] == ''){
+						return true
+					}
+				}
+				return false
+			}
+		},
 		mounted() {
 			this.language.active = this.$t('global.header.language')[0].id;
-			this.hbType.active = this.$t('global.hbType')[0].id;
+			
 		},
 		methods:{
-			
+			submit(){
+				let json = {
+					...this.form,
+					registerlongitude:this.$parent.registerlongitude,
+					//regionCode:this.$parent.regionCode,
+				}
+				this.submitLoading = true
+				this.$http.mailRegister(json).then((res)=>{
+					this.submitLoading = false
+					if(res.code==0){
+						this.$notify({
+							type:'success',
+							message:this.$t('global.base.regOk')
+						})
+						setTimeout(()=>{
+							this.$parent.pageChange(0)
+						},3000)
+					}
+					console.log(res)
+				})
+			}
 		}
 	}
 </script>

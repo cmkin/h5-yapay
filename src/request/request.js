@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 const instance = axios.create({
-  baseURL: 'https://some-domain.com/api/',
+  baseURL: '',
   timeout: 10000
 });
 
@@ -24,6 +24,8 @@ function errorf(error,reject){
 }
 
 
+
+
 export function post (url,ops){
 	let options = {
 		token:true,
@@ -36,17 +38,16 @@ export function post (url,ops){
 	return new Promise(function(resolve,reject){
 		
 		instance.post(url,options.data).then((res)=>{
-			if(options.success){
-				resolve(res)
-			}else{
-				successf(res,resolve)
+			resolve(res.data)
+			if(res.data.code!=0){
+				vm.$cheakError(res.data.code)
 			}
-		},(error)=>{
 			
+		},(error)=>{
 			if(options.error){
 				reject(error)
 			}else{
-				errorf(error,reject)
+				vm.$cheakError('global.base.networkError',true)
 			}
 		}).catch((error)=>{
 			//程序错误
@@ -103,7 +104,7 @@ export function get (url,ops){
 // 添加一个请求拦截器
 instance.interceptors.request.use(function (config) {
   // Do something before request is sent
-	console.log(config)
+	//console.log(config)
 　　//这里经常搭配token使用，将token值配置到tokenkey中，将tokenkey放在请求头中
 　　config.headers['token'] = 123;
 	

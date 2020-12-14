@@ -1,4 +1,8 @@
-module.exports = {
+import error from './error/zh'
+
+export default  {
+	//错误
+	error:error,
 	//全局公用字符
 	global: {
 		logo: require("_a/img/logo.png"),
@@ -30,11 +34,11 @@ module.exports = {
 		],
 		hbType:[
 			{
-				id:0,
+				id:1,
 				text:'人民币'
 			},
 			{
-				id:1,
+				id:0,
 				text:'美元'
 			},
 			{
@@ -127,7 +131,9 @@ module.exports = {
 					},
 				]
 			},
-			logout:'您确定要退出登录么?'
+			logout:'您确定要退出登录么?',
+			ydjy:'移动交易，随时随地',
+			xz:"下载"
 		},
 		fonter: {
 			name: "YAPAY",
@@ -253,7 +259,10 @@ module.exports = {
 			sendCode: '发送验证码',
 			reSend: '重新发送',
 			scs:'{}后重试',
-			wxts:'温馨提示'
+			wxts:'温馨提示',
+			networkError:'网络出错,请检查网络后重试!',
+			sendOk:"发送成功",
+			regOk:"注册成功,3s后跳转去登录"
 		}
 	},
 	
@@ -286,7 +295,7 @@ module.exports = {
 	},
 	//首页
 	index: {
-		bg: require('_a/img/usdt.png'),
+		bg: require('_a/img/indexbg.png'),
 		kj: '充值',
 		aq: '快捷、安全、便捷的数字货币支付平台</br>懂支付，更懂你！',
 		gm: '购买',
@@ -340,9 +349,9 @@ module.exports = {
 			}
 		],
 		
-		dgl:'多公链底层智能钱包',
-		szzf:'数字支付离你更近一步',
-		yhk:'用户可通过keypay钱包，随时随地管理数字资产，更棒的是用户可以通过我们的钱包向支持数字货币的商户支付，在真实世界进行消费，数字货币不再只是数字',
+		dgl:'更多功能尽在掌握',
+		szzf:'下载YaPay客户端，体验更多功能',
+		yhk:'您可通过keypay钱包，随时随地管理数字资产，更棒的是您可以通过我们的钱包向支持数字货币的商户支付，在真实世界进行消费，数字货币不再只是数字',
 		
 		
 		

@@ -131,6 +131,20 @@
 				
 			</div>
 		</van-popup>
+	
+		
+		<div  class="download_phone">
+			<img  src="@/assets/img/logo.png" alt="">
+			<div  class="font">
+				<p>{{ $t('global.header.name') }}</p>
+				<p>{{ $t('global.header.ydjy') }}</p>
+			</div>
+			<div class="btns">
+				<span data-v-1f779937="">{{ $t('global.header.xz') }}</span>
+				<i @click="removePhone">x</i>
+			</div>
+		</div>
+		
 	</div>
 </template>
 
@@ -278,6 +292,9 @@ export default {
 			  .catch(() => {
 			    // on cancel
 			  });
+		},
+		removePhone(){
+			document.querySelector(".components_header .download_phone").remove()
 		}
 	}
 };
@@ -488,6 +505,54 @@ export default {
 			}
 		}
 	}
+	
+		.download_phone{
+			position: fixed;
+		    bottom: 20px;
+		    left: 0;
+		    background: #0466c8;
+		    width: 90%;
+		    left: 5%;
+		    display: flex;
+		    padding: 10px;
+			box-sizing: border-box;
+		    border-radius: 5px;
+			z-index: 1000;
+			display: none;
+			&>img{
+				    background: #fff;
+				    width: 50px;
+				    height: 50px;
+				    border-radius: 10px;
+				    margin-right: 10px;
+			}
+			.font {
+			    flex: 1;
+				p:first-child {
+				    font-size: 16px;
+				    margin-bottom: 10px;
+				}
+			}
+			.btns {
+			    padding-top: 18px;
+			    position: relative;
+			    padding-right: 10px;
+				span {
+				    background: #fff;
+				    color: #0466c8;
+				    font-size: 16px;
+				    padding: 5px 20px;
+				    border-radius: 3px;
+				}
+				i {
+				    position: absolute;
+				    top: -10px;
+				    right: 0px;
+				    font-style: normal;
+				}
+			}
+		}
+	
 }
 
 @media (max-width: 1023px) {
@@ -517,7 +582,7 @@ export default {
 				}
 			}
 		}
-
+		
 		.van-popup {
 			background: @blue-0;
 		}
@@ -564,6 +629,11 @@ export default {
 				}
 			}
 		}
+		
+		/* .download_phone{
+			display: flex;
+		} */
+		
 	}
 }
 </style>

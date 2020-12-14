@@ -38,7 +38,8 @@
 	import phoneRegister from './phoneRegister'
 	import emailRegister from './emailRegister'
 	import forget from './forget'
-
+	
+	
 	export default {
 		data(){
 			return{
@@ -46,6 +47,8 @@
 				phoneDlg:{
 					show:false
 				},
+				registerlongitude:{},//经纬度
+				regionCode:'+86',
 				coms:[login,phoneLogin,phoneRegister,emailRegister,forget]
 				
 			}
@@ -63,6 +66,7 @@
 			},
 		},
 		mounted() {
+			this.getmap()
 			this.pageType =this.$route.query.type ? this.$route.query.type : 0
 		},
 		watch:{
@@ -73,7 +77,8 @@
 		methods:{
 			//选择电话
 			phoneOk(value){
-				console.log(value.split("-"))
+				this.regionCode = value.split("-")[0]
+				this.phoneDlg.show = false
 			},
 			pageChange(type){
 				this.$router.push({
@@ -82,8 +87,27 @@
 						type:type
 					}
 				})
-			}
-		
+			},
+			//获取经纬度
+			 getmap(){
+				if(navigator.geolocation){  
+				   navigator.geolocation.getCurrentPosition((res)=>{
+					this.registerlongitude = '('+res.coords.longitude+','+res.coords.latitude+')'
+				  } , (err)=>{
+					  console.log(err)
+				  });  
+				}else{  
+				 
+				}  
+			},
+			//切换语言
+			changeLanguage(id) {
+				if(id==0){
+					this.$i18n.locale='zh'
+				}else{
+					this.$i18n.locale='en'
+				}	
+			},
 			
 		}
 	}
@@ -170,13 +194,11 @@
 					height: auto;
 					border: 1px solid rgba(32, 53, 128, 0.16078431372549018);
 					background: linear-gradient(305deg, #0466C8 0%, #0088FF 100%, #5533FF 100%);
-					opacity: 1;
 					border-radius: 4px;
 					color: #fff;
 					font-size: 16px;
 					text-align: center;
 					padding: 12px 0;
-					cursor: pointer;
 					border: none;
 					box-shadow: 0 3px 3px 1px rgba(32, 53, 128, 0.5);
 				}

@@ -18,6 +18,13 @@
 				set:null
 			}
 		},
+		props:{
+			urlType:{
+				type:Number,
+				default:1
+			},
+			data:{},	
+		},
 		mounted() {
 			
 		},
@@ -26,18 +33,36 @@
 		},
 		methods:{
 			star(){
+				
 				this.setp = 1
-				setTimeout(()=>{
-					this.setp = 2
-					this.set = setInterval(()=>{
-						this.nums--
-						if(this.nums<=0){
-							clearInterval(this.set)
-							this.nums = 120
-							this.setp = 3
-						}
-					},1000)
-				},2000)
+				this.$http.sendSmsCode(this.urlType,{
+					...this.data
+				}).then((res)=>{
+					if(res.code==0){
+						this.$notify({
+							type:'success',
+							message:this.$t('global.base.sendOk')
+						})
+						this.setp = 2
+						this.set = setInterval(()=>{
+							this.nums--
+							if(this.nums<=0){
+								clearInterval(this.set)
+								this.nums = 120
+								this.setp = 3
+							}
+						},1000)
+					}else{
+						this.setp = 0
+					}
+				
+				})
+				
+				return
+				
+				
+					
+				
 			}
 		}
 	}

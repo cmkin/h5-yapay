@@ -528,7 +528,7 @@
 
 	}
 
-	@media (max-width:1024px) {
+	@media (max-width:1023px) {
 		.view_quickSale_paymentAndCollection {
 			.main {
 				.left {
@@ -540,6 +540,8 @@
 				.right {
 					float: none;
 					margin: auto;
+					width: 100%;
+					max-width: 100%;
 				}
 			}
 		}

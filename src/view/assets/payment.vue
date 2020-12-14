@@ -154,7 +154,7 @@
 				}
 				input{
 					max-width: 360px;
-					margin-right: 20%;
+					//margin-right: 20%;
 					margin-bottom: 20px;
 				}
 			}

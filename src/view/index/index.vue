@@ -39,7 +39,6 @@
 			</div>
 		</div>
 		
-		
 		<div class="tabs global_main">
 			<ul class="clearfix">
 				<router-link tag="li" :to="item.to" v-for="item in $t('index.tabs')">
@@ -57,8 +56,10 @@
 				<div class="t2">
 					{{$t('index.kzhy')}}
 				</div>
-				<p class="nj"> {{$t('index.nkyj')}} </p>
-				<span class="lj"> {{$t('index.ljty')}} </span>
+				<p class="nj"> {{$t('index.nkyj')}} </p> 
+				<a href="http://yaotc.com/download.html" target="_blank">
+					<span class="lj"> {{$t('index.ljty')}} </span>
+				</a> 
 			</div>
 			<div class="right">
 				<img src="../../assets/img/index5.png" alt="">
@@ -92,7 +93,9 @@
 					{{$t('index.szzf')}}
 				</div>
 				<p class="nj"> {{$t('index.yhk')}} </p>
-				<span class="lj"> {{$t('index.ljty')}} </span>
+				<a href="http://yaotc.com/download.html" target="_blank">
+					<span class="lj"> {{$t('index.ljty')}} </span>
+				</a>
 			</div>
 		</div>
 		
@@ -123,7 +126,7 @@
 
 		},
 		mounted() {
-			this.$http.login({a:1,b:1}).then((res)=>{})
+			
 		},
 		methods: {
 			changeType(type) {
@@ -155,15 +158,15 @@
 
 				.bg {
 					position: absolute;
-					right: 20px;
-					top: 20px;
+					right: 0px;
+					top: 0px;
 
-					opacity: .1;
+					
 
 					img {
-						width: 300px;
-						height: 300px;
-						transform: translate(20%, -20%);
+						width: 400px;
+						height: 400px;
+						transform: translate(-6%, -20%);
 					}
 				}
 
@@ -413,6 +416,13 @@
 	}
 	@media (max-width:1023px) {
 		.view_index{
+			.banner{
+				.main{
+					.bg{
+						display: none;
+					}
+				}
+			}
 			.tabs{
 				
 				ul{
