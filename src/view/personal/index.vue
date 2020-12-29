@@ -5,13 +5,13 @@
 		
 		<div class="infos">
 			<div class="tx">
-				<img src="" alt="">
-				<p>UID:123456789</p>
-				<p>{{ $t('personal.yhm') }} KDHHBHAKIA_DH</p>
+				<img :src="userInfos.headurl" alt="">
+				<p>UID:{{userInfos.uid}}</p>
+				<p>{{ $t('personal.yhm') }} {{userInfos.nickname}}</p>
 			</div>
 			<ul class="clearfix">
 				<li v-for="item in $t('personal.tlists')">
-					<span>100</span>
+					<span>{{ td(item.key) || $t('global.base.zw') }}</span>
 					<p>{{item.text}}</p>
 				</li>
 			</ul>
@@ -35,6 +35,24 @@
 		mounted() {
 				
 		
+			
+		},
+		computed:{
+			td(){
+				return function(key){
+					switch(key){
+						case 'totalOrderCount':
+							return  this.userInfos[key] +this.$t('global.base.d')
+						break;
+						case 'successRate':
+							return  this.userInfos[key] + "%"
+						break;
+					}
+					return  this.userInfos[key]
+				}
+			}
+		},
+		filters:{
 			
 		},
 		beforeDestroy() {

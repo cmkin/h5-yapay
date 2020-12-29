@@ -2,16 +2,17 @@
 	<div class="g_select" @click.stop>
 		<div class="icon_s" v-if="multiple">
 			<div class="title" :class="{'disable':disable}" @click="open">
-				<span>{{ multipleTitle }}</span>
+				<span>{{ multipleTitle}}</span>
 				<van-icon :class="{ down: flag }" name="arrow-down" size="14" />
 			</div>
 			<transition name="top" mode="out-in">
 				<ul v-if="flag" :style="{ height: height }">
 					<vue-scroll :ops="ops" ref="myscroll">
-						<li :class="sellPayClass(item.id)" @click="change(item.id)" v-for="(item, index) in lists">
+						<li :class="sellPayClass(item.id)" @click="change(item)" v-for="(item, index) in lists">
 							<img :src="item.img" alt="" />
 							<span>{{ item[showKey] }}</span>
-							<van-icon name="success" />
+							<i class="a" v-if="item.add">{{$t('global.base.add')}}</i>
+							<van-icon class="s" v-else name="success" />
 						</li>
 					</vue-scroll>
 				</ul>
@@ -178,6 +179,16 @@ export default {
 			return this.sActive.includes(id) ? 'sell_active' : '';
 		},
 		change(id) {
+			//添加--此时id为item
+			if(id.hasOwnProperty('add')){
+				//执行方法
+				id.addMethod(id)
+				this.flag = false;
+				return
+			}
+			id.hasOwnProperty('id')?id=id.id:id
+			
+			//其他选择
 			if (this.multiple) {
 				if (this.sActive.length <= 1 && this.sActive.includes(id)) {
 					this.$notify(this.$t('global.base.bl'));
@@ -189,7 +200,6 @@ export default {
 				this.sActive = id;
 			}
 			this.flag = false;
-
 			this.$emit('change', this.sActive);
 		}
 	}

@@ -47,7 +47,7 @@
 				phoneDlg:{
 					show:false
 				},
-				registerlongitude:{},//经纬度
+				registerlongitude:'',//经纬度
 				regionCode:'+86',
 				coms:[login,phoneLogin,phoneRegister,emailRegister,forget]
 				
@@ -91,13 +91,15 @@
 			//获取经纬度
 			 getmap(){
 				if(navigator.geolocation){  
+				
 				   navigator.geolocation.getCurrentPosition((res)=>{
+					   console.log(res)
 					this.registerlongitude = '('+res.coords.longitude+','+res.coords.latitude+')'
 				  } , (err)=>{
 					  console.log(err)
 				  });  
 				}else{  
-				 
+				   alert("定位失败")
 				}  
 			},
 			//切换语言
@@ -151,7 +153,7 @@
 					padding: 5px 0;
 					margin-bottom: 10px;
 					background-color: #E9EBF0;
-					display: flex;
+					padding-left: 65px;
 					position: relative;
 					border-radius: 2px;
 					align-items: center;
@@ -160,6 +162,10 @@
 						letter-spacing: 5px;
 						text-align: right;
 						box-sizing: border-box;
+						position: absolute;
+						top: 50%;
+						left: 0;
+						transform: translateY(-50%);
 					}
 					.dx_phone{
 						letter-spacing: 0;

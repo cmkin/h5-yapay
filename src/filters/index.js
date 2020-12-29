@@ -1,11 +1,15 @@
 
 
 const language = function(val,data,flag=true){
-	return flag ? val.replace("{}",`<span class="djs">${data}</span>`) : val.replace('{}',data)
+	return flag ? val.replace(/{}/g,`<span class="djs">${data}</span>`) : val.replace('{}',data)
 }
 
 const timeFormat = function(value,format){
-		let date = new Date(value);
+		let time = Number(value)
+			if(isNaN(time)){
+				time = new Date(value).getTime()
+			}
+		let date = new Date(time);
 	    let y = date.getFullYear();
 	    let m = date.getMonth() + 1;
 	    let d = date.getDate();
@@ -44,9 +48,18 @@ const MS = function(val){
 	return `${m}′${s}″`
 }
 
+const coin = function(val){
+	return Number(val || 0).toFixed(4)
+}
+const money = function(val){
+	return Number(val || 0).toFixed(2)
+}
+
 
 export{
 	language,
 	timeFormat,
-	MS
+	MS,
+	coin,
+	money
 }

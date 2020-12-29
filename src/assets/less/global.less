@@ -202,22 +202,40 @@
 	background: @org-d;
 	border: 1px solid @org;
 	color: #666;
-	display: flex;
 	padding: 10px 20px;
-	i {
+	.clearfix;
+	position: relative;
+	padding-left: 40px;
+	&>i {
 		color: @org-s;
 		font-size: 16px;
 		position: relative;
-		top: 2px;
+		position: absolute;
+		left: 20px;
+		top: 13px;
 	}
-	span {
-		width: 100px;
-		padding: 0 10px;
+	/* &>span {
+		
+		padding: 0 5px;
 		font-size: 14px;
-	}
-	div {
+		float: left;
+	} */
+	&>div {
 		display: inline-block;
 		font-size: 12px;
+		float: left;
+		position: relative;
+		padding-left: 70px;
+		.bt{
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 70px;
+			padding: 0 5px;
+			font-size: 14px;
+			box-sizing: border-box;
+			text-align: center;
+		}
 	}
 }
 
@@ -363,9 +381,13 @@
 				margin-right: 10px;
 			}
 	
-			i {
+			i.s {
 				float: right;
 				display: none;
+			}
+			i.a{
+				float: right;
+				cursor: pointer;
 			}
 		}
 	
@@ -377,7 +399,7 @@
 		.sell_active {
 			color: @blue;
 	
-			i {
+			i.s{
 				display: block;
 				margin-top: 4px;
 			}

@@ -6,24 +6,25 @@
 		<ul>
 			<li>
 				<div>
-					<i class="iconfont icon-dui"></i>
+					<i class="iconfont " :class="userInfos.verifyLevel>=1?'icon-dui':'icon-gantanhao'"></i>
 					<span> {{ $t('personal.account.identity.lv1') }} </span>
 				</div>
 				<div> {{ $t('personal.account.identity.lv1p') }} </div>
 				<div>
-					
-					<i @click="goRz(1)"> {{ $t('personal.account.identity.qrz') }} </i>
+					<i v-if="userInfos.verifyLevel<1 && userInfos.safetyStatus==0" @click="goRz(1)"> {{ $t('personal.account.identity.qrz') }} </i>
+					<i v-if="userInfos.verifyLevel==0 && userInfos.safetyStatus ==1">{{ $t('personal.account.identity.shz') }} </i>
 				</div>
 			</li>
 			
 			<li>
 				<div>
-					<i class="iconfont icon-gantanhao"></i>
+					<i class="iconfont" :class="userInfos.verifyLevel>=2?'icon-dui':'icon-gantanhao'"></i>
 					<span> {{ $t('personal.account.identity.lv2') }} </span>
 				</div>
 				<div> {{ $t('personal.account.identity.lv2p') }} </div>
 				<div>
-					<i @click="goRz(2)"> {{ $t('personal.account.identity.qrz') }} </i>
+					<i v-if="userInfos.verifyLevel<2 && userInfos.safetyStatus==0" @click="goRz(2)"> {{ $t('personal.account.identity.qrz') }} </i>
+					<i v-if="userInfos.verifyLevel==1 && userInfos.safetyStatus ==1">{{ $t('personal.account.identity.shz') }} </i>
 				</div>
 			</li>			
 		</ul>
@@ -32,15 +33,22 @@
 		<div class="rz_lv">
 			<div class="lv">
 				<span>{{ $t('personal.account.identity.dqrz') }}</span>
-				Lv.1 基础认证
+				{{ $t('personal.data.rzLists')[userInfos.verifyLevel] }}
 			</div>
-			<div class="if">张*灵  510************166</div>
+			<div class="if">{{userInfos.name}}  {{userInfos.cardNumber}}</div>
 			<div class="kys">
 				<p>{{ $t('personal.account.identity.ky') }}</p>
-				<ul>
-					<li v-for="(item,index) in $t('personal.account.identity.kys')">
-						<span v-if="index==1" v-html="$options.filters.language(item,5)"></span>
-						<span v-else-if="index==2" v-html="$options.filters.language(item,50)"></span>
+				<ul v-if="userInfos.verifyLevel==0">
+					<li  v-for="(item,index) in $t('personal.account.identity.kys0')">
+						<span v-if="index==1" v-html="$options.filters.language(item,userInfos.tradeQuota)"></span>
+						<span v-else>{{item}}</span>
+					</li>
+					
+				</ul>
+				<ul v-else>
+					<li  v-for="(item,index) in $t('personal.account.identity.kys')">
+						<span v-if="index==0" v-html="$options.filters.language(item,userInfos.drawCoinAmount)"></span>
+						<span v-else-if="index==1" v-html="$options.filters.language(item,userInfos.leftAmount)"></span>
 						<span v-else>{{item}}</span>
 					</li>
 				</ul>

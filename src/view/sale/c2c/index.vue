@@ -7,7 +7,7 @@
 				</div>
 
 				<div class="min_input hide_s">
-					<input v-model="minMoney" :placeholder="$t('quickSale.c2c.zx')" type="number" />
+					<input v-model="minMoney" @keyup="moneyChange" :placeholder="$t('quickSale.c2c.zx')" type="number" />
 					<span>CNY</span>
 				</div>
 
@@ -16,9 +16,11 @@
 						<van-dropdown-item v-model="payType" :options="payTypes" get-container=".view_quickSale_c2c .type_change" />
 					</van-dropdown-menu> -->
 					
-					<myselect v-model="payType"   :lists="payTypes" showKey="text"></myselect>
-					
+					<myselect v-model="payType"  @change="getlist"  :lists="payTypes" showKey="text"></myselect>
+							
 				</div>
+				
+				<!-- <van-button class="hide_s" :loading="btnLoading" @click="getlist(1)" type="info" style="margin-left: 30px;height: 38px;">{{ $t('global.base.ok') }}</van-button> -->
 
 				<div class="fb hide_s" @click="openOrderForm">
 					<svg t="1601171811581" class="icon" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3156" width="20" height="20">
@@ -39,55 +41,64 @@
 		
 		<div style="height: 80px;"></div>
 		
-		<van-tabs :swipeable="true" v-model="typeActive" animated>
-			<van-tab v-for="(item, index) in 2" :key="index">
-				<div class="" :class="isPhone ? 'tables_phone' : 'tables_pc'">
-					<ul class="title">
-						<li v-for="item in tableTitle">{{ item.title }}</li>
-					</ul>
-					<ul class="item" v-for="item in 7">
-						<div class="l">
-							<li class="name">
-								<img src="" alt="" />
-								<span>我是昵称</span>
-								<span>(600{{ $t('global.base.d') }}/99%)</span>
-							</li>
-							<li class="num">
-								<i>{{ $t('global.base.sl') }}:</i>
-								<span>41057.74</span>
-								USDT
-							</li>
-							<li class="xe">
-								<i>{{ $t('global.base.xe') }}:</i>
-								<span>10000.00-200000.00</span>
-								CNY
-							</li>
-						</div>
-						<div class="r">
-							<li class="price">
-								<i>{{ $t('global.base.dj') }}:</i>
-								<span>7.10</span>
-								CNY
-							</li>
-							<li class="paytype"><img :src="item.img" alt="" v-for="item in $t('global.payType')" /></li>
-							<li class="btn">
-								<span
-									v-if="item == 3"
-									v-html="$options.filters.language($t('quickSale.c2c.table.zbmz'), typeActive == 0 ? $t('global.base.sellj') : $t('global.base.buyj'))"
-								>
-									{{ $t('quickSale.c2c.table.zbmz') }}
-								</span>
-								<van-button type="info" @click="saleM()" v-else>
-									{{ typeActive == 0 ? $t('global.base.gm') : $t('global.base.cs') }} {{ $t('global.base.usdt') }}
-								</van-button>
-							</li>
-						</div>
-					</ul>
-				</div>
-			</van-tab>
-		</van-tabs>
+		<div style="position: relative;">
+			<van-tabs :swipeable="true" v-model="typeActive" animated>
+				<van-tab v-for="(item, index) in 2" :key="index">
+					<div class="" :class="isPhone ? 'tables_phone' : 'tables_pc'">
+						<ul class="title">
+							<li v-for="item in tableTitle">{{ item.title }}</li>
+						</ul>
+						<ul v-if="dataLists.length" class="item" v-for="item in dataLists">
+							<div class="l">
+								<li class="name">
+									<img :src="item.headUrl" alt="" />
+									<span>{{ item.nickName }}</span>
+									<span>({{item.totalTrade}}{{ $t('global.base.d') }}/{{item.successRate}}%)</span>
+								</li>
+								<li class="num">
+									<i>{{ $t('global.base.sl') }}:</i>
+									<span>{{Number(item.coin).toFixed(4)}}</span>
+									USDT
+								</li>
+								<li class="xe">
+									<i>{{ $t('global.base.xe') }}:</i>
+									<span>{{ item.coinLimit }}</span>
+									{{ sysInfos.hv.dw }}
+								</li>
+							</div>
+							<div class="r">
+								<li class="price">
+									<i>{{ $t('global.base.dj') }}:</i>
+									<span>{{item.price}}</span>
+									{{ sysInfos.hv.dw }}
+								</li>
+								<li class="paytype" v-html="paytypeShow(item.paymentType)"></li>
+								<li class="btn">
+									<span
+										v-if="!item.matching"
+										v-html="$options.filters.language($t('quickSale.c2c.table.zbmz'), typeActive == 0 ? $t('global.base.sellj') : $t('global.base.buyj'))"
+									>
+										{{ $t('quickSale.c2c.table.zbmz') }}
+									</span>
+									<van-button type="info" @click="saleM()" v-else>
+										{{ typeActive == 0 ? $t('global.base.gm') : $t('global.base.cs') }} {{ $t('global.base.usdt') }}
+									</van-button>
+								</li>
+							</div>
+						</ul>
+						<ul class="no_data" style="border-bottom: 1px solid #f3f3f3;" v-show="dataLists.length==0">
+							<nodata></nodata>
+						</ul>
+					</div>
+					
+				</van-tab>
+			</van-tabs>
+		
+			<loading v-model="tableLoding"></loading>
+		</div>
+		
 
-		<div class="page_change">
+		<!-- <div class="page_change">
 			<div class="m">
 				<van-pagination v-model="currentPage" :total-items="125" :show-page-size="3" force-ellipses>
 					<template #prev-text>
@@ -99,7 +110,7 @@
 				</van-pagination>
 			</div>
 		</div>
-
+ -->
 		<!-- 手机端弹窗 -->
 		<van-popup v-model="payTypePhoneFlag" position="right" :style="{ height: '100%', width: '80%' }">
 			<div class="phone_shaixuan">
@@ -120,8 +131,8 @@
 						</li>
 					</ul>
 					<div class="btns">
-						<van-button type="default">{{ $t('global.base.reset') }}</van-button>
-						<van-button type="info">{{ $t('global.base.ok') }}</van-button>
+						<van-button @click="okLists(true)" type="default">{{ $t('global.base.reset') }}</van-button>
+						<van-button :loading="btnLoading" @click="okLists(false)" type="info">{{ $t('global.base.ok') }}</van-button>
 					</div>
 				</div>
 			</div>
@@ -538,6 +549,9 @@ export default {
 					background: '#e3e3e3'
 				}
 			},
+			tableLoding:false,
+			btnLoading:false,
+			moneyInr:null,
 			orderFormNames: [],
 			currentPage: 0,
 			typeActive: null,
@@ -584,7 +598,11 @@ export default {
 			//时间弹窗
 			timeShow: false,
 			currentTime: '',
-			timeType: null
+			timeType: null,
+			
+			
+			//数据列表
+			dataLists:[]
 		};
 	},
 	computed: {
@@ -592,14 +610,14 @@ export default {
 			let arr = [
 				{
 					title: this.$t('quickSale.c2c.qbzf'),
-					id: -1
+					id: 0
 				},
 				...this.$t('global.payType')
 			];
 			return arr.map(item => {
 				return {
 					text: item.title,
-					id: Number(item.id + 1)
+					id: Number(item.id)
 				};
 			});
 		},
@@ -608,14 +626,11 @@ export default {
 		}
 	},
 	mounted() {
-		this.init();
+		this.typeActive = this.$route.query.hasOwnProperty('type') ? Number(this.$route.query.type) : 0;
 		this.buy.active = this.orderForm.buy.payType = this.$t('global.payType')[0].id;
 		this.sell.active = this.orderForm.sell.payType = this.$t('global.payType').map(item => item.id);
-		
-		
 		this.oldtops = 0
 		document.addEventListener("scroll",this.scroll)
-		
 	},
 	beforeRouteLeave(to,from,next) {
 		document.removeEventListener("scroll",this.scroll)
@@ -623,7 +638,7 @@ export default {
 	},
 	watch: {
 		$route(n) {
-			this.init();
+			
 		},
 		typeActive(nValue) {
 			this.$router.replace({
@@ -632,9 +647,16 @@ export default {
 					type: nValue
 				}
 			});
+			this.getlist()
 		}
 	},
 	methods: {
+		moneyChange(){
+			clearTimeout(this.moneyInr)
+			this.moneyInr = setTimeout(()=>{
+				this.getlist()
+			},1000)
+		},
 		formatter(type,val){
 			switch(type){
 				case 'hour':
@@ -644,8 +666,47 @@ export default {
 			}
 
 		},
-		init() {
-			this.typeActive = this.$route.query.hasOwnProperty('type') ? Number(this.$route.query.type) : 0;
+		//支付方式
+		paytypeShow(t){
+			let type = t.split(",").map(item=>Number(item))
+			let all = this.$t('global.payType').filter(item=>{
+				return type.includes(item.id)
+			})
+			
+			let str = ''
+				all.forEach(item=>{
+					str+=`<img class="img" src="${item.img}" />`
+				})
+			return str
+		},
+		getlist(){
+			this.tableLoding = true
+			
+			let json = {
+				currency:this.userInfos.currency,
+				type:this.typeActive,
+				paymentType:this.payType,
+				leastcoin:this.minMoney||0,
+				opponent: false
+			}
+			
+			this.$http.getOptionalOrderList(json).then((res)=>{
+				this.tableLoding = false
+				this.btnLoading = false
+				this.dataLists = res.data
+			},(err)=>{
+				this.tableLoding = false
+				this.btnLoading = false
+				this.dataLists = []
+			})
+		},
+		okLists(r){
+			if(r){
+				this.payType = 0
+				this.minMoney = ''
+			}
+			this.getlist()
+			this.payTypePhoneFlag = false
 		},
 		scroll(e){
 			let tops = document.documentElement.scrollTop || document.body.scrollTop
@@ -708,6 +769,9 @@ export default {
 			});
 		},
 		saleM() {
+			if(this.$isLogin()){
+				return
+			}
 			this.buy.show = true;
 			if (this.typeActive == 0) {
 			}
@@ -724,6 +788,9 @@ export default {
 		},
 		//打开委托
 		openOrderForm(){
+			if(this.$isLogin()){
+				return
+			}
 			this.orderForm.title = this.$t('quickSale.c2c.fbwt') + '(USDT/CNY)'
 			this.orderForm.titleType = this.typeActive
 			this.orderForm.show = true
@@ -869,7 +936,7 @@ export default {
 			}
 		}
 	}
-
+	
 	.tables_pc {
 		.global_table_pc;
 		.title {
@@ -932,13 +999,14 @@ export default {
 			text-align: center;
 		}
 		.paytype {
-			img {
+			.img {
 				display: inline-block;
 				margin-right: 10px;
 				width: 16px;
 			}
 		}
 		.btn {
+			padding-right: 2px;
 			& > span {
 				color: rgba(179, 179, 179, 1);
 			}
@@ -982,7 +1050,7 @@ export default {
 				}
 			}
 			.paytype {
-				img {
+				.img {
 					display: inline-block;
 					margin-left: 10px;
 					width: 16px;
@@ -1394,7 +1462,7 @@ export default {
 </style>
 <style lang="less">
 .view_quickSale_c2c {
-	& > .van-tabs--line .van-tabs__wrap {
+	 .van-tabs--line .van-tabs__wrap {
 		display: none;
 	}
 	.dhl{
@@ -1404,6 +1472,13 @@ export default {
 			}
 		}
 	}
+	
+	.img {
+		display: inline-block;
+		margin-right: 10px;
+		width: 16px;
+	}
+	
 	.buy_alert {
 		.van-dialog {
 			overflow: inherit;
@@ -1425,7 +1500,7 @@ export default {
 			}
 		}
 	}
-
+	
 	.order_form {
 		.van-dialog {
 			width: 460px;

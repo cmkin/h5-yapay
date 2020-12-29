@@ -58,16 +58,42 @@
 				this.okBuySell = obj
 			},
 			okPay(){
+					
 				let path = ''
+				let json = {}
+				let obj = this.okBuySell.datas
 				if(this.okBuySell.type==1){
 					path = 'payment'
+					json={
+						buyType:0,
+						coin:obj.nums,
+						paymenttype:obj.payTypeId,
+						type:0
+					}
 				}else{
 					path = 'collection'
+					json={
+						buyType:0,
+						coin:obj.nums,
+						paymenttype:obj.payTypeId,
+						type:1
+					}
 				}
-				this.$router.push({
-					path:path,
-					query:{}
+				
+				this.$http.tradeCoin(json).then(res=>{
+					if(res.code==0){
+						this.$router.push({
+							path:path,
+							query:{
+								id:res.data
+							}
+						})
+					}else{
+						this.okBuySell.show = false
+					}
 				})
+			
+				
 			}
 
 		}
@@ -164,6 +190,7 @@
 					}
 				}
 			}
+
 
 			.ckdj {
 				font-size: 12px;

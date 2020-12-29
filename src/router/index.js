@@ -13,28 +13,40 @@ const routes = [{
 				path: 'index',
 				component: () => import('_v/index/index'),
 				meta: {
-					title: "首页"
+					title: "首页",
+					noCheak:true
+				}
+			},
+			{
+				path:'/404',
+				component: () => import('_v/404/404'),
+				meta: {
+					title: "无权限或者没有页面",
+					noCheak:true
 				}
 			},
 			{
 				path: 'quotation',
 				component: () => import('_v/quotation/index'),
 				meta: {
-					title: "行情"
+					title: "行情",
+					noCheak:true
 				}
 			},
 			{
 				path: 'message',
 				component: () => import('_v/message/index'),
 				meta: {
-					title: "消息中心"
+					title: "消息中心",
+					noCheak:true
 				}
 			},
 			{
 				path: 'login-register',
 				component: () => import('_v/login/index'),
 				meta: {
-					title: "登录"
+					title: "登录",
+					noCheak:true
 				}
 			},
 			{
@@ -48,7 +60,8 @@ const routes = [{
 						path: 'quickBuySell',
 						component: () => import('_v/sale/quickBuySell/index'),
 						meta: {
-							title: "快捷买卖"
+							title: "快捷买卖",
+							noCheak:true
 						}
 					},
 					{
@@ -56,7 +69,7 @@ const routes = [{
 						component: () => import('_v/sale/quickBuySell/paymentAndCollection/index'),
 						meta: {
 							title: "待付款",
-							type: 1
+							type: 0
 						}
 					},
 					{
@@ -64,14 +77,15 @@ const routes = [{
 						component: () => import('_v/sale/quickBuySell/paymentAndCollection/index'),
 						meta: {
 							title: "待收款",
-							type: 2
+							type: 1
 						}
 					},
 					{
 						path: 'c2c',
 						component: () => import('_v/sale/c2c/index'),
 						meta: {
-							title: "c2c交易"
+							title: "c2c交易",
+							noCheak:true
 						}
 					}
 				]
@@ -253,7 +267,10 @@ vueRouter.prototype.replace = function replace(location) {
 	return originalreplace.call(this, location).catch(err => err)
 }
 
-export default new vueRouter({
+
+
+
+const router = new vueRouter({
 	routes,
 	scrollBehavior(to, from, savedPosition) {
 		return {
@@ -262,3 +279,31 @@ export default new vueRouter({
 		}
 	}
 })
+
+router.beforeEach((to, from, next) => {
+  if(to.meta.noCheak || localStorage.getItem('token')){
+	 if(to.path=='/login-register' && localStorage.getItem('token')){
+		next(from.fullPath)
+	 }else{
+		next()  
+	 }
+	 return
+  }
+  if(!localStorage.getItem('token')){
+	  
+	  next('/404') 
+	 /* vm.$dialog.confirm({
+		 cancelButtonText: vm.$t('global.base.cancel'),
+		 confirmButtonText: vm.$t('global.base.ok'),
+	  	title:vm.$t('global.base.qxdl'),
+	  	message:vm.$t('global.base.qxdlmsg')
+	  }).then(()=>{
+	  	vm.$router.push("/login-register?type=0")
+	  }).catch(()=>{}) */
+  }
+  
+  
+})
+
+
+export default router

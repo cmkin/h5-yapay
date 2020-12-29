@@ -4,37 +4,27 @@
 			{{ $t('personal.account.payment.title') }}
 			<span> {{ $t('personal.account.payment.ttips') }} </span>
 		</div>
-		<div class="add" @click="paymentMethod">
+		<div class="add" @click="paymentMethod(false)" v-if="payList.length<4">
 			<i class="iconfont icon-weibiaoti1"></i>
 			{{ $t('personal.account.payment.add') }}
 		</div>
-		
-		<ul v-if="false">
-			<li>
+		<ul v-if="payList.length">
+			<li v-for="item in payList">
 				<div>
-					<img src="../../../assets/img/yhk.png" alt="">
-					<span>银行卡</span>
+					<img :src="item.obj.img" alt="">
+					<span>{{item.obj.title}}</span>
 				</div>
-				<div> <span>张灵灵</span> <span>622 4651 1235 61387</span> <span>中国工商银行</span> </div>
-				<div @click="paymentMethod">
+				<div> <span>{{item.name}}</span> <span>{{item.account}}</span> <span v-if="item.type==3">{{item.bank}}</span> </div>
+				<div @click="paymentMethod(item)">
 					<i> {{ $t('personal.account.security.xg') }} </i>
 				</div>
 			</li>
-			<li>
-				<div>
-					<img src="../../../assets/img/yhk.png" alt="">
-					<span>银行卡</span>
-				</div>
-				<div> <span>张灵灵</span> <span>622 4651 1235 61387</span> <span>中国工商银行</span> </div>
-				<div @click="paymentMethod">
-					<i> {{ $t('personal.account.security.xg') }} </i>
-				</div>
-			</li>
+			
 		</ul>
-		<div class="no_data">
+		<div class="no_data" v-else>
 			<img src="../../../assets/img/pnodata.jpg" alt="">
 			<p>{{ $t('personal.account.payment.ndata') }}</p>
-			<van-button @click="paymentMethod" type="info">{{ $t('personal.account.payment.qadd') }}</van-button>
+			<van-button @click="paymentMethod(false)" type="info">{{ $t('personal.account.payment.qadd') }}</van-button>
 		</div>
 		
 	</div>
@@ -50,10 +40,26 @@
 		mounted() {
 			
 		},
+		computed:{
+			payList(){
+				 if(this.userInfos.payList){
+					return this.userInfos.payList.map(item=>{
+						let obj = this.$t('global.payType').filter(tt=>tt.id==Number(item.type))[0]
+							item.obj = obj
+						return item
+					 }).sort(function(a,b){return a.type - b.type})
+				 }
+				 
+				 return  []
+			}
+		},
 		methods:{
-			paymentMethod(){
+			paymentMethod(item=false){
 				this.$router.push({
-					path:'/paymentMethod'
+					path:'/paymentMethod',
+					query:{
+						id:item ? item.type : null
+					}
 				})
 			}
 		}
@@ -111,12 +117,13 @@
 						color: #666;
 						margin-left: 10px;
 						position: relative;
-						top: -1px;
+						width: 50px;
 					}
 					img{
 						display: inline-block;
 						width: 20px;
-						height: 17px;
+						position: relative;
+						top: 3px;
 					}
 				}
 				&>div:nth-child(2){

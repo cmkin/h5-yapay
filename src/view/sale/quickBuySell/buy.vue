@@ -5,8 +5,8 @@
 				<p class="t">
 					{{ $t('quickSale.quickBuySell.buy.mrsl') }}
 				</p>
-				<div class="input">
-					<input type="number" :error="$t('quickSale.quickBuySell.buy.mrsl')" v-model="buy.num" :placeholder="$t('global.qsr') + $t('quickSale.quickBuySell.buy.mrsl') ">
+				<div class="input">    
+					<input type="number" @input="inputChange(0)" :error="$t('quickSale.quickBuySell.buy.mrsl')" v-model="buy.num" :placeholder=" $t('global.qsr') + $t('quickSale.quickBuySell.buy.mrsl') ">
 					<span>
 						<img :src="$t('global.usdt')" alt="">
 						<b>USDT</b>
@@ -25,27 +25,27 @@
 					{{ $t('quickSale.quickBuySell.buy.mrje') }}
 				</p>
 				<div class="input">
-					<input type="number" :error="$t('quickSale.quickBuySell.buy.mrje')" v-model="buy.price" :placeholder="$t('global.qsr') + $t('quickSale.quickBuySell.buy.mrje') ">
+					<input @input="inputChange(1)" type="number" :error="$t('quickSale.quickBuySell.buy.mrje')" v-model="buy.price" :placeholder="$t('global.qsr') + $t('quickSale.quickBuySell.buy.mrje') ">
 					<span>
-						<img :src="$t('global.cny')" alt="">
-						<b>CNY</b>
+						<img :src="sysInfos.hv.dwimg" alt="">
+						<b>{{sysInfos.hv.dw}}</b>
 					</span>
 				</div>
 			</li>
 			<li>
 				<p class="t">{{ $t('quickSale.quickBuySell.buy.fkfs') }}</p>
 				<div class="pay_type">		
-					<myselect v-model="buy.active" height="160px"  icon :lists="$t('global.payType')"></myselect>
+					<myselect v-model="buy.active" height="160px"  icon :lists="payTypeShow"></myselect>
 				</div>
 			</li>
 		</ul>
 		<div class="ckdj">
 			<span> {{ $t('quickSale.quickBuySell.buy.ckdj') }}:</span>
-			<i>7.03 CNY/USDT</i>
+			<i>{{sysInfos.hv.buyPrice}} {{sysInfos.hv.dw}}/USDT</i>
 		</div>
 		<div class="btn">
 			<van-button :disabled="!(buy.num>0 && buy.price>0)" @click="buySellM()" block type="info"> {{ $t('quickSale.quickBuySell.buy.ljgm') }} </van-button>
-			<p>{{ $t('quickSale.quickBuySell.buy.sxf') }}:0%</p>
+			<p>{{ $t('quickSale.quickBuySell.buy.sxf') }}:{{ userInfos.fastbuy}} %</p>
 		</div>
 	</div>
 </template>
@@ -60,14 +60,52 @@
 					num:'',
 					price:''
 				},
+				payType:[]
+			}
+		},
+		computed:{
+			payTypeShow(){
+				if(!this.payType.length){
+					return this.$t('global.payType')
+				}
+				return this.$t('global.payType').filter(item=>{
+					return this.payType.includes(item.id)
+				})
 			}
 		},
 		mounted() {
+			let query = this.$route.query
+			 if(query.num){
+				  if( query.type=='0' ){
+					  this.buy.num = query.num
+					  this.inputChange(0)
+				  }else{
+					  this.buy.price = query.num
+					  this.inputChange(1)
+				  }
+			 }
+			 
+			 this.$router.replace('/sale/quickBuySell')
+			
 			this.buy.active = this.$t('global.payType')[0].id
 		},
 		methods:{
 			buySellM(){
-			
+					
+					if(this.$isLogin()){
+						return
+					}
+					
+					if(this.buy.price<this.sysInfos.config.coinLimit.buymin || this.buy.price>this.sysInfos.config.coinLimit.buymax){
+						this.$notify(this.$t('global.base.dbxew')+this.sysInfos.config.coinLimit.buymin+'-'+this.sysInfos.config.coinLimit.buymax+this.sysInfos.hv.dw)
+						return
+					}
+					
+					if(!this.payType.length){
+						this.$notify(this.$t('global.base.nopp'))
+						return
+					}
+					
 				
 					let payType = this.$t('global.payType').filter(item=>item.id == this.buy.active)[0]
 					
@@ -78,15 +116,39 @@
 						lists:this.$t('quickSale.quickBuySell.okBuy.list'),
 						datas:{
 							payType:payType.title,
+							payTypeId:this.buy.active,
 							img:payType.img,
-							price:this.buy.price,
+							price:this.sysInfos.hv.buyPrice,
 							nums:this.buy.num,
-							allPrice:Number(this.buy.num * this.buy.price).toFixed(2)
+							allPrice:Number(this.buy.price).toFixed(2)
 						}
 					}
 					this.$emit("okBuySell",okBuySell)
 			
 			},
+			inputChange(type){
+				if(type==0){
+					this.buy.price = Number(this.buy.num * this.sysInfos.hv.buyPrice).toFixed(2)
+				}else{
+					this.buy.num = Number(this.buy.price/this.sysInfos.hv.buyPrice).toFixed(4)
+				}
+				
+				if(this.userInfos.islogin){
+					if(this.buy.price<this.sysInfos.config.coinLimit.buymin || this.buy.price>this.sysInfos.config.coinLimit.buymax){
+						return
+					}
+					
+					
+					this.$http.getPaymentList({
+						coin:this.buy.num,
+						type:0
+					}).then(res=>{
+						this.payType = res.data.map(item=>Number(item))
+						this.buy.active = this.payTypeShow[0].id
+					})
+				}
+				
+			}
 		}
 	}
 </script>

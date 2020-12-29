@@ -6,24 +6,25 @@
 		<ul>
 			<li>
 				<div>
-					<i class="iconfont icon-dui"></i>
+					<i class="iconfont" :class="userInfos.phone?'icon-dui':'icon-gantanhao'"></i>
 					<span> {{ $t('personal.account.security.ccs[0].t') }} </span>
 				</div>
 				<div> {{ $t('personal.account.security.ccs[0].p') }} </div>
 				<div>
-					<p>188****207</p>
-					<i @click="showDialog(1)"> {{ $t('personal.account.security.xg') }} </i>
+					<p v-if="userInfos.phone">{{userInfos.phone}}</p>
+					<i @click="showDialog(1)"> {{ userInfos.phone? $t('personal.account.security.xg') : $t('personal.account.security.bd') }} </i>
 				</div>
 			</li>
 			
 			<li>
 				<div>
-					<i class="iconfont icon-gantanhao"></i>
+					<i class="iconfont" :class="userInfos.mail?'icon-dui':'icon-gantanhao'"></i>
 					<span> {{ $t('personal.account.security.ccs[1].t') }} </span>
 				</div>
 				<div> {{ $t('personal.account.security.ccs[1].p') }} </div>
 				<div>
-					<i @click="showDialog(2)"> {{ $t('personal.account.security.bd') }} </i>
+					<p v-if="userInfos.mail">{{userInfos.mail}}</p>
+					<i v-if="!userInfos.mail" @click="showDialog(2)"> {{ userInfos.mail? $t('personal.account.security.xg') : $t('personal.account.security.bd') }} </i>
 				</div>
 			</li>
 			
@@ -46,12 +47,12 @@
 			
 			<li>
 				<div>
-					<i class="iconfont icon-gantanhao"></i>
+					<i class="iconfont" :class="userInfos.payPassword?'icon-dui':'icon-gantanhao'"></i>
 					<span> {{ $t('personal.account.security.ccs[3].t') }} </span>
 				</div>
 				<div> {{ $t('personal.account.security.ccs[3].p') }} </div>
 				<div>
-					<i @click="goLink('jpwd')"> {{ $t('personal.account.security.sz') }} </i>
+					<i @click="goLink('jpwd')"> {{ userInfos.payPassword ? $t('personal.account.security.xg') : $t('personal.account.security.sz') }} </i>
 				</div>
 			</li>
 			
@@ -60,7 +61,7 @@
 	
 		
 		<!-- 弹窗 -->
-		<dialogx v-model="dialog.show" :disabled="true" :title="dialog.title" :onOk="dialogOk">
+		<dialogx v-model="dialog.show" :loading="dialog.loading" :disabled="dialogDis" :title="dialog.title" :onOk="dialogOk">
 			<template v-slot:content>
 				
 				<!-- 手机 1-->
@@ -70,31 +71,35 @@
 						<li class="qhs">
 							<span> {{ $t('personal.account.security.phone') }} </span>
 							<div @click="phoneDlg.show = true">
-								+86
+								{{ dialog.phone.regionCode }}
 								<i class="iconfont icon-jiantou"></i>
 							</div>
-							<input type="text" :placeholder=" $t('global.qsr') + $t('personal.account.security.phone')">
+							<input v-model="dialog.phone.phone" type="text" :placeholder=" $t('global.qsr') + $t('personal.account.security.phone')">
 						</li>
 						<li>
 							<span>{{ $t('personal.account.security.phoneCode') }} </span>
-							<input type="number" :placeholder=" $t('global.qsr') + $t('personal.account.security.phoneCode')">
-							<div class="scode">{{ $t('global.base.sendCode') }}</div>
+							<input v-model="dialog.phone.verifyCode" type="number" :placeholder=" $t('global.qsr') + $t('personal.account.security.phoneCode')">
+							<div class="scode">
+								<send-code :urlType="1" :data="{ account:dialog.phone.phone,regionCode:dialog.phone.regionCode,type:6 }" ></send-code>
+							</div>
 						</li>
 					</ul>
 				</div>
 				
 				<!-- 邮箱 2-->
 				<div class="dia_email" v-if="dialog.type==2">
-					<!-- <p class="tips"> {{ $t('personal.account.security.bdtips') }} </p> -->
+					 <p class="tips"> {{ $t('personal.account.security.bdtips') }} </p> 
 					<ul>
 						<li>
 							<span> {{ $t('personal.account.security.yx') }} </span>
-							<input type="text" :placeholder=" $t('global.qsr') + $t('personal.account.security.yx')">
+							<input v-model="dialog.email.email" type="text" :placeholder=" $t('global.qsr') + $t('personal.account.security.yx')">
 						</li>
 						<li>
 							<span>{{ $t('personal.account.security.yxcode') }} </span>
-							<input type="number" :placeholder=" $t('global.qsr') + $t('personal.account.security.yxcode')">
-							<div class="scode">{{ $t('global.base.sendCode') }}</div>
+							<input v-model="dialog.email.verifyCode" type="number" :placeholder=" $t('global.qsr') + $t('personal.account.security.yxcode')">
+							<div class="scode">
+								<send-code :urlType="2" :data="{ account:dialog.email.email,type:6 }" ></send-code>
+							</div>
 						</li>
 					</ul>
 				</div>
@@ -122,19 +127,24 @@
 
 <script>
 	import citys from '@/uitl/citys'
+	import updateUser from '@/uitl/updateUser'
 	export default {
 		data(){
 			return{
 				
 				dialog:{
 					show:false,
+					loading:false,
 					title:'',
 					type:1,//弹窗类型
 					email:{
-						
+						email:'',
+						verifyCode:''
 					},
 					phone:{
-						
+						phone:'',
+						verifyCode:'',
+						regionCode:''
 					}
 				},
 				phoneDlg:{
@@ -146,7 +156,7 @@
 			aqlv(){
 				let lt = this.$t('personal.account.security.lt')
 				let className = ['one','two','three']
-				let lv = 2
+				let lv = this.userInfos.passwordLevel? this.userInfos.passwordLevel-1 : 0
 				return {
 					text:lt[lv],
 					lv:lv,
@@ -163,12 +173,26 @@
 				})
 				return citysD
 			},
+			dialogDis(){
+				if(this.dialog.type==1){
+					if(Boolean(this.dialog.phone.phone && this.dialog.phone.verifyCode)){
+						return  false
+					}
+				}else{
+					if(Boolean(this.dialog.email.email && this.dialog.email.verifyCode)){
+						return  false
+					}
+				}
+				
+				return true
+			}
 		},
 		mounted() {
 			
 		},
 		methods:{
 			showDialog(type){
+				
 				switch(Number(type)){
 					case 1:
 						this.dialog.title = this.$t('personal.account.security.bdphone')
@@ -177,15 +201,63 @@
 						this.dialog.title = this.$t('personal.account.security.bdyx')
 					break;
 				}
+				this.dialog.phone = {
+					phone:'',
+					verifyCode:'',
+					regionCode:'+86'
+				}
+				this.dialog.email = {
+					email:'',
+					verifyCode:''
+				}
 				this.dialog.type = type
+				this.dialog.loading = false
 				this.dialog.show = true
 			},
 			dialogOk(){
+				this.dialog.loading = true
+				if(this.dialog.type==1){
+					this.$http.bindingPhone({
+						userid:this.$getToken(1),
+						...this.dialog.phone 
+					}).then(res=>{
+						this.dialog.loading =  false
+						if(res.code==0){
+							this.$notify({
+								type:"success",
+								message:this.$t('global.base.xgcg')
+							})
+							this.dialog.show = false
+							updateUser.call(this)
+						}else{
+							
+						}
+					})
+				}else{
+					this.$http.bindingMail({
+						userid:this.$getToken(1),
+						...this.dialog.email 
+					}).then(res=>{
+						this.dialog.loading =  false
+						if(res.code==0){
+							this.$notify({
+								type:"success",
+								message:this.$t('global.base.xgcg')
+							})
+							this.dialog.show = false
+							updateUser.call(this)
+						}else{
+							
+						}
+					})
+				}
 				
 			},
 			//选择电话
 			phoneOk(value){
-				console.log(value.split("-"))
+				this.phoneDlg.show = false
+				this.dialog.phone.regionCode = value.split("-")[0]
+				//console.log(value.split("-"))
 			},
 			
 			//

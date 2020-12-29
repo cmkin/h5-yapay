@@ -1,0 +1,60 @@
+
+
+export default function(index){
+	//个人信息
+	this.$http.getUserInfoByToken().then((res)=>{
+		this.$store.commit('updateUserInfo',{
+			add:true,
+			obj:{
+				...res.data
+			}
+		})
+	})
+	//其他个人信息
+	this.$http.getUserById({
+		userid:this.$getToken(1)
+	}).then(res=>{
+		this.$store.commit('updateUserInfo',{
+			add:true,
+			obj:{
+				...res.data
+			}
+		})
+	})
+	//个人收付款配置
+	this.$http.getUserPayInfoById({
+		userid:this.$getToken(1)
+	}).then(res=>{
+		this.$store.commit('updateUserInfo',{
+			add:true,
+			obj:{
+				payList:res.data
+			}
+		})
+		
+		if(index){
+			this.$router.push("/index")
+		}
+	})
+	//认证信息
+	this.$http.getUserLevelInfo({
+		userid:this.$getToken(1)
+	}).then(res=>{
+		this.$store.commit('updateUserInfo',{
+			add:true,
+			obj:{
+				...res.data
+			}
+		})
+	})
+	//认证等级交易限额
+	this.$http.getUserAmount({}).then(res=>{
+		this.$store.commit('updateUserInfo',{
+			add:true,
+			obj:{
+				amount:res.data
+			}
+		})
+	})
+	
+}

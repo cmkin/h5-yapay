@@ -12,7 +12,7 @@
 				<div v-else v-html="item[child.id]"></div>
 			</li>
 		</ul>
-		<div class="nodata" v-if="!datas.length"> {{ $t('global.base.zusj') }}</div>
+		<div class="nodata" v-if="!datas.length"> <nodata v-model="active"></nodata> </div>
 	</div>
 </template>
 
@@ -21,7 +21,8 @@
 		name:"tablex",
 		data(){
 			return{
-				refDom:'table'+Math.ceil(Math.random()*1000)
+				refDom:'table'+Math.ceil(Math.random()*1000),
+				active:true
 			}
 		},
 		props:{

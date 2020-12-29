@@ -1,7 +1,7 @@
 <template>
 	<div class="view_assets_recharge">
 		
-		<header-top :title="$t('withdraw.title')" rlink='/' :rtitle="$t('withdraw.titler')"></header-top>
+		<header-top :title="$t('withdraw.title')"></header-top>
 		
 		
 		<div class="top global_main">
@@ -19,27 +19,28 @@
 					<ul>
 						<li>
 							<span>{{ $t('withdraw.an') }}</span>
-							<input :placeholder="$t('withdraw.ant')" type="text" />
+							<input v-model="address" :placeholder="$t('withdraw.ant')" type="text" />
 						</li>
 						<li class="sl">
 							<span class="tl">{{ $t('withdraw.tl') }}</span>
 							<div class="i">
-								<input :placeholder="$t('withdraw.tlt') + 10" type="text" />
-								<span class="a"> USDT <i>{{ $t('withdraw.at') }}</i> </span>
+								<input v-model="num" :placeholder="$t('withdraw.tlt') + 10" type="number" />
+								<span class="a"> USDT <i @click="all">{{ $t('withdraw.at') }}</i> </span>
 							</div>
 							<div class="s">
-								<span> {{ $t('withdraw.ky') }} 9000.0000 USDT </span>
-								<span> {{ $t('withdraw.xe') }} 9000.0000 USDT <i>{{ $t('withdraw.ts') }}</i> </span>
+								<span> {{ $t('withdraw.ky') }} {{Number(userInfos.coin).toFixed(4)}} USDT </span>
+								<span> {{ $t('withdraw.xe') }} {{Number(userInfos.tibQuota).toFixed(4)}} USDT <i @click="$router.push('/personal/account/identity')">{{ $t('withdraw.ts') }}</i> </span>
 							</div>
 						</li>
 						<li class="sl">
 							<span>{{ $t('withdraw.sxf') }}</span>
 							<div class="i">
-								<input disabled="disabled" :placeholder="0.0000" type="text" />
+								<input disabled="disabled"  :placeholder="Number(userInfos.tib).toFixed(4)" type="text" />
 								<span class="a">USDT</span>
 							</div>
 							<div class="s">
-								{{ $t('withdraw.yq') }} 9000.0000 USDT
+								{{ $t('withdraw.yq') }} 
+								{{Number(num-userInfos.tib).toFixed(4)  }}  USDT
 							</div>
 						</li>
 					</ul>
@@ -52,19 +53,49 @@
 						<li v-for="item in ldetails.zls" v-html="item"></li>
 					</ul>
 				</div>
+				
+				<div class="btn">
+					<van-button @click="submit" :loading="loading" :disabled=" num<10 || address=='' " type="info" style="width: 180px;">{{ $t('withdraw.title') }}</van-button>
+				</div>
+				
 			</div>
 		</div>
 		
 		
-		<div class="table global_main">
-			<div class="t">{{$t('withdraw.titler')}}</div>
-			<tablex :titles="$t('withdraw.tableTitle')" :datas="datas">
+		
+		
+		<div style="position: relative;">
 			
-			</tablex>
-			<div class="show_more">
-				<span>{{ $t('global.base.more') }} </span>
+			<div class="table global_main">
+				<div class="t">{{$t('withdraw.titler')}}</div>
+				<tablex :titles="$t('withdraw.tableTitle')" :datas="datas">
+					<template v-slot:status="row">
+						<div>
+							<span>{{ getStatus(row.item.status) }}</span>
+						</div>
+					</template>
+				</tablex>
+				
+			</div>
+			
+			<loading v-model="tableLoading"></loading>
+		</div>
+		
+		
+		
+		<div class="page_change">
+			<div class="m">
+				<van-pagination @change="getlist()" v-model="json.current" :total-items="json.total" :items-per-page="json.size" :show-page-size="3" force-ellipses>
+					<template #prev-text>
+						<van-icon name="arrow-left" />
+					</template>
+					<template #next-text>
+						<van-icon name="arrow" />
+					</template>
+				</van-pagination>
 			</div>
 		</div>
+		
 		
 		
 		
@@ -76,24 +107,153 @@
 		data(){
 			return{
 				lid:null,
-				datas:[]
+				datas:[],
+				tableLoading:false,
+				json:{
+					current:1,
+					size:5,
+					total:0,
+					type:0
+				},
+				
+				address:'',
+				num:'',
+				paypassword:'',
+				loading:false
 			}
 		},
 		mounted() {
 			this.lid = this.$t('recharge.llists')[0].id
+			this.getlist()
 		},
 		computed:{
 			ldetails(){
 				return this.$t('recharge.llists').filter(item=>item.id == this.lid)[0]
+			},
+			getStatus(){
+				return function(id){
+					return this.$t('recharge.status').filter(item=>item.id == id)[0].text
+				}
 			}
 		},
 		methods:{
+			getlist(){
+				this.tableLoading = true
+				this.$http.userDrawCoinLog({
+					...this.json,
+					//current:this.json.current-1
+				}).then(res=>{
+					this.tableLoading = false
+					if(res.code==0){
+						this.json.total = res.total
+						this.datas = res.data.map(item=>{
+							item.createtime = this.$options.filters.timeFormat(item.createtime)
+							item.coin = Number(item.coin).toFixed(4)+" USDT"
+							//item.status = this.getStatus(item.status)
+							return item
+						})
+					
+					
+					}
+				})
+			},
+			
 			changet(id){
 				if(id=='TRC20'){
 					this.$toast(this.$t('withdraw.whz'))
 					return
 				}
 				this.lid = id
+			},
+			all(){
+				this.num = Number(this.userInfos.coin).toFixed(4)
+			},
+			submit(){
+				//this.loading = true
+				//没有支付密码
+				if(!this.userInfos.payPassword){
+					
+					this.$dialog.confirm({
+						cancelButtonText: this.$t('global.base.cancel'),
+						confirmButtonText: this.$t('global.base.ok'),
+					  title: this.$t('global.base.szzf'),
+					  message: this.$t('global.base.zfts'),
+					})
+					  .then(() => {
+						this.$router.push('/editJPwd?type=0')
+					  })
+					  .catch(() => {
+						// on cancel
+					  });
+					
+					return
+				}
+				
+				//输入支付密码
+				this.$dialog.confirm({
+				  title: this.$t('global.base.srzf'),
+				  closeOnClickOverlay:true,
+				  message: '<input  id="payPassword" type="password"  />',
+				  confirmButtonText:this.$t('global.base.ok'),
+				  cancelButtonText:this.$t('global.base.cancel'),
+				  beforeClose:(action, done)=>{
+				    if (action === 'confirm') {
+						let paypassword = document.getElementById("payPassword").value
+						console.log(paypassword)
+				     // setTimeout(done, 1000);
+						//确定，发送请求
+						let  getType = (id)=>{
+							switch(id){
+								case 'OMNI':
+									return 0
+								break;
+								case 'ERC20':
+									return 1
+								break;
+								case 'TRC20':
+									return 2
+								break;
+							}
+						}
+						this.$http.withdrawCoin({
+							address:this.address,
+							coin:this.num,
+							paypassword:paypassword,
+							type:getType(this.lid) 
+						}).then(res=>{
+							
+							document.getElementById("payPassword").value = ''
+							done()
+							if(res.code==0){
+								//成功之后
+								this.getlist()
+								this.$notify({
+									type:"success",
+									message:this.$t('global.base.tbcg')
+								})
+							}
+							
+						})
+						
+						
+						
+					 
+				    } else {
+				      done();
+					  
+					  document.getElementById("payPassword").value = ''
+					  
+				    }
+					
+				  }
+				}).then(() => {
+				  // on close
+				}).catch(() => {
+					// on cancel
+				});
+				
+				
+				
 			}
 		}
 	}
@@ -235,6 +395,14 @@
 			}
 		}
 		
+		
+		.page_change {
+			text-align: center;
+			padding: 40px 0;
+			.m {
+				display: inline-block;
+			}
+		}
 		
 	}
 </style>

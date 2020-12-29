@@ -5,7 +5,7 @@
 			<div class="tabs">
 				<div class="global_main">
 					<ul>
-						<li v-for="item in $t('quickSale.c2c.entrust.tabs')" >
+						<li @click="changTab(item.id)" v-for="item in $t('quickSale.c2c.entrust.tabs')" >
 							<span :class="tabActive==item.id?'active':''">
 								{{item.text}}
 							</span>
@@ -16,51 +16,61 @@
 			
 			<div style="height: 100px;"></div>
 			
-			<div class="tables" :class="isPhone ? 'tables_phone' : 'tables_pc'">
-				<ul class="title">
-					<li v-for="item in $t('quickSale.c2c.entrust.tableTitle')">{{ item.title }}</li>
-				</ul>
-				<ul class="item" v-for="item in datas">
-					<div class="l">
-						<li class="xz" :class="{sell:item.sell}">
-							<span class="o"> {{ true ? $t('quickSale.c2c.entrust.m1') : $t('quickSale.c2c.entrust.m2')}} </span>
-							<span class="two">
-								<i>USDT</i>/CNY({{ true ? $t('quickSale.c2c.entrust.zx') : $t('quickSale.c2c.entrust.kj') }})
-							</span>
-						</li>
-						<li>
-							<i> {{$t('quickSale.c2c.entrust.tableTitle')[1].title }}: </i>
-							<span>7.10</span>CNY
-						</li>
-						<li>
-							<i> {{$t('quickSale.c2c.entrust.tableTitle')[2].title }}: </i>
-							<span>1010</span>USDT
-						</li>
-						<li>
-							<i> {{$t('quickSale.c2c.entrust.tableTitle')[3].title }}: </i>
-							<span>710</span>CNY
-						</li>
-					</div>
-					<div class="r">
-						<li class="cx">
-							<span> {{ $t('quickSale.c2c.entrust.cx') }}</span>
-						</li>
-						<li class="status">
-							<span :class="{zt:item.isjd==false}">{{ item.isjd ? $t('quickSale.c2c.entrust.jd') : $t('quickSale.c2c.entrust.zt') }}</span>
-							<div class="b">
-								<span> {{ item.isjd ? $t('quickSale.c2c.entrust.dzt') : $t('quickSale.c2c.entrust.dkq') }} </span>
-									<!-- :value 手动切换 -->
-								<van-switch :loading="false" v-model="item.isjd"  size="18px" active-color="#4DB872" />
-							</div>
-						</li>
-					</div>
-				</ul>
+			
+			<div style="position: relative;">
 				
+				
+			
+				<div class="tables" :class="isPhone ? 'tables_phone' : 'tables_pc'">
+					<ul class="title">
+						<li v-for="item in $t('quickSale.c2c.entrust.tableTitle')">{{ item.title }}</li>
+					</ul>
+					<ul class="item" v-for="item in datas">
+						<div class="l">
+							<li class="xz" :class="{sell:item.type==1}">
+								<span class="o"> {{ item.type==0 ? $t('quickSale.c2c.entrust.m1') : $t('quickSale.c2c.entrust.m2')}} </span>
+								<span class="two">
+									<i>USDT</i>/{{sysInfos.hv.dw}}({{ tabActive==2 ? $t('quickSale.c2c.entrust.zx') : $t('quickSale.c2c.entrust.kj') }})
+								</span>
+							</li>
+							<li>
+								<i> {{$t('quickSale.c2c.entrust.tableTitle')[1].title }}: </i>
+								<span>{{Number(item.price).toFixed(2)}}</span>{{sysInfos.hv.dw}}
+							</li>
+							<li>
+								<i> {{$t('quickSale.c2c.entrust.tableTitle')[2].title }}: </i>
+								<span>{{Number(item.startcoin).toFixed(4)}}</span>USDT
+							</li>
+							<li>
+								<i> {{$t('quickSale.c2c.entrust.tableTitle')[3].title }}: </i>
+								<span>{{Number(item.coin).toFixed(4)}}</span>{{sysInfos.hv.dw}}
+							</li>
+						</div>
+						<div class="r">
+							<li class="cx" @click="changeStatus(1,item)">
+								<span> {{ $t('quickSale.c2c.entrust.cx') }}</span>
+							</li>
+							<li class="status">
+								<span :class="{zt:item.isjd}">{{ item.isjd ? $t('quickSale.c2c.entrust.jd') : $t('quickSale.c2c.entrust.zt') }}</span>
+								<div class="b" @click="changeStatus(4,item)">
+									<span> {{ item.isjd  ? $t('quickSale.c2c.entrust.dzt') : $t('quickSale.c2c.entrust.dkq') }} </span>
+										<!-- :value 手动切换 -->
+									
+									<van-switch :loading="item.loading" :value="item.isjd"  size="18px" active-color="#4DB872" />
+								</div>
+							</li>
+						</div>
+					</ul>
+					
+				</div>
+				
+				<nodata v-show="!datas.length"></nodata>
+				
+				<loading v-model="tableLoading"></loading>
 			</div>
-		
 			
 			
-			<div class="page_change">
+			<!-- <div class="page_change">
 				<div class="m">
 					<van-pagination v-model="currentPage" :total-items="125" :show-page-size="3" force-ellipses>
 						<template #prev-text>
@@ -71,7 +81,7 @@
 						</template>
 					</van-pagination>
 				</div>
-			</div>
+			</div> -->
 			
 		</div>
 		
@@ -85,28 +95,127 @@
 				oldtops:0,
 				tabActive:0,
 				currentPage:0,
-				datas:[
-					{
-						isjd:true,
-						sell:true
-					},
-					{
-						isjd:true,
-						sell:false
-					}
-				]
+				tableLoading:false,
+				allDatas:false
 			}
 		},
 		mounted() {
-			this.tabActive = this.$t('quickSale.c2c.entrust.tabs')[0].id
+			this.tabActive = this.$route.query.id?this.$route.query.id:this.$t('quickSale.c2c.entrust.tabs')[0].id
 			this.oldtops = 0
 			document.addEventListener("scroll",this.scroll)
+			this.getlist()
+		},
+		computed:{
+			datas(){
+				if(!this.allDatas){
+					return []
+				}
+				return this.tabActive == 1 ? this.allDatas.merchantOrderList : this.allDatas.userOrderList
+			}
+			
 		},
 		beforeRouteLeave(to,from,next) {
 			document.removeEventListener("scroll",this.scroll)
 			next()
 		},
 		methods:{
+			getlist(){
+				//this.tableLoading = true
+				this.$http.getUserOpenOrderList({}).then(res=>{
+					this.tableLoading = false
+					if(res.code==0){
+						
+						 res.data.merchantOrderList.map(item=>{
+									item.isjd = item.status ==0 ? true : false
+									item.loading = false
+									return item
+								}) 
+						res.data.userOrderList.map(item=>{
+									item.isjd = item.status ==0 ? true : false
+									item.loading = false
+									return item
+								})
+						
+						this.allDatas = res.data
+						
+					}
+				})
+			},
+			changeStatus(type,item){
+				 let send = this.tabActive==1 ? this.$http.cancelOrder :  this.$http.cancelUserOrder
+				 
+				switch (type){
+					case 1:
+						//撤销
+						this.$dialog.confirm({
+						  title: this.$t('global.base.wxts'),
+						  closeOnClickOverlay:true,
+						  message: this.$t('quickSale.c2c.entrust.recx'),
+						  confirmButtonText:this.$t('global.base.ok'),
+						  cancelButtonText:this.$t('global.base.cancel'),
+						  beforeClose:(action, done)=>{
+							   if (action === 'confirm') {
+								  
+								  send({
+								   	id:item.id,
+								   	type:item.type,
+								   	status:type
+								   }).then(res=>{
+								   	  done()  
+									  if(res.code==0){
+										  this.$notify({
+											  type:"success",
+											  message:this.$t('quickSale.c2c.entrust.cxok')
+										  })
+										  this.getlist()
+									  }
+								   })
+							   }else{
+								 done()  
+							   }  
+						  }
+						  
+						})
+						
+						
+						
+					break;
+					
+					case 4: //开启，暂停
+					   
+							
+							if(item.loading){
+								return
+							}
+						
+							//0,开启，点击暂停
+							//updeteStatus(true)
+							item.loading  = true
+							let json = {
+								type:item.type,
+								status:item.status==0 ? 4 :0
+							}
+							if(this.tabActive==2) json.id = item.id
+							send(json).then(res=>{
+								if(res.code==0){
+									this.getlist()
+								}
+								
+							},err=>{
+								item.loading  = false
+							})
+						
+						
+					
+					break;
+					
+				}
+				
+			},
+			changTab(id){
+				this.$router.replace('/entrust?id='+id)
+				this.tabActive = id
+			},
 			scroll(e){
 				let tops = document.documentElement.scrollTop || document.body.scrollTop
 				let dhl = document.querySelector(".view_quickSale_c2c_entrust .tabs")
@@ -178,7 +287,7 @@
 								content: '';
 								position: absolute;
 								left: 0;
-								bottom: -14px;
+								bottom: -15px;
 								width: 100%;
 								height: 2px;
 								background-color: rgba(51, 51, 51, 1);

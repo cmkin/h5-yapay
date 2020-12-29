@@ -1,7 +1,7 @@
 <template>
 	<div class="view_assets_recharge">
 		
-		<header-top :title="$t('recharge.title')" rlink='/' :rtitle="$t('recharge.titler')"></header-top>
+		<header-top :title="$t('recharge.title')" ></header-top>
 		
 		
 		<div class="top global_main">
@@ -17,10 +17,10 @@
 				<div class="addr" v-if="ldetails">
 					<span>{{ $t('recharge.an') }}</span>
 					<div>
-						<span>32apAqXbZeKGVJa8nsLvA2NvS7saVsTywyaVsTywyaVsTywyaVsTywy</span>
+						<span>{{getAddr}}</span>
 						<span>
-							<copy content="213123"></copy>
-							<i class="iconfont icon-erweima"></i>
+							<copy :content="getAddr"></copy>
+							<i @click="showCode" class="iconfont icon-erweima"></i>
 						</span>
 					</div>
 				</div>
@@ -34,44 +34,144 @@
 		</div>
 		
 		
-		<div class="table global_main">
-			<div class="t">{{$t('recharge.titler')}}</div>
-			<tablex :titles="$t('recharge.tableTitle')" :datas="datas">
-			
-			</tablex>
-			<div class="show_more">
-				<span>{{ $t('global.base.more') }} </span>
+		
+		 
+		
+		<div style="position: relative;">
+			<div class="table global_main">
+				<div class="t">{{$t('recharge.titler')}}</div>
+				<tablex :titles="$t('recharge.tableTitle')" :datas="datas">
+					<template v-slot:status="row">
+						<div>
+							<span>{{ getStatus(row.item.status) }}</span>
+						</div>
+					</template>
+				</tablex>
+			</div>
+			<loading v-model="tableLoading"></loading>
+		</div>
+		
+		
+		
+		<div class="page_change">
+			<div class="m">
+				<van-pagination @change="getlist()" v-model="json.current" :total-items="json.total" :items-per-page="json.size" :show-page-size="3" force-ellipses>
+					<template #prev-text>
+						<van-icon name="arrow-left" />
+					</template>
+					<template #next-text>
+						<van-icon name="arrow" />
+					</template>
+				</van-pagination>
 			</div>
 		</div>
 		
+		
+		
+		
+		<qrcode-vue style="display: none;" :value="getAddr" :size="isPhone ? 140 : 168" ref="qrcode" level="H"></qrcode-vue>
 		
 		
 	</div>
 </template>
 
 <script>
+	import QrcodeVue from 'qrcode.vue'
+	import { ImagePreview } from 'vant';
 	export default {
 		data(){
 			return{
 				lid:null,
-				datas:[]
+				datas:[],
+				tableLoading:false,
+				address:{},
+				json:{
+					current:1,
+					size:5,
+					total:0,
+					type:1
+				},
 			}
+		},
+		components:{
+			QrcodeVue,ImagePreview
 		},
 		mounted() {
 			this.lid = this.$t('recharge.llists')[0].id
+			this.getDetail()
+			this.getlist()
 		},
 		computed:{
 			ldetails(){
 				return this.$t('recharge.llists').filter(item=>item.id == this.lid)[0]
+			},
+			getAddr(){
+				let loading = this.$t('global.base.loading')
+				if(this.ldetails) {
+					switch(this.ldetails.id){
+						case 'ERC20':
+							return this.address.erc20address || loading
+						break;
+						case 'OMNI':
+							return this.address.omniaddress || loading
+						break;
+						case 'TRC20':
+							return this.address.trc20address || loading
+						break;
+					}
+				}
+				
+				return loading
+			},
+			getStatus(){
+				return function(id){
+					return this.$t('recharge.status').filter(item=>item.id == id)[0].text
+				}
 			}
 		},
 		methods:{
+			getlist(){
+				this.tableLoading = true
+				this.$http.userDrawCoinLog({
+					...this.json,
+					//current:this.json.current-1
+				}).then(res=>{
+					this.tableLoading = false
+					if(res.code==0){
+						this.json.total = res.total
+						this.datas = res.data.map(item=>{
+							item.createtime = this.$options.filters.timeFormat(item.createtime)
+							item.coin = Number(item.coin).toFixed(4)+" USDT"
+							//item.status = this.getStatus(item.status)
+							return item
+						})
+					
+					
+					}
+				})
+			},
+			
+			getDetail(){
+				this.$http.getUserCoinAddress({}).then(res=>{
+					if(res.code==0){
+						this.address = res.data
+					}
+				})
+			},
 			changet(id){
 				if(id=='TRC20'){
 					this.$toast(this.$t('withdraw.whz'))
 					return
 				}
 				this.lid = id
+			},
+			showCode(){
+				ImagePreview({
+				  images: [
+				    this.$refs.qrcode.$refs['qrcode-vue'].toDataURL('image/png')
+				  ],
+				  closeable: true,
+				});
 			}
 		}
 	}
@@ -190,6 +290,13 @@
 			}
 		}
 		
+		.page_change {
+			text-align: center;
+			padding: 40px 0;
+			.m {
+				display: inline-block;
+			}
+		}
 		
 	}
 </style>

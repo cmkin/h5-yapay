@@ -7,7 +7,7 @@
 
 		<ul class="base" v-if="edit.show">
 			<li class="tx clearfix">
-				<img src="" alt="" />
+				<img :src="userInfos.headurl" alt="" />
 				<div class="r">
 					<span>{{ $t('personal.data.yh') }}</span>
 					<p>{{ $t('personal.data.wmz') }}</p>
@@ -16,18 +16,18 @@
 			<li class="name">
 				<div>
 					<span>{{ $t('personal.yhm') }}</span>
-					<p>我是用户名</p>
+					<p>{{userInfos.nickname}}</p>
 				</div>
 				<div>
 					<span>{{ $t('personal.data.gj') }}</span>
-					<p>中国大陆</p>
+					<p>{{ getCurrency }}</p>
 				</div>
 			</li>
 			<li class="lv">
-				<span>{{ $t('personal.data.rzdj') }} LV.1基础认证</span>
-				<p>
-					<span>{{ $t('personal.data.xm') }} &nbsp;&nbsp;&nbsp; 我是名字</span>
-					<span>{{ $t('personal.data.zjh') }} &nbsp;&nbsp;&nbsp; 50**************66</span>
+				<span>{{ $t('personal.data.rzdj') }} {{ $t('personal.data.rzLists')[userInfos.verifyLevel] }}</span>
+				<p v-if="userInfos.verifyLevel>0">
+					<span>{{ $t('personal.data.xm') }} &nbsp;&nbsp;&nbsp; {{userInfos.name}}</span>
+					<span>{{ $t('personal.data.zjh') }} &nbsp;&nbsp;&nbsp; {{userInfos.cardNumber}}</span>
 				</p>
 				<div class="r" @click="goRz()">{{ $t('personal.data.qts') }}</div>
 			</li>
@@ -40,10 +40,9 @@
 			<li>
 				<span>{{ $t('personal.yhm') }}</span>
 				<div style="margin-bottom: 20px;">
-					<input disabled="disabled" placeholder="yonghu" type="text" />
+					<input maxlength="8" v-model="nickname"  placeholder="nickname" type="text" />
 				</div>
-				
-				<van-button @click="edit.show = true" type="info">{{ $t('personal.data.save') }}</van-button>
+				<van-button :disabled=" Boolean(nickname=='' || fileList.length==0) " :loading="edit.loading" @click="save" type="info">{{ $t('personal.data.save') }}</van-button>
 			</li>
 
 			
@@ -52,28 +51,84 @@
 </template>
 
 <script>
+ import updateUser from '@/uitl/updateUser' 
 export default {
 	data() {
 		return {
 			edit: {
-				show: true
+				show: true,
+				loading:false
 			},
-			fileList: [{ url: 'https://img.yzcdn.cn/vant/leaf.jpg' }]
+			fileList: [],
+			nickname:''
 		};
 	},
-	mounted() {},
+	mounted() {
+		this.fileList = [{ url: this.userInfos.headurl}]
+		this.nickname = this.userInfos.nickname
+	},
+	computed:{
+		getCurrency(){
+			return  this.$t('global.hbType').filter(item=>item.id == this.userInfos.currency)[0].currency
+		},
+		headurl(){
+			return  this.userInfos.headurl
+		}
+	},
+	watch:{
+		'headurl'(n){
+			if(n){
+				this.fileList = [{ url: n}]
+				this.nickname = this.userInfos.nickname
+			}
+		}
+	},
+	filters:{
+		hidenum(value){
+			if(!value){
+				return ''
+			}
+			return value.slice(0,3)+'********'+value.slice(11,value.length)
+		}
+	},
 	methods: {
 		afterRead(file) {
 			file.status = 'uploading';
 			file.message = this.$t('personal.data.scz');
-
-			setTimeout(() => {
-				file.status = 'failed';
-				file.message =  this.$t('personal.data.scs');
-			}, 1000);
+			
+			let formData = new FormData();
+			    formData.append("file",file.file);
+			    formData.append("userid",this.$getToken(1));
+				
+				this.$http.uploadUserHead(formData).then(res=>{
+					if(res.code==0){
+						this.fileList = [{ url: res.data.headurl}]
+					}else{
+						file.status = 'failed';
+						file.message =  this.$t('personal.data.scs');
+					}
+				})
+			
 		},
 		goRz(){
 			this.$router.push('/personal/account/identity')
+		},
+		save(){
+			this.edit.loading = true
+			this.$http.updateUserInfo({
+				nickname:this.nickname,
+				headurl:this.fileList[0].url
+			}).then(res=>{
+				if(res.code==0){
+					this.$notify({
+						type:"success",
+						message:this.$t('global.base.xgcg')
+					})
+					this.edit.show = true
+					this.edit.loading = false
+					updateUser.call(this)
+				}
+			})
 		}
 	}
 };

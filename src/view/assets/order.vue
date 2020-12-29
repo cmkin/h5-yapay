@@ -5,7 +5,7 @@
 			<div class="tabs">
 				<div class="global_main">
 					<ul>
-						<li v-for="item in $t('order.tabs')" >
+						<li @click="changeTab(item.id)" v-for="item in $t('order.tabs')" >
 							<span :class="tabActive==item.id?'active':''">
 								{{item.text}}
 							</span>
@@ -16,52 +16,57 @@
 			
 			<div style="height: 100px;"></div>
 			
+			<div style="position: relative;">
 			<div class="tables" :class="isPhone ? 'tables_phone' : 'tables_pc'">
 				<ul class="title">
 					<li v-for="item in $t('order.tableTitle')">{{ item.title }}</li>
 				</ul>
-				<ul class="item" v-for="item in datas">
+				<ul v-if="datas.length" class="item" v-for="item in datas">
 					<div class="l">
-						<li class="xz" :class="{sell:item.sell}">
-							<span class="o"> {{ true ? $t('quickSale.c2c.entrust.m1') : $t('quickSale.c2c.entrust.m2')}} </span>
+						<li class="xz" :class="{sell:item.type==1}">
+							<span class="o"> {{ item.type==0 ? $t('quickSale.c2c.entrust.m1') : $t('quickSale.c2c.entrust.m2')}} </span>
 							<span class="two">
-								<i>USDT</i>/CNY
+								<i>USDT</i>/{{sysInfos.hv.dw}}
 							</span>
 						</li>
 						<li>
 							<i> {{$t('order.tableTitle')[1].title }}: </i>
-							<span>1010</span>USDT
+							<span>{{item.realcoin | coin }}</span>USDT
 						</li>
 						<li>
 							<i> {{$t('order.tableTitle')[2].title }}: </i>
-							<span>7.10</span>CNY
+							<span> {{item.price | money}} </span>{{sysInfos.hv.dw}}
 						</li>
 						<li>
 							<i> {{$t('order.tableTitle')[3].title }}: </i>
-							<span>710</span>CNY
+							<span>{{item.value | money}} </span>{{sysInfos.hv.dw}}
 						</li>
 					</div>
 					<div class="r">
-						<li class="cx">
+						<li class="cx" @click="goOrder(item)">
 							<i> {{$t('order.tableTitle')[4].title }}: </i>
-							<span>25265826942365648259156</span>
+							<span>{{item.orderid}}</span>
 						</li>
 						<li class="status">
 							<span :class="statusClass(item.status)">{{ status(item.status)}} </span>
 							<div class="b" >
-								2019-12-18 13:18:26
+								{{item.createtime | timeFormat}}
 							</div>
 						</li>
 					</div>
 				</ul>
 				
+				<nodata v-show="!datas.length"></nodata>
+				
 			</div>
-		
 			
+			
+			<loading v-model="tableLoading"></loading>
+			</div>
 			
 			<div class="page_change">
 				<div class="m">
-					<van-pagination v-model="currentPage" :total-items="125" :show-page-size="3" force-ellipses>
+					<van-pagination v-model="currentPage" @change="getlist" :total-items="allitems"  :items-per-page="8"  :show-page-size="3" force-ellipses>
 						<template #prev-text>
 							<van-icon name="arrow-left" />
 						</template>
@@ -84,18 +89,9 @@
 				oldtops:0,
 				tabActive:0,
 				currentPage:0,
-				datas:[
-					{
-						isjd:true,
-						sell:true,
-						status:0
-					},
-					{
-						isjd:true,
-						sell:false,
-						status:1
-					}
-				]
+				allitems:0,
+				tableLoading:false,
+				datas:[]
 			}
 		},
 		computed:{
@@ -123,16 +119,62 @@
 				}
 			}
 		},
+		watch:{
+			$route(){
+				this.tabActive = Number(this.$route.query.type)
+				 this.getlist()
+			}
+		},
 		mounted() {
-			this.tabActive = this.$t('order.tabs')[0].id
+			this.tabActive = Number(this.$route.query.type?this.$route.query.type:this.$t('order.tabs')[0].id) 
 			this.oldtops = 0
 			document.addEventListener("scroll",this.scroll)
+			
+			this.getlist()
 		},
 		beforeRouteLeave(to,from,next) {
 			document.removeEventListener("scroll",this.scroll)
 			next()
 		},
 		methods:{
+			getlist(){
+				this.tableLoading = true
+				let json = {
+					current:this.currentPage,
+					size:8,
+					orderStatus:this.tabActive
+				}
+				this.$http.getOrderList(json).then(res=>{
+					this.tableLoading = false
+					if(res.code==0){
+						this.allitems = res.total
+						this.datas = res.data
+					}
+					
+				})
+				
+			},
+			changeTab(id){
+				this.$router.replace({
+					path:"/assets/order",
+					query:{
+						type:id
+					}
+				})	
+			},
+			
+			goOrder(item){
+				if(item.status==0){}
+					//交易中-去交易界面
+					this.$router.push({
+						path:item.type==0?'/sale/payment':'/sale/collection',
+						query:{
+							id:item.id
+						}
+					})
+				
+			},
+			
 			scroll(e){
 				let tops = document.documentElement.scrollTop || document.body.scrollTop
 				let dhl = document.querySelector(".view_assets_order .tabs")
@@ -204,7 +246,7 @@
 								content: '';
 								position: absolute;
 								left: 0;
-								bottom: -14px;
+								bottom: -15px;
 								width: 100%;
 								height: 2px;
 								background-color: rgba(51, 51, 51, 1);
@@ -254,6 +296,7 @@
 					
 					.cx{
 						color: @blue;
+						cursor: pointer;
 					}
 					.status{
 						&>span{

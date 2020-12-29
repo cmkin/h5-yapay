@@ -53,8 +53,10 @@ import chat from '_c/common/chat'
 import select from '_c/common/select'
 import headerTop from '_c/common/headerTop'
 import sendCode from '_c/common/sendCode'
+import nodata from '_c/common/noData'
+import loading from '_c/common/loading'
 
-const components = [tablex, dialog, copy, chat, select,headerTop,sendCode]
+const components = [tablex, dialog, copy, chat, select,headerTop,sendCode,nodata,loading]
 components.forEach(item => {
 	Vue.component(item.name, item)
 })
@@ -62,11 +64,19 @@ components.forEach(item => {
 
 /////////////////////////自定义方法//////////
 
+
+//获取dom
 Vue.prototype.$dom = {
 	getwh: function(ele, type = "h") {
+		if(!document.querySelector(ele)){
+			return 0
+		}
 		return type == 'h' ? document.querySelector(ele).offsetHeight : document.querySelector(ele).offsetWidth
 	},
 	setwh: function(ele, num, type = "h") {
+		if(!document.querySelector(ele)){
+			return 0
+		}
 		type == 'h' ? document.querySelector(ele).style.height = num + 'px' : document.querySelector(ele).style.width = num +
 			'px'
 	}
@@ -107,6 +117,36 @@ Vue.prototype.$inputCheak = function(doms, error) {
 
 Vue.prototype.$cheakError = function(code,isall){
 	this.$notify( this.$t( isall ? code : 'error.ERROR_'+code  ) )
+}
+
+//检查登录
+
+Vue.prototype.$isLogin=function(){
+	let token = localStorage.getItem('token')
+		if(!token){
+			this.$dialog.confirm({
+				cancelButtonText: this.$t('global.base.cancel'),
+				confirmButtonText: this.$t('global.base.ok'),
+				title:this.$t('global.base.qxdl'),
+				message:this.$t('global.base.qxdlmsg')
+			}).then(()=>{
+				this.$router.push("/login-register?type=0")
+			}).catch(()=>{})
+			
+			return true //未登录
+		}
+		
+		return false
+}
+
+
+//获取token
+Vue.prototype.$getToken=function(type=0){
+	return localStorage.getItem(type==0?'token':'userid')
+}
+//保存token
+Vue.prototype.$saveToken=function(data,type=0){
+	localStorage.setItem(type==0?'token':'userid',data)
 }
 
 //table隐藏检查

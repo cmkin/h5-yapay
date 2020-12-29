@@ -5,7 +5,7 @@
 		<div class="ot" @click="$parent.pageChange(2)"> <i class="iconfont icon-arrowRight"></i> {{ $t('login.sht') }}</div>
 		<ul class="from">
 			<li class="select">
-				<myselect  v-model="language.active"  :lists="$t('global.header.language')"></myselect>
+				<myselect @change="$parent.changeLanguage"  v-model="language.active"  :lists="$t('global.header.language')"></myselect>
 			</li>
 			<li class="select">
 				<myselect  v-model="form.currency" showKey="text"  :lists="$t('global.hbType')"></myselect>

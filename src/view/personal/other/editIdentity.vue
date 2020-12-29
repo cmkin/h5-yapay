@@ -9,8 +9,8 @@
 			</div>
 			<div class="tip">
 				<i class="iconfont icon-gantanhao"></i>
-				<span>{{ $t('personal.editIdentity.tip') }}</span>
-				<i class="iconfont icon-close1" @click="remove"></i>
+				<span style="padding-left: 35px;max-width: 80%;display: inline-block;">{{ $t('personal.editIdentity.tip') }}</span>
+				<i class="iconfont icon-close1" style="left: auto;right: 20px;" @click="remove"></i>
 			</div>
 			<ul class="lists"  v-if="type==1">
 				<li>
@@ -18,7 +18,7 @@
 						{{ $t('personal.editIdentity.zjlx') }}
 					</span>
 					<div class="r">
-						<van-radio-group v-model="form.idType" direction="horizontal">
+						<van-radio-group v-model="form.cardType" direction="horizontal">
 						  <van-radio  :name="item.id" v-for="item in $t('personal.editIdentity.idType')">{{item.text}}</van-radio>
 						</van-radio-group>
 					</div>
@@ -29,7 +29,7 @@
 						{{ $t('personal.editIdentity.gj') }}
 					</span>
 					<div class="r">
-						<span @click="gjDlg.show = true" class="gj"> {{ $t('personal.editIdentity.gjt') }}  <i class="iconfont icon-jiantou"></i> </span>
+						<span @click="gjDlg.show = true" class="gj" :style="{color:form.country ? '#333' : '#D3D3D3'}"> {{ form.country ? form.country : $t('personal.editIdentity.gjt') }}  <i class="iconfont icon-jiantou"></i> </span>
 					</div>
 				</li>
 				<li class="two">
@@ -38,7 +38,7 @@
 						{{ $t('personal.editIdentity.m') }}
 					</span>
 					<div class="r">
-						<input type="text" :placeholder="$t('personal.editIdentity.mt')">
+						<input v-model="form.name" type="text" :placeholder="$t('personal.editIdentity.mt')">
 					</div>
 				</li>
 				<li class="two">
@@ -47,7 +47,7 @@
 						{{ $t('personal.editIdentity.x') }}
 					</span>
 					<div class="r">
-						<input type="text" :placeholder="$t('personal.editIdentity.xt')">
+						<input v-model="form.surname" type="text" :placeholder="$t('personal.editIdentity.xt')">
 					</div>
 				</li>
 				<li>
@@ -56,10 +56,10 @@
 						{{ $t('personal.editIdentity.zjh') }}
 					</span>
 					<div class="r">
-						<input type="text" :placeholder="$t('personal.editIdentity.zjht')">
+						<input type="text" v-model="form.cardNumber" :placeholder="$t('personal.editIdentity.zjht')">
 					</div>
 				</li>
-				<li v-if="form.idType==0">
+				<li v-if="form.cardType==1">
 					<span class="l">
 						<i>*</i>
 						{{ $t('personal.editIdentity.hzxx') }}
@@ -72,18 +72,18 @@
 				<li v-else>
 					<span class="l">
 						<i>*</i>
-						{{ $t('personal.editIdentity.hzxx') }}
+						{{ $t('personal.editIdentity.sfxx') }}
 					</span>
 					<div class="r upload idcard">
 						<van-uploader class="z"  :after-read="afterRead" v-model="fileList" :max-count="1"></van-uploader>
-						<van-uploader class="f"  :after-read="afterRead" v-model="fileList" :max-count="1"></van-uploader>
+						<van-uploader class="f"  :after-read="afterReadf" v-model="fileList2" :max-count="1"></van-uploader>
 						<span class="ts" v-html="$t('personal.editIdentity.sfts')"></span>
 					</div>
 				</li>
 				<li>
 					<span class="l" style="opacity: 0;"> ''</span>
 					<div class="r">
-						<van-button type="info">{{ $t('personal.editIdentity.tjrz') }}</van-button>
+						<van-button @click="baseSubmit" type="info">{{ $t('personal.editIdentity.tjrz') }}</van-button>
 					</div>
 				</li>
 			</ul>
@@ -94,21 +94,27 @@
 						{{ $t('personal.editIdentity.scrz') }}:
 					</span>
 					<div class="r upload idcard vodio">
-						<van-uploader class=""  :after-read="afterRead" v-model="fileList" :max-count="1"></van-uploader>
+						<van-uploader v-if="!form.cardFront" class="" accept=".mp4,.AVI,.mov,.rmvb,.rm,.FLV,.3GP" :after-read="afterRead" v-model="fileList" :max-count="1">
+							
+						</van-uploader>
+						<div v-else class="pre">
+							<i class="iconfont icon-close" @click="clearVodio"></i>
+							<video controls="controls" :src="form.cardFront"></video >
+						</div>
 						<div class="v_nums">
 							<p>{{ $t('personal.editIdentity.qzlz') }}</p>
 							<div>
-								<span v-for="item in 4">{{item}}</span>
+								<span v-for="item in arr">{{item}}</span>
 							</div>
 						</div>
 					</div>
 				</li>
-				<li>
+				<!-- <li>
 					<span class="l" style="opacity: 0;"> ''</span>
 					<div class="r">
 						<van-button type="info">{{ $t('personal.editIdentity.tjrz') }}</van-button>
 					</div>
-				</li>
+				</li> -->
 			</ul>
 			<div>
 				
@@ -124,7 +130,7 @@
 			  show-toolbar
 			  :columns="citys"
 			  @confirm="gjOk"
-			  @cancel=" gjDlg.show = false "
+			  @cancel="gjOk"
 			/> 
 		</van-popup>
 		
@@ -133,14 +139,21 @@
 
 <script>
 	import citys from '@/uitl/citys'
-	
+	import updateUser from '@/uitl/updateUser'
 	export default {
 		data(){
 			return{
-				fileList: [{ url: 'https://img.yzcdn.cn/vant/leaf.jpg' }],
+				arr:[],
+				fileList: [],
+				fileList2:[],
 				form:{
-					idType:0,
-					
+					cardType:0,
+					country:'',
+					name:'',
+					surname:'',
+					cardNumber:'',
+					cardFront:'',//s-正
+					cardBack:'',//s-反
 				},
 				gjDlg:{
 					show:false
@@ -163,27 +176,98 @@
 					})
 				})
 				return citysD
-			},
+			}
+			
 		},
 		mounted() {
-			
+			let arr = []
+				for(let i in [0,0,0,0]){
+					arr.push(Math.floor(Math.random()*10))
+				}
+			this.arr = arr
 		},
 		methods:{
 			remove(e){
 				document.querySelector(".view_assets_identity .tip").remove()
 			},
 			gjOk(e){
+				this.form.country = e
+				this.gjDlg.show = false
 				console.log(e)
 			},
 			afterRead(file) {
+				
 				file.status = 'uploading';
 				file.message = this.$t('personal.data.scz');
-			
-				setTimeout(() => {
-					file.status = 'failed';
-					file.message =  this.$t('personal.data.scs');
-				}, 1000);
+				
+				let formData = new FormData();
+				    formData.append("file",file.file);
+					
+					let post = this.type ==1 ? this.$http.uploadFile : this.$http.videoAuthentication 
+					
+					post(formData).then(res=>{
+						if(res.code==0){
+							if(this.type ==1){
+								this.fileList = [{ url: res.data}]
+								this.form.cardFront = res.data
+							}else{
+								this.$notify({
+									type:'success',
+									message:this.$t('global.base.tjcg')
+								})
+								updateUser.call(this)
+								this.$router.go(-1)
+							}
+							
+						}else{
+							file.status = 'failed';
+							file.message =  this.$t('personal.data.scs');
+						}
+					})
+					
 			},
+			afterReadf(file){
+				file.status = 'uploading';
+				file.message = this.$t('personal.data.scz');
+				
+				let formData = new FormData();
+				    formData.append("file",file.file);
+					
+					this.$http.uploadFile(formData).then(res=>{
+						if(res.code==0){
+							this.fileList2 = [{ url: res.data}]
+							this.form.cardBack = res.data
+						}else{
+							file.status = 'failed';
+							file.message =  this.$t('personal.data.scs');
+						}
+					})
+			},
+			baseSubmit(){
+				let Toast = this.$toast.loading({
+				  message: this.$t('global.base.loading'),
+				  forbidClick: true,
+				});
+				this.$http.basicAuthentication({
+					...this.form
+				}).then(res=>{
+					Toast.clear();
+					if(res.code==0){
+						this.$notify({
+							type:'success',
+							message:this.$t('global.base.tjcg')
+						})
+						updateUser.call(this)
+						this.$router.go(-1)
+					}
+				})
+			},
+			clearVodio(){
+				this.form.cardFront = ''
+				this.fileList = []
+			}
+			
+			
 		}
 	}
 </script>
@@ -359,6 +443,28 @@
 				li{
 					.upload{
 						.clearfix;
+						.pre{
+							width: 230px;
+							height: 130px;
+							margin-right: 20px;
+							overflow: hidden;
+							display: inline-block;
+							border-radius: 5px;
+							border: 1px solid #489EEC;
+							position: relative;
+							video{
+								display: block;
+								width: 100%;
+								height: 100%;
+							}
+							.icon-close{
+								position: absolute;
+								right: 5px;
+								top: 5px;
+								cursor: pointer;
+								z-index: 10000;
+							}
+						}
 						.van-uploader{
 							display: inline-block;
 							background-color: #fff;

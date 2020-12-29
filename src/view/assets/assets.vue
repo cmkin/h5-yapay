@@ -11,21 +11,21 @@
 					<i class="iconfont" :class="  showPrice==true ? 'icon-Eyesopen' : 'icon-biyan'  " @click="changeShowPrice()"  ></i>
 				</div>
 				<div class="num_p">
-					<span>{{ '₮0.0000' | priceShowHide(that) }}</span>
-					<i> ≈ {{ '￥0.00' | priceShowHide(that) }}</i>
+					<span>₮{{userInfos.numcoin | priceShowHide(that,'an') }}</span>
+					<i> ≈ {{ sysInfos.hv.dwf }}{{ userInfos.numcoin*userInfos.buyPrice | priceShowHide(that,'ap') }}</i>
 					<div class="r">
-						<span>{{ $t('global.base.sk') }}</span>
-						<span>{{ $t('global.base.fk') }}</span>
+						<span @click="golink('/assets/collection')">{{ $t('global.base.sk') }}</span>
+						<span @click="golink('/assets/payment')">{{ $t('global.base.fk') }}</span>
 					</div>
 				</div>
 				<ul class="is">
 					<li v-for="item in $t('assets.is')">
 						<i>{{item.text}}</i>
-						<span>{{ '₮0.0000' | priceShowHide(that) }}</span>
+						<span>₮{{userInfos[item.key] | priceShowHide(that,item.key) }}</span>
 					</li>
 					<li>
-						<van-button type="info">{{ $t('global.base.cb') }}</van-button> <br />
-						<van-button plain type="info">{{ $t('global.base.tb') }}</van-button>
+						<van-button @click="golink('/assets/recharge')" type="info">{{ $t('global.base.cb') }}</van-button> <br />
+						<van-button @click="golink('/assets/withdraw')" plain type="info">{{ $t('global.base.tb') }}</van-button>
 					</li>
 				</ul>
 			</div>
@@ -37,8 +37,8 @@
 			<tablex :titles="$t('assets.tableTitle')" :datas="datas">
 				<template v-slot:df="row">
 					<div class="df">
-						<img :src="row.item.dfimg" alt="">
-						<span>{{row.item.df}}</span>
+						<img :src="row.item.headUrl" alt="">
+						<span>{{row.item.nickname}}</span>
 					</div>
 				</template> 
 				<template v-slot:action="row">
@@ -48,7 +48,7 @@
 				</template> 
 			</tablex>
 			<div class="show_more">
-				<span>{{ $t('global.base.more') }} </span>
+				<span @click="$router.push('/assets/bill')">{{ $t('global.base.more') }} </span>
 			</div>
 		</div>
 		
@@ -61,37 +61,50 @@
 			return{
 				that: this,
 				showPrice:true,
-				datas:[
-					{
-						df:'昵称',
-						dfimg:'/',
-						fl:'买币',
-						time:'2020.06.20',
-						num:'+100.0000'
-					},
-					{
-						df:'昵称',
-						dfimg:'/',
-						fl:'买币',
-						time:'2020.06.20',
-						num:'+100.0000'
-					},
-				]
+				datas:[]
 			}
 		},
 		filters:{
-			priceShowHide(value,that){
-				return that.showPrice==true ? value : '******'
+			priceShowHide(value,that,key){
+				return that.showPrice==true ? key=='ap'? Number(value).toFixed(2):Number(value).toFixed(4) : '******'
 			}
 		},
 		mounted() {
 			this.showPrice = localStorage.getItem('showPrice') === 'false' ? false : true
-				
+			this.getlist()
+		},
+		computed:{
+			getStatus(){
+				return function(type){
+				  return this.$t('bill.tjs').filter(item=>item.id == type)[0].text
+				}
+			}
 		},
 		methods:{
 			changeShowPrice(){
 				this.showPrice = !this.showPrice
 				localStorage.setItem('showPrice',this.showPrice)
+			},
+			golink(path){
+				this.$router.push({
+					path:path
+				})
+			},
+			getlist(){
+				this.$http.getTradeLogList({
+					type:8,
+					current:0,
+					size:5
+				}).then(res=>{
+					if(res.code==0){
+						this.datas = res.data.map(item=>{
+							item.type =  this.getStatus(item.type)
+							item.datetime = this.$options.filters.timeFormat(Number(item.datetime))
+							item.tradecoin = Number(item.tradecoin).toFixed(4)
+							return item
+						})
+					}
+				})
 			}
 		}
 	}

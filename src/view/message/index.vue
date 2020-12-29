@@ -7,19 +7,37 @@
 			<div class="tabs">
 				<div class="global_main">
 					<ul>
-						<li @click="changeTab(item.id)" v-for="item in $t('message.tabs')" >
+						<li @click="changeTab(item.id)" v-if="item.id<2 || userInfos.islogin" v-for="item in $t('message.tabs')" >
 							<span :class="tabActive==item.id?'active':''">
 								{{item.text}}
 							</span>
 						</li>
 					</ul>
 				</div>
+			</div>			
+			<div style="height: 80px;"></div>
+			<div style="position: relative;">
+				<transition name="left" mode="out-in">
+					<component :is="coms[tabActive]" :datas="datas" :text=" tabActive!==null ? $t('message.tabs')[tabActive].text : '' "></component>
+				</transition>
+				<loading v-model="tableLoading"></loading>
 			</div>
 			
-			<div style="height: 80px;"></div>
-			<transition name="left" mode="out-in">
-				<component :is="coms[tabActive]" :text=" tabActive!==null ? $t('message.tabs')[tabActive].text : '' "></component>
-			</transition>
+			
+			<div class="page_change">
+			
+				<div class="m">
+					<van-pagination v-model="json.pageNo" @change="getlist" :total-items="json.total"  :items-per-page="json.pageSize"  :show-page-size="3" force-ellipses>
+						<template #prev-text>
+							<van-icon name="arrow-left" />
+						</template>
+						<template #next-text>
+							<van-icon name="arrow" />
+						</template>
+					</van-pagination>
+				</div>
+			</div>
+			
 		</div>
 		
 	</div>
@@ -34,11 +52,20 @@
 			return{
 				tabActive:null,
 				oldtops:0,
-				coms:[notice,tips,account]
+				tableLoading:false,
+				coms:[notice,tips,account],
+				json:{
+					"userId":this.$getToken(1),
+					"pageNo": 1,
+					"pageSize":3,
+					"total":0
+				},
+				datas:[]
 			}
 		},
 		mounted() {
 			this.tabActive = this.$route.query.type ? this.$route.query.type : this.$t('message.tabs')[0].id
+			this.getlist()
 			this.oldtops = 0
 			document.addEventListener("scroll",this.scroll)
 		},
@@ -49,17 +76,44 @@
 		watch:{
 			$route(){
 				this.tabActive = this.$route.query.type ? this.$route.query.type : this.$t('message.tabs')[0].id
+				this.getlist()
 			}
 		},
 		methods:{
 			changeTab(type){
+				
 				this.$router.replace({
 					path:"/message",
 					query:{
 						type:type
 					}
 				})
+				this.json.pageNo = 1
 				//this.tabActive = type
+			},
+			getlist(){
+				this.tableLoading = true
+				this.datas = []
+				let post = null
+				switch(Number(this.tabActive)){
+					case 0:
+						post = this.$http.findNoticeByUserid
+					break;
+					case 1:
+						post = this.$http.findSystemNoticeByUserid
+					break;
+					case 2:
+						post = this.$http.billReminder
+					break;
+				}
+				let json = { ...this.json }
+					delete json.total
+				post(json).then(res=>{
+					this.datas = res.data
+					this.json.total = res.total
+					this.tableLoading = false
+				})
+				
 			},
 			scroll(e){
 				let tops = document.documentElement.scrollTop || document.body.scrollTop
@@ -132,7 +186,7 @@
 								content: '';
 								position: absolute;
 								left: 0;
-								bottom: -14px;
+								bottom: -15px;
 								width: 100%;
 								height: 2px;
 								background-color: rgba(51, 51, 51, 1);
@@ -144,6 +198,7 @@
 			}
 			
 			.lists{
+				min-height: 60vh;
 				&>ul{
 					margin-bottom: 20px;
 					&>li{
@@ -255,6 +310,13 @@
 				}
 			}
 			
+			.page_change {
+				text-align: center;
+				padding: 40px 0;
+				.m {
+					display: inline-block;
+				}
+			}
 		}
 	}
 	

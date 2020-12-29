@@ -1,0 +1,218 @@
+<====================================推送消息协议====================================>
+    /*** 客户端-连接 **/
+    static final public int CHAT_MAIN_MSG_CONNECT           = 0;
+
+    /*** 客户端-聊天 **/
+    static final public int CHAT_MAIN_MSG_CHAT              = 1;
+
+    /*** 客户端-消息回执签收 **/
+    static final public int CHAT_MAIN_MSG_REC               = 2;
+
+    /*** 客户端-保持心跳连接 **/
+    static final public int CHAT_MAIN_MSG_KEEPALIVE         = 3;
+
+    /*** 服务器-订单推送 **/
+    static final public int CHAT_MAIN_MSG_TRADEODER         = 4;
+
+    /*** 服务器-公告推送 **/
+    static final public int CHAT_MAIN_MSG_PLACARD           = 5;
+
+    /*** 服务器-动账推送 **/
+    static final public int CHAT_MAIN_CHANGE_ACCOUNT        = 6;
+
+    /*** 服务器-账号变化推送 系统通知**/
+    static final public int CHAT_MAIN_ACOUNT_CHANGE_ACCOUNT = 7;
+
+    /*** 服务器-首页跑马灯推送 **/
+    static final public int CHAT_MAIN_MARQUEE_ACCOUNT       = 8;
+
+    /*** 服务器-首页弹框推送 **/
+    static final public int CHAT_MAIN_HOME_ACCOUNT          = 9;
+
+    /*** 客户端-重新拉取好友 **/
+    static final public int CHAT_MAIN_MSG_RELOADFRIEND      = 10;
+	/**收付款的通知**/
+	？？？？？？？？？？？ 									= 12;
+	
+	/**充提币的通知**/
+	？？？？？？？？？？？ 									= 13;
+	
+	/**所有订单成功后的提示**/
+	？？？？？？？？？？？ 									= 14;
+	
+	/**被踢下线**/
+	？？？？？？？？？？？ 									= 15;
+
+
+<====================================聊天消息推送====================================>
+聊天消息字段解析
+{
+	protocol： 2 协议（上面6大协议）
+	token： 用户token
+	ext： 扩展消息字段
+	chatRecord： 聊天消息体
+		{
+			id： 消息id
+			userid： 发送者id
+			friendid： 接收者id
+			hasRead： 是否已读 0 未读  1已读
+			createtime： 聊天时间
+			hasDelete： 是否删除 0 未删除 1已删除
+			message： 消息内容
+			type： 消息类型0、普通聊天,1、订单消息
+			pushType： 推送情况 0：未推送 1：已经推送
+			nickname： 发送者昵称
+			headurl： 发送者头像
+		}
+}
+
+
+/*** 客户端-连接示例 **/
+{"protocol":0,"token":"51bd6ea6-8c29-4990-a2ae-fda6a2ce6b4f","chatRecord":{"userid":"5100004"}}
+{"protocol":0,"token":"c8587f1a-582c-4eb4-8e88-43e959500343","chatRecord":{"userid":"100000086"}}
+{"protocol":0,"token":"29c61d09-92be-4112-9b6c-57c3bdeb6b7a","chatRecord":{"userid":"100000089"}}
+{"protocol":0,"token":"40613d30-1948-49e6-9de4-c90b56770af0","chatRecord":{"userid":"100000090"}}
+{"protocol":0,"token":"48ce1487-4564-407a-8c54-eed3523a5a24","chatRecord":{"userid":"1"}}
+
+/*** 发送者-聊天消息发送示例 **/
+{"protocol":1,"token":"83212fd7-04e7-4084-a6b0-4cdccdcd4fc6","chatRecord":{"id":null,"userid":"100000070","friendid":100000086,"message":"您好！我是用户2","type":0},"ext":null,"client_id":"abcdefg"}
+
+/*** 接收者-接收聊天消息示例 **/
+{"chatRecord":{"createtime":1590197533000,"friendid":"100000070","hasDelete":0,"hasRead":0,"headurl":"http://111.73.45.141:8084/keypayfile/system.png","id":"1264006186038984703","message":"您好-70-1！我是用户1","nickname":"100000069user","pushType":1,"type":0,"userid":"100000069"},"protocol":1,"token":"4ae6979c-bfcf-4f64-bced-85f4398a05bc"}
+/*** 发送者-发送聊天消息返回示例 **/
+成功 <--> {"msg":"success","code":"0","protocol":"1","clientId":"abcdefg"}
+失败 <--> {"msg":"对方不在线","code":"500","protocol":"1","clientId":"abcdefg"}
+
+/*** 接收者-消息签收 userid 表示为我的id friendid 对方的id,即发送者id **/
+{"protocol":2,"token":"c8587f1a-582c-4eb4-8e88-43e959500343","chatRecord":{"userid":"100000086","friendid":100000070}}
+
+/*** 客户端心跳连接 **/
+{"protocol":3,"token":"4122f29a-181e-4da8-8c8c-eb669ba4a396","chatRecord":{"userid":"100000070"}}
+
+<====================================公告列表推送====================================>
+	/*** 公告协议 **/
+    private Integer protocol;  5：公告推送 8：首页跑马灯推送 9首页弹框推送
+
+    /*** 保存时间 **/
+    private Date holdTime;
+
+    /*** 公告id **/
+    private Integer id;
+
+    /*** 公告主题 **/
+    private String noticeTitle;
+
+    /*** 公告内容 **/
+    private String noticeContent;
+
+    /*** 公告针对类型  -1:所有 0：临时用户 1：用户 2:服务商,    100商户,101代理,102总代理 **/
+    private Integer noticeType;
+
+    /*** 公告排序 **/
+    private Integer sort;
+
+    /*** 公告结束时间 **/
+    private Date endTime;
+
+    /*** 公告创建时间 **/
+    private Date createTime;
+
+    /*** 是否开启 0：未开启 1：开启 **/
+    private Byte isDelete;
+
+    /*** 是否跑马灯 0：不是 1：是 **/
+    private Byte isHorseRaceLamp;
+    
+    /*** 是否为首页弹框内容 0：不是 1：是 **/
+    private Byte iSSpringBox;
+
+
+<====================================订单列表推送消息====================================>
+订单列表字段解析
+{
+	protocol： 4 协议（上面6大协议
+	holdTime： 保存时间
+	id： 订单id
+	sendid： 卖方id
+	toid： 买方id
+	coin： usdt 数量
+	value： 折合价值
+	currency： 交易货币类型0、美元,1、人民币
+	status： 交易状态0、等待买家付款,1、等
+	remarks： 备注
+	rate： 费率
+	sendtime： 付款时间
+	orderid： 订单编号
+	finishtime： 完成时间
+	createtime： 创建时间
+	type： 订单类型0、用户买币，1、用户卖
+	paymenttype： 收款方式
+	exceptiontype： 是否异议过：0 未异议  1，异议
+	obligationid： 待付款id
+	obligationcoin： 待付金额
+	earncoin： 每笔订单的利润
+	price： 单价
+	payusername： 购买人
+	realcoin： 实际交易币数量
+	otherinfo： 三方信息
+}
+/*** 订单推送案例 **/
+{"id":232,"sendid":50000003,"toid":100000070,"coin":12,"currency":1,"status":2,"remarks":"您好！100000070用户,您有一笔订单需要处理!麻烦您给我个5星好评谢谢","sendtime":1588928299764,"orderid":"测试订单推送id","finishtime":1588928421241,"createtime":1588928284947,"type":0,"paymenttype":1,"exceptiontype":false,"obligationid":"测试待付款id","payusername":"赵本山","otherinfo":"测试三方信息"}
+
+
+<====================================账号变更推送消息====================================>
+	/*** 用户id **/
+    private String id;
+
+    /*** 用户id **/
+    private Integer userId;
+
+    /*** 订单协议-6 **/
+    private Integer protocol;
+
+    /*** 保存时间 **/
+    private Date holdTime;
+
+    /*** 账号类型  1账户风险提示 2账户解除风险提示 3账户冻结提示 4账户解冻提示 **/
+    private Integer type;
+
+    /*** 账号消息提示 **/
+    private String message;
+
+
+<====================================动账推送消息====================================>
+	/*** 动账协议-6 **/
+    private Integer protocol;
+
+    /*** id **/
+    private Long id;
+
+    /**
+     * 变化类型：
+     * 0.买币   1.卖币   2.收款   3.付款   4.充币   5.提币
+     * 6.挂单卖币扣除   7.取消卖币挂单返还   8.卖币取消订单退币   9.下级返佣   10.下下级返佣
+     */
+    private Integer type;
+
+    /*** 币数量 **/
+    private BigDecimal coin;
+
+    /*** 用户id **/
+    private Integer userid;
+
+    /*** 变化前的货币数量 **/
+    private BigDecimal bccoin;
+
+    /*** 变化后的货币数量 **/
+    private BigDecimal accoin;
+
+    /*** 税率 **/
+    private BigDecimal rate;
+
+    /*** 备注 **/
+    private String remarks;
+
+    /*** 创建时间 **/
+    private Long createtime;
+
+

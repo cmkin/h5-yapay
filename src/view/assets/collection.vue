@@ -1,16 +1,18 @@
 <template>
 	<div class="view_assets_collection">
 	
-		<header-top :title="$t('collection.title')" rlink='/' :rtitle="$t('collection.titlel')"></header-top>
+		<header-top :title="$t('collection.title')" ></header-top>
+		
 		
 		
 		<div class="top">
 			<div class="main global_main">
 				<div class="t">{{ $t('collection.titler') }}</div>
 				<div class="code">
-					<img src="" alt="">
+					<!-- <img src="" alt=""> -->
+					<qrcode-vue class="cd" :value="codeVal" :size="isPhone ? 140 : 168" ref="qrcode" level="H"></qrcode-vue>
 					<span>{{ $t('collection.skxx') }}</span>
-					<span class="sz" @click="skalert.show = true">
+					<span class="sz" @click="open">
 						<i class="iconfont icon-edit"></i>
 						{{ $t('collection.szske') }}
 					</span> 
@@ -24,7 +26,7 @@
 								{{ $t('collection.skse') }}
 							</span>
 							<span>
-								1000.00<i>USDT</i>
+								{{num}}<i>USDT</i>
 							</span>
 						</li>
 						<li>
@@ -32,12 +34,12 @@
 								{{ $t('collection.skbz') }}
 							</span>
 							<span>
-								我是备注我是备注备注
+								{{note || $t('global.base.zw') }}
 							</span>
 						</li>
 					</ul>
 					<div class="sm">
-						<a href="" download="download">
+						<a href="javascript:;" @click="doSave">
 							<i class="iconfont icon-download"></i>
 							{{ $t('collection.bc') }}
 						</a>
@@ -47,35 +49,57 @@
 		</div>
 		
 		
+
 		
-		<div class="table global_main">
-			<div class="t">{{$t('collection.titlel')}}</div>
-			<tablex :titles="$t('payment.tableTitle')" :datas="datas">
-				<template v-slot:df="row">
-					<div class="df">
-						<img :src="row.item.dfimg" alt="">
-						<span>{{row.item.df}}</span>
-					</div>
-				</template> 
-				<template v-slot:usdt="row">
-					<div class="usdt">
-						<div class="n">
-							100.000
+		<div style="position: relative;">
+			<div class="table global_main">
+				<div class="t">{{$t('collection.titlel')}}</div>
+				<tablex :titles="$t('collection.tableTitle')" :datas="datas">
+					<template v-slot:df="row">
+						<div class="df">
+							<img :src="row.item.headUrl" alt="">
+							<span>{{row.item.nickName}}</span>
 						</div>
-						<div class="o">
-							<span>{{$t('global.base.jylv')}}:7.25 CNY/USDT</span>
-							<span>{{$t('global.base.fbje')}}:7.25 CNY</span>
+					</template> 
+					<template v-slot:usdt="row">
+						<div class="usdt">
+							<div class="n">
+								{{Number(row.item.coin).toFixed(4) }}
+							</div>
+							<div class="o">
+								<span>{{$t('global.base.jylv')}}:{{ sysInfos.hv.buyPrice }} {{sysInfos.hv.dw}}/USDT</span>
+								<span>{{$t('global.base.fbje')}}:{{Number(row.item.value).toFixed(2)}} {{sysInfos.hv.dw}} </span>
+							</div>
 						</div>
-					</div>
-				</template> 
-				<template v-slot:action="row">
-					<div class="action">
-						<span>{{ $t('global.base.ckxq') }}</span>
-					</div>
-				</template> 
-			</tablex>
-			<div class="show_more">
-				<span>{{ $t('global.base.more') }} </span>
+					</template> 
+					<template v-slot:status="row">
+						<div>
+							<span>{{ getStatus(row.item.status) }}</span>
+						</div>
+					</template>
+					<template v-slot:action="row">
+						<div class="action" @click="goDetail(row.item.transferid)">
+							<span>{{ $t('global.base.ckxq') }}</span>
+						</div>
+					</template> 
+				</tablex>
+				
+			</div>
+			<loading v-model="tableLoading"></loading>
+		</div>
+		
+		
+		
+		<div class="page_change">
+			<div class="m">
+				<van-pagination @change="getlist()" v-model="json.current" :total-items="json.total" :items-per-page="json.size" :show-page-size="3" force-ellipses>
+					<template #prev-text>
+						<van-icon name="arrow-left" />
+					</template>
+					<template #next-text>
+						<van-icon name="arrow" />
+					</template>
+				</van-pagination>
 			</div>
 		</div>
 		
@@ -89,12 +113,14 @@
 					<div>
 						<ul class="items" ref="buy">
 							<li style="border: none;margin-bottom: 5px;">
-								<p class="t"  v-html="$options.filters.language( $t('collection.skalert.ske') , 10 )"></p>
+								<p class="t"  v-html="$options.filters.language( $t('collection.skalert.ske') , sysInfos.hv.buyPrice+sysInfos.hv.dw+'/USDT' )"></p>
 							</li>
 							<li class="sell_num">
 								<div class="input">
 									<input
 										type="number"
+										@input="inputChange(0)"
+										v-model="skalert.num"
 										:error="$t('collection.skalert.sl')"
 										:placeholder="$t('global.qsr') + $t('collection.skalert.sl')"
 									/>
@@ -116,14 +142,15 @@
 							
 								<div class="input">
 									<input
+										@input="inputChange(1)"
 										type="number"
 										:error="$t('collection.skalert.je')"
-										
+										v-model="skalert.price"
 										:placeholder="$t('global.qsr') + $t('collection.skalert.je')"
 									/>
 									<span>
-										<img :src="$t('global.cny')" alt="" />
-										<b>CNY</b>
+										<img :src="sysInfos.hv.dwimg" alt="">
+										<b>{{sysInfos.hv.dw}}</b>
 									</span>
 								</div>
 							</li>
@@ -132,7 +159,9 @@
 								<p class="t">{{ $t('collection.skalert.skbz') }}</p>
 								<div class="input">
 									<input
-										type="number"
+										type="text"
+										maxlength="10"
+										v-model="skalert.note"
 										:placeholder=" $t('collection.skalert.note')"
 									/>
 								</div>
@@ -140,7 +169,7 @@
 							
 						</ul>
 						<div class="btn">
-							<van-button  :disabled="true" block type="info">{{ $t('global.base.ok') }}</van-button>
+							<van-button  :disabled="!skalert.num " @click="skOk" block type="info">{{ $t('global.base.ok') }}</van-button>
 						</div>
 						
 					</div>
@@ -148,42 +177,179 @@
 		</dialogx>
 		
 		
+		
+		
 	</div>
 </template>
 
 <script>
+	import QrcodeVue from 'qrcode.vue'
 	export default {
 		data(){
 			return{
-				datas:[
-					{
-						df:'昵称',
-						dfimg:'/',
-						fl:'买币',
-						time:'2020.06.20',
-						num:'+100.0000',
-						stu:'<span style="color:#FF5B5B">等待付款</span>'
-					},
-					{
-						df:'昵称',
-						dfimg:'/',
-						fl:'买币',
-						time:'2020.06.20',
-						num:'+100.0000',
-						stu:'已付款'
-					},
-				],
+				//codeVal: '',
+				num:'0.0000',
+				price:'',
+				note:'',
+			
+				datas:[],
+				tableLoading:false,
 				skalert:{
 					show:false,
-					title:this.$t('collection.skalert.title'),
-					
+				},
+				json:{
+					current:1,
+					size:5,
+					total:0,
+					type:0
+				},
+			}
+		},
+		components:{
+			QrcodeVue
+		},
+		computed:{
+			codeVal(){
+				return `keypay://type=1-account=${this.userInfos.uid}-money=${this.num}`
+			},
+			getStatus(){
+				return function(value){
+					return this.$t('payment.jywc')
 				}
 			}
 		},
 		mounted() {
-			
+			this.getlist()
 		},
 		methods:{
+			getlist(){
+				this.tableLoading = true
+				this.$http.collectionAndPaymentLog({
+					...this.json
+				}).then(res=>{
+					this.tableLoading = false
+					if(res.code==0){
+						this.json.total = res.total
+						this.datas = res.data.map(item=>{
+							item.time = this.$options.filters.timeFormat(item.time)
+							//item.status = this.getStatus(item.status)
+							return item
+						})
+					
+					
+					}
+				})
+			},
+			open(){
+				this.skalert={
+					show:true,
+					title:this.$t('collection.skalert.title'),
+					num:'',
+					price:'',
+					note:'',
+				}
+			},
+			skOk(){
+				this.num = Number(this.skalert.num).toFixed(4)
+				this.price = this.skalert.price
+				this.note = this.skalert.note
+				this.skalert.show = false
+			
+			},
+			inputChange(type){
+				if(type==0){
+					this.skalert.price = Number(this.skalert.num * this.sysInfos.hv.buyPrice).toFixed(2)
+				}else{
+					this.skalert.num = Number(this.skalert.price/this.sysInfos.hv.buyPrice).toFixed(4)
+				}
+			},
+			goDetail(id){
+				this.$router.push('/assets/paymentRecords?id='+id+'&type=0')
+			},
+			doSave(){
+				
+				
+			
+				let codeUrl = this.$refs.qrcode.$refs['qrcode-vue']//.toDataURL('image/png')
+				let limg = new Image()
+					limg.src = require("_a/img/qrcLogo.png");
+					
+				//const context = document.createElement("canvas").getContext("2d");
+				let canvas = document.createElement("canvas")
+				let w,h;
+					if(screen.width>414){
+						w = 414 
+						h = 736
+					}else{
+						w = screen.width
+						h = screen.height
+					}
+					canvas.width = w
+					canvas.height = h
+				const context = canvas.getContext("2d");
+					
+					
+				
+				context.font = "30px";
+				let str = "";
+				context.fillStyle = "#0466C8";
+				context.fillRect(0,0,414,736);
+				context.fillStyle = "#FFFFFF";
+				context.fillRect(30,30,w-60,h*0.75);
+				
+				limg.onload=()=>{
+					
+					context.drawImage(limg,(w/2)-(limg.width/4), 50,99,30);
+					context.drawImage(codeUrl,60, 100,w-120,w-120);
+					
+					//接收方
+					
+					context.font = "16px Arial";
+					context.textAlign="center";
+					context.fillStyle="#2E323D";
+					str = this.$t('global.base.jsf')+':'+ this.userInfos.uid + "("+ this.userInfos.nickname+")";
+					context.fillText(str,w/2,w+20);
+					
+					if(this.num){
+						context.font = "20px Arial";
+						str = this.num + "USDT"
+						context.fillText(str,w/2,w+60);
+					}
+					if(this.note){
+						context.font = "16px Arial";
+						str = this.note
+						context.fillText(str,w/2,w+100);
+					}
+					
+					context.fillStyle = "#ffffff"
+					context.font = "18px Arial";
+					str = this.$t("global.base.sys")
+					context.fillText(str,w/2,h*0.88);
+					
+					str = this.$t("global.base.gaq")
+					context.fillText(str,w/2,h*0.93);
+					
+					
+					//创建一个a标签节点
+					  let a = document.createElement("a")
+					//设置a标签的href属性（将canvas变成png图片）
+					  a.href =context.canvas.toDataURL('image/png')
+					//设置下载文件的名字
+					  a.download = "qrcode"
+					//点击
+					  a.click()
+					  this.$notify({
+						  type:"success",
+						  message:this.$t('global.base.bccg')
+					  })
+					
+				}	
+				
+				
+				
+				
+			
+			},
 			
 		}
 	}
@@ -204,7 +370,7 @@
 				min-height: 168px;
 				padding-left: 190px;
 				position: relative;
-				&>img{
+				&>.cd{
 					position: absolute;
 					left: 0;
 					top: 0;
@@ -317,6 +483,13 @@
 			}
 		}
 		
+		.page_change {
+			text-align: center;
+			padding: 40px 0;
+			.m {
+				display: inline-block;
+			}
+		}
 		
 		.sk_alert{
 			.items {
@@ -411,7 +584,7 @@
 				.code{
 					padding-left: 160px;
 					min-height: 140px;
-					&>img{
+					.cd{
 						width: 140px;
 						height: 140px;
 					}
@@ -455,6 +628,9 @@
 					}
 				}
 			}
+			
+			
+			
 		}
 	}
 	

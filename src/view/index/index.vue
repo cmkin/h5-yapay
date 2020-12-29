@@ -10,8 +10,8 @@
 				<div class="buy clearfix">
 					<div class="left">
 						<div class="input">
-							<input type="number" :placeholder="buyPlaceholder">
-							<span>{{ buyType==0? 'USDT' : 'CNY' }}</span>
+							<input type="number" v-model="num" :placeholder="buyPlaceholder">
+							<span>{{ buyType==0? 'USDT' : sysInfos.hv.dw }}</span>
 						</div>
 						<div class="btn" @click="buyFlag = !buyFlag">
 							<van-button type="info">
@@ -41,10 +41,10 @@
 		
 		<div class="tabs global_main">
 			<ul class="clearfix">
-				<router-link tag="li" :to="item.to" v-for="item in $t('index.tabs')">
+				<li @click="golink(item,index)" tag="li" :to="item.to" v-for="item,index in $t('index.tabs')">
 					<img :src="item.img" alt="">
 					<span>{{item.text}}</span>
-				</router-link>
+				</li>
 			</ul>
 		</div>
 		
@@ -112,7 +112,7 @@
 				
 				buyType: 0,
 				buyFlag: false,
-				
+				num:''
 			}
 		},
 		computed: {
@@ -136,8 +136,17 @@
 			goQuickSale(){
 				this.$router.push({
 					path:'/sale/quickBuySell',
-					query:{}
+					query:{
+						type:this.buyType,
+						num:this.num
+					}
 				})
+			},
+			golink(item,index){
+				if(index<2 && this.$isLogin()){
+					return
+				}
+				this.$router.push(item.to)
 			}
 		}
 	}
