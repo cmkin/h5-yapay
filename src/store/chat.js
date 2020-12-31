@@ -26,6 +26,16 @@ export default {
 				
 			}else{
 				//添加记录
+				
+				let last = state.lists[infos.friendid].lists[state.lists[infos.friendid].lists.length-1]
+					
+				if(last && (infos.time - last.time)/1000 >60*20){
+					state.lists[infos.friendid].lists.push({
+						type:3,
+						time:infos.time,
+						message:infos.time,
+					}) 
+				}
 				state.lists[infos.friendid].lists.push(infos)
 				
 				if(! state.lists[infos.friendid]){

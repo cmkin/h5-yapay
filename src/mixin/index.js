@@ -61,6 +61,7 @@ Vue.mixin({
 					break;
 				case 3:
 					//hv = sysinfos.hv ? sysinfos.hv.AED : {}
+					hv.dw = 'AED'
 					hv.dwf =  "د.إ";
 					hv.dwimg = require("@/assets/img/dlm.png")
 					break;

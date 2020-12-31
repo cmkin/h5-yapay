@@ -43,7 +43,7 @@
 							</li>
 							<li>
 								<i> {{$t('quickSale.c2c.entrust.tableTitle')[3].title }}: </i>
-								<span>{{Number(item.coin).toFixed(4)}}</span>{{sysInfos.hv.dw}}
+								<span>{{Number(item.coin).toFixed(4)}}</span>USDT
 							</li>
 						</div>
 						<div class="r">

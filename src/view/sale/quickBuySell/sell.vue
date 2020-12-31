@@ -46,7 +46,7 @@
 				</div>
 			</li>
 			<li>
-				<p class="t">{{ $t('quickSale.quickBuySell.sell.fkfs') }}</p>
+				<p class="t">{{ $t('quickSale.quickBuySell.sell.fkfs') }}</p>			
 				<div class="pay_type"><myselect v-model="sell.active" height="160px" multiple :lists="payTypeShow"></myselect></div>
 			</li>
 		</ul>
@@ -55,7 +55,7 @@
 			<i>{{sysInfos.hv.sellPrice}} {{sysInfos.hv.dw}}/USDT</i>
 		</div>
 		<div class="btn">
-			<van-button :disabled="!(sell.num > 0 && sell.price > 0)" block @click="buySellM()" type="info">{{ $t('quickSale.quickBuySell.sell.ljgm') }}</van-button>
+			<van-button :disabled="!(sell.num > 0 && sell.price > 0 && sell.active.length)" block @click="buySellM()" type="info">{{ $t('quickSale.quickBuySell.sell.ljgm') }}</van-button>
 			<p>{{ $t('quickSale.quickBuySell.sell.sxf') }}:{{ userInfos.fastsell}}%</p>
 		</div>
 	</div>
@@ -87,7 +87,6 @@ export default {
 			}
 			
 			let hasType = this.userInfos.payList.map(item=>Number(item.type))
-			
 			return this.$t('global.payType').filter(item=>{
 				if(!this.payType.length){
 					return true
@@ -104,6 +103,8 @@ export default {
 							}
 						})
 					}
+				}else{
+					item.add = false
 				}
 				return item 
 			})

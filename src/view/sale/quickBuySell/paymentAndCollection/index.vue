@@ -275,7 +275,7 @@
 				<div class="buttoms clearfix" v-if="orderDetails.status == 2">
 					<div class="l cancal">
 						<div class="p">{{  status(orderDetails.status) }}</div>
-						<div class="t">{{ $t('global.base.ycrzh') }}</div>
+						<div class="t">{{ $t('global.base.ykczh') }}</div>
 					</div>
 					<div class="r">
 						<van-button @click="$router.push('/assets/assets')" type="info">
@@ -492,31 +492,15 @@ export default {
 		}
 	},
 	mounted() {
-		this.pageType = this.$route.meta.type;
-		this.id = this.$route.query.id;
-
-		this.getDetails(() => {
-			if (this.orderDetails.status !=4 || this.orderDetails.status !=5 ) {
-				
-				
-				this.updeteTime()
-				this.testTimeInr = setInterval(() => {
-					this.testTime--;
-					if (this.testTime <= 0) {
-						this.testTime = 0;
-						clearInterval(this.testTimeInr);
-					}
-				}, 1000);
-				this.interInr = setInterval(()=>{
-					this.getDetails()
-				},3000)
-			}
-		});
+		this.init()
 	},
 	beforeRouteLeave(to,from,next){
+		clearInterval(this.testTimeInr)
+		clearInterval(this.interInr)
 		next({replace:true})
 	},
 	beforeRouteEnter(to,from,next) {
+		
 		next({replace:true})
 	},
 	
@@ -524,7 +508,36 @@ export default {
 		clearInterval(this.testTimeInr)
 		clearInterval(this.interInr)
 	},
+	watch:{
+		'$route'(){
+			if(this.$route.query.hasOwnProperty("id")){
+				this.init()
+			}
+		}
+	},
 	methods: {
+		init(){
+			this.pageType = this.$route.meta.type;
+			this.id = this.$route.query.id;
+			this.getDetails(() => {
+				if (this.orderDetails.status ==0 || this.orderDetails.status ==1 ) {
+					
+					
+					this.updeteTime()
+					clearInterval(this.testTimeInr);
+					this.testTimeInr = setInterval(() => {
+						this.testTime--;
+						if (this.testTime <= 0) {
+							this.testTime = 0;
+							clearInterval(this.testTimeInr);
+						}
+					}, 1000);
+					this.interInr = setInterval(()=>{
+						this.getDetails()
+					},3000)
+				}
+			});
+		},
 		//获取详情
 		getDetails(callback) {
 			this.$http
@@ -539,7 +552,12 @@ export default {
 						}
 						this.orderDetails = res.data;
 						this.buy.payTypeActive = this.buy.payTypeActive ? this.buy.payTypeActive : this.buyPayType[0].id;
-
+						
+						if(res.data.status>1){
+							clearInterval(this.testTimeInr)
+							clearInterval(this.interInr)
+						}
+						
 						callback ? callback() : '';
 					}
 				});
@@ -578,7 +596,10 @@ export default {
 				if (res.code == 0) {
 					this.$notify({ type: 'success', message: this.$t('global.base.qxcg') });
 					this.getDetails(()=>{
-						clearInterval(this.testTimeInr)
+						setTimeout(()=>{
+							clearInterval(this.testTimeInr)
+							clearInterval(this.interInr)
+						},2000)
 					});
 				}
 			});
@@ -608,7 +629,10 @@ export default {
 				
 				if (res.code == 0) {
 					this.getDetails(()=>{
-						clearInterval(this.testTimeInr)
+						setTimeout(()=>{
+							clearInterval(this.testTimeInr)
+							clearInterval(this.interInr)
+						},2000)
 					});
 					this.openKf()
 				}
@@ -625,7 +649,10 @@ export default {
 				if (res.code == 0) {
 					this.payOkCoin.show = false
 					this.getDetails(()=>{
-						clearInterval(this.testTimeInr)
+						setTimeout(()=>{
+							clearInterval(this.testTimeInr)
+							clearInterval(this.interInr)
+						},2000)
 					});
 				}
 			},(err)=>{

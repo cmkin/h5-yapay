@@ -37,7 +37,7 @@
 							<i> {{$t('order.tableTitle')[2].title }}: </i>
 							<span> {{item.price | money}} </span>{{sysInfos.hv.dw}}
 						</li>
-						<li>
+						<li class="value">
 							<i> {{$t('order.tableTitle')[3].title }}: </i>
 							<span>{{item.value | money}} </span>{{sysInfos.hv.dw}}
 						</li>
@@ -425,6 +425,11 @@
 							left: 0;
 							width: 100%;
 							text-align: left;
+						}
+						.value{
+							position: absolute;
+							right: 0;
+							bottom: 12px;
 						}
 					}
 				}

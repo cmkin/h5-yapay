@@ -8,18 +8,17 @@
 
 				<div class="min_input hide_s">
 					<input v-model="minMoney" @keyup="moneyChange" :placeholder="$t('quickSale.c2c.zx')" type="number" />
-					<span>CNY</span>
+					<span>{{ sysInfos.hv.dw }}</span>
 				</div>
 
 				<div class="type_change min_input hide_s">
 					<!-- <van-dropdown-menu active-color="#0466C8">
 						<van-dropdown-item v-model="payType" :options="payTypes" get-container=".view_quickSale_c2c .type_change" />
 					</van-dropdown-menu> -->
-					
-					<myselect v-model="payType"  @change="getlist"  :lists="payTypes" showKey="text"></myselect>
-							
+
+					<myselect v-model="payType" @change="getlist" :lists="payTypes" showKey="text"></myselect>
 				</div>
-				
+
 				<!-- <van-button class="hide_s" :loading="btnLoading" @click="getlist(1)" type="info" style="margin-left: 30px;height: 38px;">{{ $t('global.base.ok') }}</van-button> -->
 
 				<div class="fb hide_s" @click="openOrderForm">
@@ -38,10 +37,10 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div style="height: 80px;"></div>
-		
-		<div style="position: relative;">
+
+		<div style="position: relative;" class="tables_wrap">
 			<van-tabs :swipeable="true" v-model="typeActive" animated>
 				<van-tab v-for="(item, index) in 2" :key="index">
 					<div class="" :class="isPhone ? 'tables_phone' : 'tables_pc'">
@@ -51,13 +50,14 @@
 						<ul v-if="dataLists.length" class="item" v-for="item in dataLists">
 							<div class="l">
 								<li class="name">
+									<i class="on" :class="{ off: item.onLine }"></i>
 									<img :src="item.headUrl" alt="" />
 									<span>{{ item.nickName }}</span>
-									<span>({{item.totalTrade}}{{ $t('global.base.d') }}/{{item.successRate}}%)</span>
+									<span>({{ item.totalTrade }}{{ $t('global.base.d') }}/{{ item.successRate }}%)</span>
 								</li>
 								<li class="num">
 									<i>{{ $t('global.base.sl') }}:</i>
-									<span>{{Number(item.coin).toFixed(4)}}</span>
+									<span>{{ Number(item.coin).toFixed(4) }}</span>
 									USDT
 								</li>
 								<li class="xe">
@@ -69,34 +69,32 @@
 							<div class="r">
 								<li class="price">
 									<i>{{ $t('global.base.dj') }}:</i>
-									<span>{{item.price}}</span>
+									<span>{{ Number(item.price).toFixed(2) }}</span>
 									{{ sysInfos.hv.dw }}
 								</li>
 								<li class="paytype" v-html="paytypeShow(item.paymentType)"></li>
 								<li class="btn">
 									<span
-										v-if="!item.matching"
+										v-if="!item.matching || item.uid == userInfos.uid"
 										v-html="$options.filters.language($t('quickSale.c2c.table.zbmz'), typeActive == 0 ? $t('global.base.sellj') : $t('global.base.buyj'))"
 									>
 										{{ $t('quickSale.c2c.table.zbmz') }}
 									</span>
-									<van-button type="info" @click="saleM()" v-else>
+									<van-button :loading="saleMBtnLoading" type="info" @click="saleM(item)" v-else>
 										{{ typeActive == 0 ? $t('global.base.gm') : $t('global.base.cs') }} {{ $t('global.base.usdt') }}
 									</van-button>
 								</li>
 							</div>
 						</ul>
-						<ul class="no_data" style="border-bottom: 1px solid #f3f3f3;" v-show="dataLists.length==0">
+						<ul class="no_data" style="border-bottom: 1px solid #f3f3f3;" v-show="dataLists.length == 0">
 							<nodata></nodata>
 						</ul>
 					</div>
-					
 				</van-tab>
 			</van-tabs>
-		
+
 			<loading v-model="tableLoding"></loading>
 		</div>
-		
 
 		<!-- <div class="page_change">
 			<div class="m">
@@ -144,43 +142,43 @@
 				<div class="main">
 					<div class="left">
 						<div class="tx">
-							<img src="" alt="" />
-							<span>我是昵称</span>
+							<img :src="saleDetails.headUrl" alt="" />
+							<span>{{ saleDetails.nickName }}</span>
 						</div>
 						<ul>
 							<li>
 								<i>{{ $t('global.base.sl') }}</i>
-								<span>410.54 USDT</span>
+								<span>{{ Number(saleDetails.coin).toFixed(4) }} USDT</span>
 							</li>
 							<li>
 								<i>{{ $t('global.base.xe') }}</i>
-								<span>900-1000 CNY</span>
+								<span>{{ saleDetails.coinLimit }} {{ sysInfos.hv.dw }}</span>
 							</li>
 							<li>
 								<i>{{ $t('global.base.fbsx') }}</i>
-								<span>0'35"</span>
+								<span>{{ saleDetails.passTime }}</span>
 							</li>
 							<li>
 								<i>{{ $t('global.base.rzdj') }}</i>
-								<span>LV.2 视频认证</span>
+								<span>{{ saleDetails.verifyLevel }}</span>
 							</li>
 							<li>
 								<i>{{ $t('global.base.cdv') }}</i>
-								<span>600{{ $t('global.base.d') }}/90%</span>
+								<span>{{ saleDetails.totalTrade }}{{ $t('global.base.d') }}/{{ saleDetails.successRate }}%</span>
 							</li>
 						</ul>
 						<div class="jyts">
 							<p>{{ $t('quickSale.c2c.buy.ts') }}</p>
-							<div v-html="$t('quickSale.c2c.buy.tst')"></div>
+							<div v-html="saleDetails.remarks"></div>
 						</div>
 					</div>
 					<div class="right">
 						<div class="tprice">
 							<span>
-								<i>7.04 CNY</i>
+								<i>{{ Number(saleDetails.price).toFixed(2) }} {{ sysInfos.hv.dw }}</i>
 								/USDT
 							</span>
-							<div v-html="$options.filters.language($t('global.base.csqx'), '40s')"></div>
+							<div v-html="$options.filters.language($t('global.base.csqx'), timeoutTime + 's')"></div>
 						</div>
 
 						<!-- 购买 -->
@@ -193,6 +191,7 @@
 										type="number"
 										:error="$t('quickSale.quickBuySell.buy.mrsl')"
 										v-model="buy.num"
+										@input="inputChange(0, 0)"
 										:placeholder="$t('global.qsr') + $t('quickSale.quickBuySell.buy.mrsl')"
 									/>
 									<span>
@@ -200,10 +199,10 @@
 										<b>USDT</b>
 									</span>
 								</div>
-								<div class="num">
-									<span>{{ $t('quickSale.quickBuySell.buy.km') }} 10.00 USDT</span>
+								<!-- <div class="num">
+									<span>{{ $t('quickSale.quickBuySell.buy.km') }} {{Number(saleDetails.coin).toFixed(4)}} USDT</span>
 									<i>{{ $t('quickSale.quickBuySell.sell.zd') }}</i>
-								</div>
+								</div> -->
 							</li>
 							<li class="jh">
 								<svg t="1596700800611" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8219" width="24" height="24">
@@ -220,23 +219,26 @@
 										type="number"
 										:error="$t('quickSale.quickBuySell.buy.mrje')"
 										v-model="buy.price"
+										@input="inputChange(1, 0)"
 										:placeholder="$t('global.qsr') + $t('quickSale.quickBuySell.buy.mrje')"
 									/>
 									<span>
-										<img :src="$t('global.cny')" alt="" />
-										<b>CNY</b>
+										<img :src="sysInfos.hv.dwimg" alt="" />
+										<b>{{ sysInfos.hv.dw }}</b>
 									</span>
 								</div>
 							</li>
 							<li>
 								<p class="t">{{ $t('quickSale.quickBuySell.buy.fkfs') }}</p>
-								<div class="pay_type"><myselect v-model="buy.active" height="160px" icon :lists="$t('global.payType')"></myselect></div>
+								<div class="pay_type"><myselect v-model="buy.active" height="160px" icon :lists="buyPayType"></myselect></div>
 							</li>
 						</ul>
 
 						<div v-if="typeActive == 0" class="btn">
-							<van-button :disabled="!(buy.num > 0 && buy.price > 0)" @click="buySellM()" block type="info">{{ $t('quickSale.quickBuySell.buy.ljgm') }}</van-button>
-							<p>{{ $t('quickSale.quickBuySell.buy.sxf') }}:0%</p>
+							<van-button :loading="saleOkLoading" :disabled="!(buy.num > 0 && buy.price > 0)" @click="buySellM(0)" block type="info">
+								{{ $t('quickSale.quickBuySell.buy.ljgm') }}
+							</van-button>
+							<p>{{ $t('quickSale.quickBuySell.buy.sxf') }}:{{ userInfos.buy }}%</p>
 						</div>
 
 						<!-- 出售 -->
@@ -248,6 +250,7 @@
 									<input
 										type="number"
 										v-model="sell.num"
+										@input="inputChange(0, 1)"
 										:error="$t('quickSale.quickBuySell.sell.mrsl')"
 										:placeholder="$t('global.qsr') + $t('quickSale.quickBuySell.sell.mrsl')"
 									/>
@@ -257,8 +260,8 @@
 									</span>
 								</div>
 								<div class="num">
-									<span>{{ $t('quickSale.quickBuySell.sell.ky') }} 10.00 USDT</span>
-									<i>{{ $t('quickSale.quickBuySell.sell.zd') }}</i>
+									<span>{{ $t('quickSale.quickBuySell.sell.ky') }} {{ Number(userInfos.coin).toFixed(4) }} USDT</span>
+									<i @click="changeAll">{{ $t('quickSale.quickBuySell.sell.zd') }}</i>
 								</div>
 							</li>
 							<li class="jh">
@@ -275,26 +278,27 @@
 									<input
 										type="number"
 										v-model="sell.price"
+										@input="inputChange(1, 1)"
 										:error="$t('quickSale.quickBuySell.sell.mrje')"
 										:placeholder="$t('global.qsr') + $t('quickSale.quickBuySell.sell.mrje')"
 									/>
 									<span>
-										<img :src="$t('global.cny')" alt="" />
-										<b>CNY</b>
+										<img :src="sysInfos.hv.dwimg" alt="" />
+										<b>{{sysInfos.hv.dw}}</b>
 									</span>
 								</div>
 							</li>
 							<li>
 								<p class="t">{{ $t('quickSale.quickBuySell.sell.fkfs') }}</p>
-								<div class="pay_type"><myselect v-model="sell.active" height="160px" multiple :lists="$t('global.payType')"></myselect></div>
+								<div class="pay_type"><myselect v-model="sell.active" height="160px" multiple :lists="sellPayType"></myselect></div>
 							</li>
 						</ul>
 
 						<div v-if="typeActive == 1" class="btn">
-							<van-button :disabled="!(sell.num > 0 && sell.price > 0)" block @click="buySellM()" type="info">
+							<van-button :disabled="!(sell.num > 0 && sell.price > 0)" block @click="buySellM(1)" type="info">
 								{{ $t('quickSale.quickBuySell.sell.ljgm') }}
 							</van-button>
-							<p>{{ $t('quickSale.quickBuySell.sell.sxf') }}:0%</p>
+							<p>{{ $t('quickSale.quickBuySell.sell.sxf') }}:{{ userInfos.sell }}%</p>
 						</div>
 					</div>
 				</div>
@@ -306,230 +310,310 @@
 		<dialogx class="order_form" v-model="orderForm.show" :title="orderForm.title" :fonter="false">
 			<template v-slot:content>
 				<div class="main">
-					<div class="p">{{ $t('quickSale.c2c.orderForm.dqpk') }} 7.08 CNY</div>
+					<div class="p">
+						{{ $t('quickSale.c2c.orderForm.dqpk') }} {{ orderForm.titleType == 0 ? userInfos.inventoryBuyPrice : userInfos.inventorySellPrice }} {{ sysInfos.hv.dw }}
+					</div>
 
-					<van-tabs v-model="orderForm.titleType" swipeable line-height="0" lazy-render animated>
+					<van-tabs v-model="orderForm.titleType" line-height="0" lazy-render animated>
+						<!-- 购买 -->
+
 						<van-tab :title="$t('quickSale.c2c.typeTitle[0]')">
-							
 							<div class="scroll">
 								<vue-scroll :ops="ops" ref="myscroll">
 									<ul class="items">
 										<li>
 											<p class="t">{{ $t('quickSale.c2c.orderForm.wtlxt') }}</p>
-											<div class="input"><myselect :disable="true" v-model="orderForm.wtType" :lists="$t('quickSale.c2c.orderForm.wtlx')"></myselect></div>
+											<div class="input">
+												<myselect
+													@change="numChange(0)"
+													:disable="userInfos.type != 2"
+													v-model="orderForm.wtType"
+													:lists="$t('quickSale.c2c.orderForm.wtlx')"
+												></myselect>
+											</div>
 										</li>
 										<li>
-											<p class="t">{{ $t('quickSale.c2c.orderForm.jyjg') }}</p>
-											<div class="input"><input type="number" :placeholder="$t('quickSale.c2c.orderForm.srjy')" /></div>
+											<p class="t">
+												{{ $t('quickSale.c2c.orderForm.jyjg') }}({{
+													orderForm.wtType == 2 ? $t('quickSale.c2c.orderForm.jyjgg') : $t('quickSale.c2c.orderForm.jyjgp')
+												}})
+											</p>
+											<div class="input">
+												<input
+													@input="numChange(0)"
+													type="number"
+													v-model="orderForm.buy.price"
+													v-if="orderForm.wtType == 2"
+													:placeholder="$t('quickSale.c2c.orderForm.srjy')"
+												/>
+												<span class="input sjfw" v-else style="color: red;">{{ userInfos.sellPrice }} {{ sysInfos.hv.dw }}</span>
+											</div>
 										</li>
 										<li class="two">
 											<div class="i">
 												<p class="t">{{ $t('quickSale.c2c.orderForm.gmsl') }}</p>
-												<div class="input"><input type="number" :placeholder="$t('global.qsr') + $t('quickSale.c2c.orderForm.gmsl')" /></div>
+												<div class="input">
+													<input
+														@input="numChange(0)"
+														v-model="orderForm.buy.num"
+														type="number"
+														:placeholder="$t('global.qsr') + $t('quickSale.c2c.orderForm.gmsl')"
+													/>
+												</div>
 											</div>
 											<div class="i">
 												<p class="t">{{ $t('quickSale.c2c.orderForm.gmje') }}</p>
 												<div class="input">
-													<input disabled="disabled" type="number" :placeholder="$t('global.qsr') + $t('quickSale.c2c.orderForm.gmje')" />
-													<span class="money">CNY</span>
+													<input
+														disabled="disabled"
+														v-model="orderForm.buy.value"
+														type="number"
+														:placeholder="$t('global.qsr') + $t('quickSale.c2c.orderForm.gmje')"
+													/>
+													<span class="money">{{ sysInfos.hv.dw }}</span>
 												</div>
 											</div>
 										</li>
 
-										<li>
+										<li v-if="orderForm.wtType == 2">
 											<p class="t">{{ $t('quickSale.c2c.orderForm.zdmr') }}</p>
 											<div class="input">
-												<input type="number" :placeholder="$t('quickSale.c2c.orderForm.zdmr')" />
-												<span class="money">CNY</span>
+												<input type="number" v-model="orderForm.buy.leastcoin" :placeholder="$t('quickSale.c2c.orderForm.zdmr')" />
+												<span class="money">{{ sysInfos.hv.dw }}</span>
 											</div>
 										</li>
 
 										<li>
 											<p class="t">{{ $t('quickSale.c2c.orderForm.sjfw') }}</p>
-											<div class="input sjfw">
-												<span @click="openTime(1)">{{ $t('quickSale.c2c.orderForm.ks') }}</span>
-												<van-icon name="down" />
-												<span @click="openTime(2)">{{ $t('quickSale.c2c.orderForm.js') }}</span>
+											<div class="input sjfw" @click="openTime(1)">
+												<span :style="{ color: orderForm.buy.duration ? '#2E323D' : '#e3e3e3' }">
+													{{ orderForm.buy.duration ? orderForm.buy.duration : $t('global.qxz') }}
+												</span>
+												<!-- <van-icon name="down" />-->
+												<span style="text-align: right;color: #2E323D;">{{ $t('quickSale.c2c.orderForm.fz') }}</span>
 											</div>
 										</li>
 
 										<li>
 											<p class="t">{{ $t('quickSale.c2c.orderForm.fkfs') }}</p>
-											<div class="input "><myselect v-model="orderForm.buy.payType" icon :lists="$t('global.payType')"></myselect></div>
+											<div class="input "><myselect v-model="orderForm.buy.payType" multiple :lists="$t('global.payType')"></myselect></div>
 										</li>
 									</ul>
 
 									<div class="collapse">
 										<van-collapse v-model="orderFormNames">
-											<van-collapse-item :title="$t('quickSale.c2c.orderForm.dsxz')" name="1">
+											<van-collapse-item v-if="orderForm.wtType == 2" :title="$t('quickSale.c2c.orderForm.dsxz')" name="1">
 												<ul class="dsxz items">
 													<li>
 														<p class="t">{{ $t('quickSale.c2c.orderForm.rzdj') }}</p>
 														<div class="input">
-															<myselect height="88px" v-model="orderForm.wtType" :lists="$t('quickSale.c2c.orderForm.wtlx')"></myselect>
+															<myselect
+																height="88px"
+																v-model="orderForm.buy.verifylevel"
+																:lists="$t('quickSale.c2c.orderForm.verifylevel')"
+															></myselect>
 														</div>
 													</li>
 													<li>
 														<p class="t">{{ $t('quickSale.c2c.orderForm.zcsj') }}</p>
 														<div class="input sjfw">
-															<span @click="openTime(1)">{{ $t('global.qxz') }}</span>
+															<span  @click="openTime(3)" :style="{ color: orderForm.buy.createtime ? '#2E323D' : '#e3e3e3' }">
+																{{orderForm.buy.createtime?orderForm.buy.createtime: $t('global.qxz') }}
+															</span>
 														</div>
 													</li>
 												</ul>
 											</van-collapse-item>
 											<van-collapse-item :title="$t('quickSale.c2c.orderForm.jysm')" name="2">
-												<div class="jysm"><textarea :placeholder="$t('quickSale.c2c.orderForm.jysmp')" rows="5"></textarea></div>
+												<div class="jysm">
+													<textarea v-model="orderForm.buy.remarks" maxlength="50" :placeholder="$t('quickSale.c2c.orderForm.jysmp')" rows="5"></textarea>
+												</div>
 											</van-collapse-item>
 										</van-collapse>
 									</div>
 								</vue-scroll>
 							</div>
-						
 						</van-tab>
+
+						<!-- 出售 -->
+
 						<van-tab :title="$t('quickSale.c2c.typeTitle[1]')">
-							
 							<div class="scroll">
 								<vue-scroll :ops="ops" ref="myscroll">
 									<ul class="items">
 										<li>
 											<p class="t">{{ $t('quickSale.c2c.orderForm.wtlxt') }}</p>
-											<div class="input"><myselect :disable="true" v-model="orderForm.wtType" :lists="$t('quickSale.c2c.orderForm.wtlx')"></myselect></div>
+											<div class="input">
+												<myselect
+													@change="numChange(1)"
+													:disable="userInfos.type != 2" 
+													v-model="orderForm.wtType" 
+													:lists="$t('quickSale.c2c.orderForm.wtlx')">
+												</myselect>
+											</div>
 										</li>
 										<li>
-											<p class="t">{{ $t('quickSale.c2c.orderForm.jyjg') }}</p>
-											<div class="input"><input type="number" :placeholder="$t('quickSale.c2c.orderForm.srjy')" /></div>
+											<p class="t">
+												{{ $t('quickSale.c2c.orderForm.jyjg') }}
+												({{orderForm.wtType == 2 ? $t('quickSale.c2c.orderForm.jyjgg') : $t('quickSale.c2c.orderForm.jyjgp')}})
+											</p>
+											
+											<div class="input">
+												
+												<input
+													@input="numChange(1)"
+													type="number"
+													v-model="orderForm.sell.price"
+													v-if="orderForm.wtType == 2"
+													:placeholder="$t('quickSale.c2c.orderForm.srjy')"
+												/>
+												<span class="input sjfw" v-else style="color: red;">{{ userInfos.buyPrice }} {{ sysInfos.hv.dw }}</span>
+											
+											</div>
 										</li>
 										<li class="two">
 											<div class="i">
 												<p class="t">{{ $t('quickSale.c2c.orderForm.cssl') }}</p>
-												<div class="input"><input type="number" :placeholder="$t('global.qsr') + $t('quickSale.c2c.orderForm.cssl')" /></div>
+												<div class="input">
+													<input @input="numChange(1)"
+														v-model="orderForm.sell.num" type="number" 
+														:placeholder="$t('global.qsr') + $t('quickSale.c2c.orderForm.cssl')" />
+												</div>
 											</div>
 											<div class="i">
 												<p class="t">{{ $t('quickSale.c2c.orderForm.csje') }}</p>
 												<div class="input">
-													<input disabled="disabled" type="number" :placeholder="$t('global.qsr') + $t('quickSale.c2c.orderForm.csje')" />
-													<span class="money">CNY</span>
+													<input disabled="disabled" v-model="orderForm.sell.value" type="number" :placeholder="$t('global.qsr') + $t('quickSale.c2c.orderForm.csje')" />
+													<span class="money">{{ sysInfos.hv.dw }}</span>
 												</div>
 											</div>
+											<div class="all">
+												{{ $t('quickSale.quickBuySell.sell.ky') +  Number(userInfos.coin).toFixed(4) + 'USDT' }}
+												<span @click="changeMax">{{ $t('quickSale.quickBuySell.sell.zd') }}</span>
+											</div>
 										</li>
-							
-										<li>
+
+										<li v-if="orderForm.wtType == 2">
 											<p class="t">{{ $t('quickSale.c2c.orderForm.zdcs') }}</p>
 											<div class="input">
-												<input type="number" :placeholder="$t('quickSale.c2c.orderForm.zdcs')" />
-												<span class="money">CNY</span>
+												<input type="number" v-model="orderForm.sell.leastcoin"  :placeholder="$t('quickSale.c2c.orderForm.zdcs')" />
+												<span class="money">{{ sysInfos.hv.dw }}</span>
 											</div>
 										</li>
-							
+
 										<li>
 											<p class="t">{{ $t('quickSale.c2c.orderForm.sjfw') }}</p>
-											<div class="input sjfw">
-												<span @click="openTime(1)">{{ $t('quickSale.c2c.orderForm.ks') }}</span>
-												<van-icon name="down" />
-												<span @click="openTime(2)">{{ $t('quickSale.c2c.orderForm.js') }}</span>
+											<div class="input sjfw" @click="openTime(2)">
+												<span :style="{ color: orderForm.sell.duration ? '#2E323D' : '#e3e3e3' }">
+													{{ orderForm.sell.duration ? orderForm.sell.duration : $t('global.qxz') }}
+												</span>
+												<!-- <van-icon name="down" /> -->
+												<span style="text-align: right;color: #2E323D;">{{ $t('quickSale.c2c.orderForm.fz') }}</span>
 											</div>
 										</li>
-							
+
 										<li>
 											<p class="t">{{ $t('quickSale.c2c.orderForm.skfs') }}</p>
-											<div class="input "><myselect v-model="orderForm.sell.payType" icon multiple :lists="$t('global.payType')"></myselect></div>
+											<div class="input "><myselect v-model="orderForm.sell.payType" icon multiple :lists="payTypeShow"></myselect></div>
 										</li>
 									</ul>
-							
+
 									<div class="collapse">
 										<van-collapse v-model="orderFormNames">
-											<van-collapse-item :title="$t('quickSale.c2c.orderForm.dsxz')" name="1">
+											<van-collapse-item v-if="orderForm.wtType == 2" :title="$t('quickSale.c2c.orderForm.dsxz')" name="3">
 												<ul class="dsxz items">
 													<li>
 														<p class="t">{{ $t('quickSale.c2c.orderForm.fksj') }}</p>
 														<div class="input">
-															<myselect height="88px" v-model="orderForm.wtType" :lists="$t('quickSale.c2c.orderForm.wtlx')"></myselect>
+															<myselect height="88px" 
+																v-model="orderForm.sell.overtimetype"
+																:lists="$t('quickSale.c2c.orderForm.overtimetype')">
+															</myselect>
 														</div>
 													</li>
 													<li>
 														<p class="t">{{ $t('quickSale.c2c.orderForm.rzdj') }}</p>
 														<div class="input">
-															<myselect height="88px" v-model="orderForm.wtType" :lists="$t('quickSale.c2c.orderForm.wtlx')"></myselect>
+															<myselect height="88px" 
+																v-model="orderForm.sell.verifylevel"
+																:lists="$t('quickSale.c2c.orderForm.verifylevel')">
+															</myselect>
 														</div>
 													</li>
 													<li>
 														<p class="t">{{ $t('quickSale.c2c.orderForm.zcsj') }}</p>
 														<div class="input sjfw">
-															<span @click="openTime(1)">{{ $t('global.qxz') }}</span>
+															<span @click="openTime(4)" :style="{ color: orderForm.sell.createtime ? '#2E323D' : '#e3e3e3' }">
+																{{orderForm.sell.createtime?orderForm.sell.createtime: $t('global.qxz') }}
+															</span>
 														</div>
 													</li>
 												</ul>
 											</van-collapse-item>
-											<van-collapse-item :title="$t('quickSale.c2c.orderForm.jysm')" name="2">
-												<div class="jysm"><textarea :placeholder="$t('quickSale.c2c.orderForm.jysmp')" rows="5"></textarea></div>
+											<van-collapse-item :title="$t('quickSale.c2c.orderForm.jysm')" name="4">
+												<div class="jysm"><textarea v-model="orderForm.sell.remarks" maxlength="50" :placeholder="$t('quickSale.c2c.orderForm.jysmp')" rows="5"></textarea></div>
 											</van-collapse-item>
 										</van-collapse>
 									</div>
 								</vue-scroll>
 							</div>
-													
-							
 						</van-tab>
 					</van-tabs>
 
 					<div class="btn">
-						<van-button @click="orderFormSumbit" :disabled="false" block :type="orderForm.titleType == 0 ? 'primary' : 'danger'">{{ $t('quickSale.c2c.fbwt') }}</van-button>
-						<p>{{ $t('quickSale.quickBuySell.buy.sxf') }}:0.8%</p>
+						<van-button @click="orderFormSumbit" :disabled="wtBtnIsOk" block :type="orderForm.titleType == 0 ? 'primary' : 'danger'">
+							{{ $t('quickSale.c2c.fbwt') }}
+						</van-button>
+						<p>{{ $t('quickSale.quickBuySell.buy.sxf') }}: {{ getHv }}</p>
 					</div>
 				</div>
 			</template>
 		</dialogx>
-		
-		
+
 		<!-- 确认交易弹窗 -->
-		
-		<dialogx v-model="orderForm.okOrder.show && orderForm.okOrder.type == 0" :onOk="orderFormOk" :title="orderForm.okOrder.title">
-			<!-- 购买 -->
-			<template v-slot:content>
+
+		<dialogx
+			v-model="orderForm.okOrder.show"
+			:onOk="orderFormOk"
+			:disabled="!Boolean(orderForm.okOrder.password || orderForm.okOrder.type == 0)"
+			:title="orderForm.okOrder.title"
+		>
+			<!-- 购买 , 出售 -->
+			<template v-slot:content >
 				<ul class="ok_buy">
 					<li v-for="item in orderForm.okOrder.lists">
-						<span>{{item.name}}</span>
-						<span class="r" :style="{color:item.key=='allPrice'?'red':'#333'}">
-							<img :src="orderForm.okOrder.datas.img" alt="" v-if="orderForm.okOrder.type==0 && item.key=='payType'">
-							{{orderForm.okOrder.datas[item.key]}} 
-							<i v-if="item.key=='nums'">USDT</i>
-							<i v-if="item.key=='price' || item.key=='allPrice' ">CNY</i>
-						</span>
-					</li>	
-				</ul>
-			</template>
-		</dialogx>
-		
-		<dialogx v-model="orderForm.okOrder.show && orderForm.okOrder.type == 1" :disabled="!Boolean(orderForm.okOrder.password)" :title="orderForm.okOrder.title">
-			<!-- 出售 -->
-			<template v-slot:content>
-				<ul class="ok_buy">
-					<li v-for="item in orderForm.okOrder.lists">
-						<span>{{item.name}}</span>
-						<span class="r" :style="{color:item.key=='allPrice'?'red':'#333'}">
-							<img :src="orderForm.okOrder.datas.img" alt="" v-if="orderForm.okOrder.type==1 && item.key=='payType'">
-							{{orderForm.okOrder.datas[item.key]}} 
-							<i v-if="item.key=='nums'">USDT</i>
-							<i v-if="item.key=='price' || item.key=='allPrice' ">CNY</i>
-						</span>
-					</li>	
-					<li class="password clearfix">
-						{{ $t('global.base.jymm') }}
-						<input v-model="orderForm.okOrder.password" autofocus="autofocus" type="password"  :placeholder="$t('global.qsr') + $t('global.base.jymm')">
-						<a href="#">
-							{{ $t('global.base.wjmm') }}?
-						</a>
+						<span>{{ item.name }}</span>
+						<span class="r">{{ orderForm.okOrder.datas[item.key] }}</span>
 					</li>
 					
-					<li class="tips" v-html="$options.filters.language( $t('quickSale.c2c.orderForm.okwt.sell.lowts') , 10 )"></li>
+					<li class="password clearfix" v-if="orderForm.okOrder.type == 1">
+						{{ $t('global.base.jymm') }}
+						<input v-model="orderForm.okOrder.password" autofocus="autofocus" type="password" :placeholder="$t('global.qsr') + $t('global.base.jymm')" />
+						<a href="/#/editJPwd">{{ $t('global.base.wjmm') }}?</a>
+					</li>
+					
+					<li class="tips" v-if="isTip" v-html="$options.filters.language($t('quickSale.c2c.orderForm.okwt.sell.lowts'), userInfos.indexPrice+sysInfos.hv.dw)"></li>
+					<div v-if="isTip" style="opacity: 0;font-size: 13px;" v-html="$options.filters.language($t('quickSale.c2c.orderForm.okwt.sell.lowts'), userInfos.indexPrice+sysInfos.hv.dw)"></div>
 				</ul>
-			</template>		
+			</template>
+
+			
+			
 		</dialogx>
-		
-		
+
 		<!-- 时间弹窗 -->
 		<van-popup v-model="timeShow" :position="isPhone ? 'bottom' : 'center'">
-			<van-datetime-picker v-model="currentTime" type="time" :formatter="formatter" title="" :min-hour="0" :max-hour="23" @cancel="timeShow = false" @confirm="timeOk" />
+			<van-datetime-picker
+				v-model="currentTime"
+				:type="timeType < 3 ? 'time' : 'date'"
+				:formatter="formatter"
+				title=""
+				
+				:confirm="$t('global.base.ok')"
+				:cancel="$t('global.base.cancel')"
+				@cancel="timeOk"
+				@confirm="timeOk"
+			/>
 		</van-popup>
 	</div>
 </template>
@@ -538,7 +622,7 @@
 export default {
 	data() {
 		return {
-			oldtops:0,
+			oldtops: 0,
 			ops: {
 				vuescroll: {
 					wheelScrollDuration: 500
@@ -549,9 +633,11 @@ export default {
 					background: '#e3e3e3'
 				}
 			},
-			tableLoding:false,
-			btnLoading:false,
-			moneyInr:null,
+			tableLoding: false,
+			btnLoading: false,
+			saleMBtnLoading: false,
+			saleOkLoading: false,
+			moneyInr: null,
 			orderFormNames: [],
 			currentPage: 0,
 			typeActive: null,
@@ -560,6 +646,9 @@ export default {
 			payTypePhoneFlag: false,
 			//弹窗
 			//购买
+			saleDetails: {}, //单条详情数据
+			timeoutTime: 60,
+			timeoutInr: null,
 			buy: {
 				show: false,
 				active: null,
@@ -580,29 +669,47 @@ export default {
 				titleType: 0,
 				wtType: 2,
 				buy: {
-					payType: null
+					payType: [],
+					num: '',
+					price: '',
+					value: '',
+					leastcoin: '',
+					duration: '',
+					verifylevel: 0,
+					remarks: '',
+					paymenttype: '',
+					createtime: ''
 				},
 				sell: {
-					payType: []
+					payType: [],
+					overtimetype: 10,
+					num: '',
+					price: '',
+					value: '',
+					leastcoin: '',
+					duration: '',
+					verifylevel: 0,
+					remarks: '',
+					paymenttype: '',
+					createtime: ''
 				},
 				//确认
-				okOrder:{
-					show:false,
-					type:null,
-					password:'',
-					title:'',
-					lists:[],
-					datas:{}
+				okOrder: {
+					show: false,
+					type: null,
+					password: '',
+					title: '',
+					lists: [],
+					datas: {}
 				}
 			},
 			//时间弹窗
 			timeShow: false,
-			currentTime: '',
+			currentTime: new Date(),
 			timeType: null,
-			
-			
+
 			//数据列表
-			dataLists:[]
+			dataLists: []
 		};
 	},
 	computed: {
@@ -623,23 +730,139 @@ export default {
 		},
 		tableTitle() {
 			return this.typeActive == 0 ? this.$t('quickSale.c2c.table.buyTitle') : this.$t('quickSale.c2c.table.sellTitle');
+		},
+		buyPayType() {
+			if (this.saleDetails) {
+				let hastype = this.saleDetails.paymentType.split(',').map(x => Number(x));
+				return this.$t('global.payType').filter(item => {
+					return hastype.includes(item.id);
+				});
+			}
+			return [];
+		},
+		sellPayType() {
+			if (!this.userInfos.islogin) {
+				return this.$t('global.payType');
+			}
+
+			if (this.saleDetails) {
+				let hastype = this.saleDetails.paymentType.split(',').map(x => Number(x)); //订单方式
+				let ihasType = this.userInfos.payList.map(item => Number(item.type)); //我的方式
+
+				return this.$t('global.payType')
+					.filter(item => {
+						return hastype.includes(item.id);
+					})
+					.map(item => {
+						if (!ihasType.includes(item.id)) {
+							item.add = true;
+							item.addMethod = res => {
+								this.$router.push({
+									path: '/paymentMethod',
+									query: {
+										type: res.id
+									}
+								});
+							};
+						} else {
+							item.add = false;
+						}
+						return item;
+					});
+			}
+
+			return [];
+		},
+		//发布委托单相关
+		//发布是否可以点击
+		wtBtnIsOk() {
+			let datas = this.orderForm.titleType == 0 ?  this.orderForm.buy : this.orderForm.sell;
+			
+				
+				if (this.orderForm.wtType == 2) {
+					//自选
+					return [datas.num, datas.value, datas.duration, datas.payType, datas.price, datas.leastcoin].some(item => !Boolean(item));
+				} else {
+					//快捷
+					return [datas.num, datas.value, datas.duration, datas.payType].some(item => !Boolean(item));
+				}
+			
+
+			return false;
+		},
+		//手续汇率
+		getHv() {
+			let fs = 0;
+			if (this.orderForm.titleType == 0) {
+				//买
+				fs = this.orderForm.wtType == 1 ? this.userInfos.fastbuy : this.userInfos.buy;
+			} else {
+				fs = this.orderForm.wtType == 1 ? this.userInfos.fastsell : this.userInfos.sell;
+			}
+
+			return fs + '%';
+		},
+		//指数偏差
+		isTip(){
+			if(this.orderForm.wtType==2){
+			
+				let price = this.orderForm.titleType == 0 ? this.orderForm.buy.price : this.orderForm.sell.price
+					
+				 return  Math.abs(price - this.userInfos.indexPrice) / price > 0.2
+					
+			}
+			
+			return  false
+		},
+		//出售-可用支付方式
+		payTypeShow(){
+			
+			if(!this.userInfos.islogin){
+				return this.$t('global.payType')
+			}
+			
+			let hasType = this.userInfos.payList.map(item=>Number(item.type))
+			return this.$t('global.payType').filter(item=>{
+				if(!this.payType.length){
+					return true
+				}
+				return this.payType.includes(item.id)
+			}).map(item=>{
+				if(!hasType.includes(item.id)){
+					item.add = true
+					item.addMethod = (res)=>{
+						this.$router.push({
+							path:'/paymentMethod',
+							query:{
+								type:res.id
+							}
+						})
+					}
+				}else{
+					item.add = false
+				}
+				return item 
+			})
 		}
 	},
 	mounted() {
+		//= this.orderForm.buy.payType  = this.orderForm.sell.payType
 		this.typeActive = this.$route.query.hasOwnProperty('type') ? Number(this.$route.query.type) : 0;
-		this.buy.active = this.orderForm.buy.payType = this.$t('global.payType')[0].id;
-		this.sell.active = this.orderForm.sell.payType = this.$t('global.payType').map(item => item.id);
-		this.oldtops = 0
-		document.addEventListener("scroll",this.scroll)
+		this.buy.active = this.$t('global.payType')[0].id;
+		this.sell.active = this.$t('global.payType').map(item => item.id);
+		this.oldtops = 0;
+		document.addEventListener('scroll', this.scroll);
 	},
-	beforeRouteLeave(to,from,next) {
-		document.removeEventListener("scroll",this.scroll)
-		next()
+
+	beforeRouteLeave(to, from, next) {
+		document.removeEventListener('scroll', this.scroll);
+		next();
+	},
+	beforeDestroy() {
+		document.removeEventListener('scroll', this.scroll);
 	},
 	watch: {
-		$route(n) {
-			
-		},
+		$route(n) {},
 		typeActive(nValue) {
 			this.$router.replace({
 				path: 'c2c',
@@ -647,99 +870,108 @@ export default {
 					type: nValue
 				}
 			});
-			this.getlist()
+			this.getlist();
 		}
 	},
 	methods: {
-		moneyChange(){
-			clearTimeout(this.moneyInr)
-			this.moneyInr = setTimeout(()=>{
-				this.getlist()
-			},1000)
+		moneyChange() {
+			clearTimeout(this.moneyInr);
+			this.moneyInr = setTimeout(() => {
+				this.getlist();
+			}, 1000);
 		},
-		formatter(type,val){
-			switch(type){
+		formatter(type, val) {
+			switch (type) {
+				case 'year':
+					return `${val}` + this.$t('global.base.year');
+				case 'month':
+					return `${val}` + this.$t('global.base.month');
+				case 'day':
+					return `${val}` + this.$t('global.base.day');
 				case 'hour':
-					return `${val}`+this.$t('global.base.hou')
+					return `${val}` + this.$t('global.base.hou');
 				case 'minute':
-					return `${val}`+this.$t('global.base.min')	
+					return `${val}` + this.$t('global.base.min');
 			}
-
 		},
 		//支付方式
-		paytypeShow(t){
-			let type = t.split(",").map(item=>Number(item))
-			let all = this.$t('global.payType').filter(item=>{
-				return type.includes(item.id)
-			})
-			
-			let str = ''
-				all.forEach(item=>{
-					str+=`<img class="img" src="${item.img}" />`
-				})
-			return str
+		paytypeShow(t) {
+			let type = t.split(',').map(item => Number(item));
+			let all = this.$t('global.payType').filter(item => {
+				return type.includes(item.id);
+			});
+
+			let str = '';
+			all.forEach(item => {
+				str += `<img class="img" src="${item.img}" />`;
+			});
+			return str;
 		},
-		getlist(){
-			this.tableLoding = true
-			
+		getlist() {
+			this.tableLoding = true;
+
 			let json = {
-				currency:this.userInfos.currency,
-				type:this.typeActive,
-				paymentType:this.payType,
-				leastcoin:this.minMoney||0,
+				currency: this.userInfos.currency,
+				type: this.typeActive,
+				paymentType: this.payType,
+				leastcoin: this.minMoney || 0,
 				opponent: false
-			}
-			
-			this.$http.getOptionalOrderList(json).then((res)=>{
-				this.tableLoding = false
-				this.btnLoading = false
-				this.dataLists = res.data
-			},(err)=>{
-				this.tableLoding = false
-				this.btnLoading = false
-				this.dataLists = []
-			})
-		},
-		okLists(r){
-			if(r){
-				this.payType = 0
-				this.minMoney = ''
-			}
-			this.getlist()
-			this.payTypePhoneFlag = false
-		},
-		scroll(e){
-			let tops = document.documentElement.scrollTop || document.body.scrollTop
-			let dhl = document.querySelector(".view_quickSale_c2c .dhl")
-			
-			let min = this.isPhone ? 61 : 80
-			let max = this.isPhone ? 130 : 150
-				if(tops==0){
-					dhl.style.top = max +'px'
-					dhl.style.boxShadow = "none"
-					return
+			};
+
+			this.$http.getOptionalOrderList(json).then(
+				res => {
+					this.tableLoding = false;
+					this.btnLoading = false;
+					this.dataLists = res.data;
+				},
+				err => {
+					this.tableLoding = false;
+					this.btnLoading = false;
+					this.dataLists = [];
 				}
-				if(tops>this.oldtops){
-					//向下
-					dhl.style.boxShadow = "0px 1px 2px rgba(0, 0, 0, 0.16)"
-					if(dhl.offsetTop <=min ){
-						dhl.style.top = min +'px'
-						return
-					}
-					dhl.style.top = (dhl.offsetTop - (tops-this.oldtops)) + 'px'
-				}else{
-					//向上
-					if(dhl.offsetTop >=max ){
-						dhl.style.top = max +'px'
-						dhl.style.boxShadow = "none"
-						return
-					}
-					
-					
-					dhl.style.top = (dhl.offsetTop - (tops-this.oldtops)) + 'px'
+			);
+		},
+		okLists(r) {
+			if (r) {
+				this.payType = 0;
+				this.minMoney = '';
+			}
+			this.getlist();
+			this.payTypePhoneFlag = false;
+		},
+		scroll(e) {
+			let tops = document.documentElement.scrollTop || document.body.scrollTop;
+			let dhl = document.querySelector('.view_quickSale_c2c .dhl');
+			if (!dhl) {
+				return;
+			}
+			let min = this.isPhone ? 61 : 80;
+			let max = this.isPhone ? 130 : 150;
+			if (tops == 0) {
+				dhl.style.top = max + 'px';
+				dhl.style.boxShadow = 'none';
+				return;
+			}
+			if (tops > this.oldtops) {
+				//向下
+				dhl.style.boxShadow = '0px 1px 2px rgba(0, 0, 0, 0.16)';
+				if (dhl.offsetTop <= min) {
+					dhl.style.top = min + 'px';
+					return;
 				}
-				
-			this.oldtops = tops	
+				dhl.style.top = dhl.offsetTop - (tops - this.oldtops) + 'px';
+			} else {
+				//向上
+				if (dhl.offsetTop >= max) {
+					dhl.style.top = max + 'px';
+					dhl.style.boxShadow = 'none';
+					return;
+				}
+
+				dhl.style.top = dhl.offsetTop - (tops - this.oldtops) + 'px';
+			}
+
+			this.oldtops = tops;
 		},
 		changeType(index) {
 			this.typeActive = index;
@@ -748,32 +980,117 @@ export default {
 			this.payType = item.id;
 		},
 		buySellM() {
-			let path = '';
-			if (this.typeActive == 0) {
-				let flag = this.$inputCheak(this.$refs.buy);
-				path = 'payment';
-				if (!flag) {
-					return;
-				}
+			//检查限额
+			let limit = this.saleDetails.coinLimit.split('-').map(x => Number(x));
+			let price = this.typeActive == 0 ? this.buy.price : this.sell.price;
+			console.log(limit, price);
+			if (price < limit[0] || price > limit[1]) {
+				this.$notify(this.$t('global.base.dbxew') + this.saleDetails.coinLimit + this.sysInfos.hv.dw);
+				return;
 			}
-			if (this.typeActive == 1) {
-				let flag = this.$inputCheak(this.$refs.sell);
-				path = 'collection';
-				if (!flag) {
-					return;
-				}
-			}
-			this.$router.push({
-				path: path,
-				query: {}
-			});
+
+			//发起请求
+			this.saleOkLoading = true;
+			this.$http
+				.userOptionalTradeCoin({
+					buyType: 0,
+					coin: this.typeActive == 0 ? this.buy.num : this.sell.num,
+					id: this.saleDetails.id,
+					type: this.typeActive
+				})
+				.then(res => {
+					this.saleOkLoading = false;
+					if (res.code == 0) {
+						this.$router.push({
+							path: this.typeActive == 0 ? 'payment' : 'collection',
+							query: {
+								id: res.data
+							}
+						});
+					}
+				});
 		},
-		saleM() {
-			if(this.$isLogin()){
-				return
+		saleM(item) {
+			if (this.$isLogin()) {
+				return;
 			}
-			this.buy.show = true;
-			if (this.typeActive == 0) {
+
+			this.saleMBtnLoading = true;
+			this.$http
+				.getOptionalDetail({
+					id: item.id,
+					type: this.typeActive == 0 ? 1 : 0
+				})
+				.then(res => {
+					this.saleMBtnLoading = false;
+					if (res.code != 0) {
+						return;
+					}
+
+					//详情买卖字段一样
+					this.saleDetails = {
+						...item,
+						...res.data
+					};
+
+					//重置
+					this.buy = {
+						show: true,
+						active: this.buyPayType[0].id,
+						num: '',
+						price: ''
+					};
+					//出售
+					let active = this.sellPayType
+						.filter(item => {
+							return item.add == false;
+						})
+						.map(item => {
+							return item.id;
+						});
+					this.sell = {
+						show: true,
+						active: active,
+						num: '',
+						price: ''
+					};
+
+					clearInterval(this.timeoutInr);
+					this.timeoutTime = 60;
+					this.timeoutInr = setInterval(() => {
+						this.timeoutTime--;
+						if (this.timeoutTime <= 0) {
+							clearInterval(this.timeoutInr);
+							this.buy.show = false;
+						}
+					}, 1000);
+				});
+		},
+
+		changeAll() {
+			this.sell.num = Number(this.userInfos.coin).toFixed(4);
+			this.inputChange(0, 1);
+		},
+
+		inputChange(type, typet) {
+			if (typet == 0) {
+				//购买
+				if (type == 0) {
+					//num
+					this.buy.price = Number(this.buy.num * this.saleDetails.price).toFixed(2);
+				} else {
+					//price
+					this.buy.num = Number(this.buy.price / this.saleDetails.price).toFixed(4);
+				}
+			} else {
+				//出售
+				if (type == 0) {
+					//num
+					this.sell.price = Number(this.sell.num * this.saleDetails.price).toFixed(2);
+				} else {
+					//price
+					this.sell.num = Number(this.sell.price / this.saleDetails.price).toFixed(4);
+				}
 			}
 		},
 
@@ -784,58 +1101,214 @@ export default {
 			this.timeShow = true;
 		},
 		timeOk(value) {
-			console.log(value);
+			
+			if(this.timeType<3){
+				//选择分钟 
+				let min = value ? value.split(':')[0] * 60 + Number(value.split(':')[1]) : value ;
+			
+				if (this.timeType == 1) {
+					//购买-持续时间
+					this.orderForm.buy.duration = min;
+				}
+				if (this.timeType == 2) {
+					//出售-持续时间
+					this.orderForm.sell.duration = min;
+				}
+			}else{
+				//选择时间
+				let date = value ?  this.$dateFormat('YYYY-mm-dd',new Date(value)) : value;
+				if (this.timeType == 3) {
+					//购买-注册时间
+					this.orderForm.buy.createtime = date;
+				}
+				if (this.timeType == 4) {
+					//出售-注册时间
+					this.orderForm.sell.createtime = date;
+				}
+			}
+			
+			this.timeShow = false;
+			
 		},
 		//打开委托
-		openOrderForm(){
-			if(this.$isLogin()){
-				return
+		openOrderForm() {
+			if (this.$isLogin()) {
+				return;
 			}
-			this.orderForm.title = this.$t('quickSale.c2c.fbwt') + '(USDT/CNY)'
-			this.orderForm.titleType = this.typeActive
-			this.orderForm.show = true
+			this.orderForm.title = this.$t('quickSale.c2c.fbwt') + '(USDT/'+this.sysInfos.hv.dw+")";
+			this.orderForm.titleType = this.typeActive;
+			this.orderForm.wtType = this.userInfos.type == 2 ? 1 : 2;
+			//重置数据
+			this.orderForm.buy = {
+				payType: this.$t('global.payType').map(item => item.id),
+				num: '',
+				price: '',
+				value: '',
+				leastcoin: '',
+				duration: '',
+				verifylevel: 0,
+				remarks: '',
+				paymenttype: '',
+				createtime: ''
+			}
+			this.orderForm.sell={
+				payType: this.payTypeShow.filter(item=>!item.add).map(item => item.id),
+				overtimetype: 10,
+				num: '',
+				price: '',
+				value: '',
+				leastcoin: '',
+				duration: '',
+				verifylevel: 0,
+				remarks: '',
+				paymenttype: '',
+				createtime: ''
+			},
+			
+			this.orderForm.show = true;
+		},
+		changeMax(){
+			this.orderForm.sell.num = Number(this.userInfos.coin).toFixed(4) 
+			this.numChange(1)
+		},
+		//数量输入
+		numChange(type) {
+			if (type == 0) {
+				//购买
+				if (this.orderForm.wtType == 1) {
+					//快捷
+					this.orderForm.buy.value = Number(this.orderForm.buy.num * this.userInfos.sellPrice).toFixed(2);
+				} else {
+					//自选
+					this.orderForm.buy.value = Number(this.orderForm.buy.num * this.orderForm.buy.price).toFixed(2);
+				}
+			}else{
+				if (this.orderForm.wtType == 1) {
+					//快捷
+					this.orderForm.sell.value = Number(this.orderForm.sell.num * this.userInfos.buyPrice).toFixed(2);
+				} else {
+					//自选
+					this.orderForm.sell.value = Number(this.orderForm.sell.num * this.orderForm.sell.price).toFixed(2);
+				}
+			}
 		},
 		//发布委托
-		orderFormSumbit(){
-			let payType = this.$t('global.payType').filter(item=>item.id == this.buy.active)[0]
-			let okBuySell= null	
+		orderFormSumbit() {
+			
+			//出售时检查支付密码
+			if(!this.userInfos.payPassword && this.orderForm.titleType==1){
+				
+				this.$dialog.confirm({
+					cancelButtonText: this.$t('global.base.cancel'),
+					confirmButtonText: this.$t('global.base.ok'),
+				  title: this.$t('global.base.szzf'),
+				  message: this.$t('global.base.zfts'),
+				})
+				  .then(() => {
+					this.$router.push('/editJPwd?type=0')
+				  })
+				  .catch(() => {
+					// on cancel
+				  });
+				
 				return
-				//根据数据具体配置
-			 okBuySell={
-				show:true,
-				type:1,
-				title:this.$t('quickSale.c2c.orderForm.okwt.buy.title'), 
-				lists:this.$t('quickSale.c2c.orderForm.okwt.buy.list'), //这是买的部分
-				datas:{
-					payType:payType.title,
-					img:payType.img,
-					price:this.buy.price,
-					nums:this.buy.num,
-					allPrice:Number(this.buy.num * this.buy.price).toFixed(2)
-				}
 			}
 			
-			//else
 			
-			 okBuySell={
-				show:true,
-				type:2,
-				title:this.$t('quickSale.c2c.orderForm.okwt.buy.title'), 
-				lists:this.$t('quickSale.c2c.orderForm.okwt.buy.list'), //这是卖的部分
-				datas:{
-					payType:payType.title,
-					img:payType.img,
-					price:this.buy.price,
-					nums:this.buy.num,
-					allPrice:Number(this.buy.num * this.buy.price).toFixed(2)
+			let datas = this.orderForm.titleType == 0 ? this.orderForm.buy : this.orderForm.sell
+			let payType = this.$t('global.payType').filter(item => {
+				return datas.payType.includes(item.id);
+			});
+			
+				
+			let okBuySellDatas = {
+					payType: payType.map(x => x.title).join(','),
+					price: Number(this.userInfos.sellPrice).toFixed(2) + this.sysInfos.hv.dw,
+					num: Number(datas.num).toFixed(4) + 'USDT(≈' +  Number(datas.value).toFixed(2) + this.sysInfos.hv.dw +')',
+					duration: datas.duration + this.$t('quickSale.c2c.orderForm.fz')
+				};
+				//自选
+				if (this.orderForm.wtType == 2) {
+					let limt = ()=>{
+							let text = this.$t('quickSale.c2c.orderForm.verifylevel').filter(item=>item.id == datas.verifylevel)[0].title 
+								if(datas.createtime){
+									text+=`/${datas.createtime}`
+								}
+								return text
+						} 
+					okBuySellDatas = {
+						...okBuySellDatas,
+						price: Number(datas.price).toFixed(2) + this.sysInfos.hv.dw,
+						leastcoin: Number(datas.leastcoin).toFixed(2) + this.sysInfos.hv.dw,
+						limt: limt()
+					};
 				}
-			}
+				
+				let title = this.orderForm.titleType==0?this.$t('quickSale.c2c.orderForm.okwt.buy.title'):this.$t('quickSale.c2c.orderForm.okwt.sell.title')
+				let lists = this.orderForm.titleType==0 ? this.$t('quickSale.c2c.orderForm.okwt.buy.list') : this.$t('quickSale.c2c.orderForm.okwt.sell.list')
+		
+				this.orderForm.okOrder = {
+					show: true,
+					password:'', //出售时的交易密码
+					type:this.orderForm.titleType,
+					title: title,
+					lists: lists.filter(item => {
+						return okBuySellDatas.hasOwnProperty(item.key);
+					}), 
+					datas: okBuySellDatas
+				};
+		
 			
-			this.orderForm.okOrder=okBuySell
 		},
 		//确认发布
-		orderFormOk(){
+		orderFormOk() {
+			let json = {};
+			let post = this.orderForm.wtType == 1 ? this.$http.openOrder : this.$http.userOrder;
+			let datas = this.orderForm.titleType == 0 ? this.orderForm.buy : this.orderForm.sell;
 			
+				//快捷
+				json = {
+					coin: datas.num,
+					duration: datas.duration,
+					paymenttype: datas.payType.join(','),
+					price: this.userInfos.sellPrice,
+					remarks: datas.remarks,
+					type: this.orderForm.titleType,
+					starttime:new Date().getTime()
+				};
+				//自选
+				if (this.orderForm.wtType == 2) {
+					json = {
+						...json,
+						price:Number(datas.price).toFixed(2),
+						leastcoin: Number(datas.leastcoin).toFixed(2),
+						verifylevel:this.$t('quickSale.c2c.orderForm.verifylevel').filter(item=>item.id == datas.verifylevel)[0].id,
+						createtime:new Date(datas.createtime).getTime()
+						
+					};
+				}
+				
+				if(this.orderForm.titleType == 1){
+					//出售时 多一个交易密码
+					json.paypassword = this.orderForm.okOrder.password
+				}
+
+			post(json).then(
+				res => {
+					this.orderForm.okOrder.show = false;
+					if (res.code == 0) {
+						this.orderForm.show = false;
+						this.getlist();
+						this.$notify({
+							type: 'success',
+							message: this.$t('global.base.fbcg')
+						});
+					}
+				},
+				() => {
+					this.orderForm.okOrder.show = false;
+				}
+			);
 		}
 	}
 };
@@ -936,7 +1409,7 @@ export default {
 			}
 		}
 	}
-	
+
 	.tables_pc {
 		.global_table_pc;
 		.title {
@@ -970,6 +1443,23 @@ export default {
 		}
 		.name {
 			.clearfix;
+			position: relative;
+			& > i.on {
+				position: absolute;
+				left: 32px;
+				top: 5px;
+				background-color: #e3e3e3;
+				border: 1px solid #fff;
+				border-radius: 50%;
+				width: 8px;
+				height: 8px;
+				z-index: 100;
+				display: block !important;
+				box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+			}
+			& > i.off {
+				background-color: @green;
+			}
 			img {
 				margin-top: 5px;
 				margin-right: 5px;
@@ -1036,6 +1526,23 @@ export default {
 			}
 			.name {
 				.clearfix;
+				position: relative;
+				& > i.on {
+					position: absolute;
+					left: 25px;
+					top: 5px;
+					background-color: #e3e3e3;
+					border: 1px solid #fff;
+					border-radius: 50%;
+					width: 8px;
+					height: 8px;
+					z-index: 100;
+					display: block !important;
+					box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+				}
+				& > i.off {
+					background-color: @green;
+				}
 				img {
 					margin-top: 5px;
 					margin-right: 5px;
@@ -1057,11 +1564,11 @@ export default {
 				}
 			}
 		}
-		
-		.item:nth-child(2){
+
+		.item:nth-child(2) {
 			padding-top: 0;
 		}
-		
+
 		.btn {
 			& > span {
 				color: rgba(179, 179, 179, 1);
@@ -1388,25 +1895,40 @@ export default {
 					}
 				}
 				.two {
-					display: flex;
+					position: relative;
+					.clearfix;
 					.i {
-						flex: 1;
+						float: left;
+						width:calc(50% - 10px);
 					}
-					.i:last-child {
+					.i:nth-child(2) {
 						margin-left: 20px;
 						.input {
 						}
 					}
+					.all{
+						font-size: 13px;
+						margin-top: 5px;
+						float: left;
+						width: 100%;
+						
+						span{
+							color: @blue;
+							cursor: pointer;
+							margin-left: 20px;
+						}
+					}
+					
 				}
 			}
 		}
 	}
-	
-	.ok_buy{
-		.line_rl(#B3B3B3);
-		li{
-			&>.r{
-				img{
+
+	.ok_buy {
+		.line_rl(#b3b3b3);
+		li {
+			& > .r {
+				img {
 					width: 16px;
 					height: 16px;
 					position: relative;
@@ -1414,27 +1936,27 @@ export default {
 				}
 			}
 		}
-		
-		.password{
-			padding-bottom: 40px;
+
+		.password {
 			display: block;
-			input{
+			input {
 				display: block;
 				width: 100%;
-				
+
 				margin: 5px 0;
 			}
-			input:focus{
+			input:focus {
 				border-color: @blue;
 			}
-			a{
-				color:@blue;
+			a {
+				color: @blue;
 				float: right;
 			}
 		}
-		.tips{
+		.tips {
 			display: block;
 			font-size: 13px;
+			box-sizing: border-box;
 			text-align: center;
 			position: absolute;
 			bottom: 0;
@@ -1446,15 +1968,12 @@ export default {
 			border-top: 1px solid @org;
 			border-bottom: 1px solid @org;
 		}
-		
 	}
-	
-
 }
 
 @media (max-width: 1023px) {
-	.view_quickSale_c2c{
-		.dhl{
+	.view_quickSale_c2c {
+		.dhl {
 			top: 130px;
 		}
 	}
@@ -1462,23 +1981,26 @@ export default {
 </style>
 <style lang="less">
 .view_quickSale_c2c {
-	 .van-tabs--line .van-tabs__wrap {
-		display: none;
+	.tables_wrap {
+		.van-tabs--line .van-tabs__wrap {
+			display: none;
+		}
 	}
-	.dhl{
-		.type_change{
-			.changed{
+
+	.dhl {
+		.type_change {
+			.changed {
 				padding: 8px;
 			}
 		}
 	}
-	
+
 	.img {
 		display: inline-block;
 		margin-right: 10px;
 		width: 16px;
 	}
-	
+
 	.buy_alert {
 		.van-dialog {
 			overflow: inherit;
@@ -1500,7 +2022,7 @@ export default {
 			}
 		}
 	}
-	
+
 	.order_form {
 		.van-dialog {
 			width: 460px;
@@ -1534,7 +2056,6 @@ export default {
 						padding: 7px 10px;
 						border: 1px solid #e3e3e3;
 						i {
-							
 						}
 					}
 				}
@@ -1590,7 +2111,6 @@ export default {
 
 @media (max-width: 1023px) {
 	.view_quickSale_c2c {
-		
 		.buy_alert {
 			.van-dialog {
 				width: 90%;

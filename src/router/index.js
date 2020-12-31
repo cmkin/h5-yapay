@@ -197,6 +197,13 @@ const routes = [{
 						}
 					},
 					{
+						path: 'gift',
+						component: () => import('_v/assets/gift'),
+						meta: {
+							title: "礼品卡"
+						}
+					},
+					{
 						path: 'order',
 						component: () => import('_v/assets/order'),
 						meta: {

@@ -21,7 +21,7 @@
 							</span>
 						</div>
 						<div v-if="item.type==3" class="time">
-							时间记录
+							{{ getTime(item.message)}}
 						</div>
 						<div v-if="item.type==1" class="ts">
 							 {{ getMessage(item.message).text  }}
@@ -107,7 +107,21 @@
 				
 					return alllist && alllist.lists  ? alllist.lists : []
 			},
-			
+			getTime(){
+				//timeFormat
+				return function(data){
+					let time = (new Date().getTime() - data) / 1000
+						
+						if( new Date().getDate() == new Date(data).getDate() && new Date().getFullYear() == new Date(data).getFullYear() && new Date().getMonth() == new Date(data).getMonth() ){
+							
+							return this.$options.filters.timeFormat(data,'hh:mm')
+							
+						}else{
+							return this.$options.filters.timeFormat(data)
+						}
+						
+				}
+			},
 			getMessage(){
 				return function(data){
 					let type = 1
@@ -285,7 +299,8 @@
 				margin-bottom: 30px;
 			}
 			.time{
-				font-size: 12px;
+				font-size: 13px;
+				padding: 8px 0;
 			}
 			.ts{
 				color: #B3B3B3;

@@ -236,6 +236,46 @@ const sale = {
 		return post('payuserorder/changeOrderStatus',{
 			data:data
 		})
+	},
+	//自选订单点击进入第一步
+	getOptionalDetail(data){
+		return post('payuserorder/getOptionalDetail',{
+			data:data
+		})
+	},
+	//用户自选区下单
+	userOptionalTradeCoin(data){
+		return post('payuserorder/userOptionalTradeCoin',{
+			data:data
+		})
+	},
+	//用户委托单-自选-发布
+	userOrder(data){
+		return post('payuserorder/userOrder',{
+			data:data
+		})
+	},
+	//大户挂单-服务商-快捷-发布
+	openOrder(data){
+		return post('payuserorder/openOrder',{
+			data:data
+		})
+	},
+	//生成礼品卡
+	createRedeemCode(data){
+		return post('payuserorder/createRedeemCode',{
+			data:data
+		})
+	},
+	//使用礼品卡
+	useRedeemCode(data){
+		return post('payuserorder/useRedeemCode?code='+data.code)
+	},
+	//获取生成和使用的礼品卡
+	getRedeemCodes(data){
+		return post('payuserorder/getRedeemCodes',{
+			data:data
+		})
 	}
 }
 

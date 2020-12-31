@@ -94,7 +94,7 @@
 		methods:{
 			goOrderDetails(item){
 				this.$router.push({
-					path:'/sale/payment',
+					path:item.type==0? '/sale/payment' : '/sale/collection',
 					query:{
 						id:item.id
 					}

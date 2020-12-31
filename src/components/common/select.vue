@@ -1,8 +1,9 @@
 <template>
 	<div class="g_select" @click.stop>
 		<div class="icon_s" v-if="multiple">
-			<div class="title" :class="{'disable':disable}" @click="open">
-				<span>{{ multipleTitle}}</span>
+			<div class="title"   :class="{'disable':disable}" @click="open">
+				<span v-if="multipleTitle">{{ multipleTitle}}</span>
+				<span v-else>{{$t('global.qxz')}}</span>
 				<van-icon :class="{ down: flag }" name="arrow-down" size="14" />
 			</div>
 			<transition name="top" mode="out-in">
@@ -180,7 +181,7 @@ export default {
 		},
 		change(id) {
 			//添加--此时id为item
-			if(id.hasOwnProperty('add')){
+			if(id.hasOwnProperty('add') && id.add){
 				//执行方法
 				id.addMethod(id)
 				this.flag = false;

@@ -77,7 +77,7 @@ const socket = {
 	},
 	getMessage(data) {
 		//接受到消息
-		if (data.hasOwnProperty("client_id")) {
+		if (data.hasOwnProperty("client_id")) {			
 			//发送成功回执
 			return
 		}
@@ -106,7 +106,7 @@ const socket = {
 			case 1: //聊天消息
 				let obj = {
 					"friendid": data.chatRecord.userid,
-					"time": data.chatRecord.createtime,
+					"time": new Date().getTime(), //data.chatRecord.createtime,
 					"message": data.chatRecord.message,
 					"type": data.chatRecord.type, // 0文字消息 ， 1 订单  2图片消息  3 时间
 				}
@@ -167,8 +167,8 @@ const socket = {
 							.then(() => {
 								// on confirm
 								clearInterval(inter)
-								_this.$router.push({
-									path: '/sale/payment',
+								_this.$router.replace({
+									path:data.type==0? '/sale/payment' : '/sale/collection',
 									query: {
 										id: data.id
 									}
@@ -189,6 +189,8 @@ const socket = {
 					isNew: true,
 					data: data
 				})
+				//更新userinfo
+				updateUser.call(_this)
 
 				break;
 

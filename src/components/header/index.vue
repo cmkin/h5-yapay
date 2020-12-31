@@ -194,6 +194,7 @@ export default {
 					isNew:this.$store.state.message.isNew
 				}
 				
+				
 				 switch(type){
 					 case 0:
 					 if(obj.announcement){
@@ -245,13 +246,14 @@ export default {
 		},
 		changeLanguage(id) {
 			this.language.active = id;
-
+			
+			return;
 			if (id == 0) {
 				this.$i18n.locale = 'zh';
 			} else {
 				this.$i18n.locale = 'en';
 			}
-			return;
+			
 
 			let obj = {};
 			if (item.hasOwnProperty('index')) {

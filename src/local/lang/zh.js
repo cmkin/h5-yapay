@@ -126,11 +126,15 @@ export default  {
 						to:'/assets/withdraw'
 					},
 					{
+						text:'礼品卡',
+						to:'/assets/gift'
+					},
+					{
 						text:'账单',
 						to:'/assets/bill'
 					},
 					{
-						text:'我的订单',
+						text:'我的委托单',
 						to:'/entrust'
 					},
 				]
@@ -141,20 +145,26 @@ export default  {
 		},
 		fonter: {
 			name: "YAPAY",
-			c: '© yapay.com 2020',
+			c: '© YaPay.com 2020',
+			imgs:[
+				require("_a/img/f1.png"),
+				require("_a/img/f2.png"),
+				require("_a/img/f3.png"),
+				require("_a/img/f4.png")
+			],
 			lists: [{
 					title: '联系我们',
 					items: [{
 							title: '+44 345 678 903',
-							to: ''
+							to: false
 						},
 						{
 							title: 'yapay@mail.com',
-							to: ''
+							to: false
 						},
 						{
-							title: '公司地址',
-							to: ''
+							title: '公司地址: </br> Creative Tower, Fujairah, UAE',
+							to: '/app/introduction'
 						}
 					]
 				},
@@ -162,27 +172,27 @@ export default  {
 					title: '条款说明&服务',
 					items: [{
 							title: '关于我们',
-							to: ''
+							to: '/app/introduction'
 						},
 						{
 							title: '联系客服',
-							to: ''
+							url: 'https://tawk.to/yaotc.com'
 						},
 						{
 							title: '服务条款',
-							to: ''
+							to: '/apphelp/help/problem?itemId=1&childId=100'
 						},
 						{
 							title: '隐私政策',
-							to: ''
+							to: '/apphelp/help/problem?itemId=1&childId=101'
 						},
 						{
 							title: '帮助中心',
-							to: ''
+							to: '/apphelp"'
 						},
 						{
 							title: '执法请求指南',
-							to: ''
+							to: '/apphelp/help/problem?itemId=3&childId=1000'
 						}
 					]
 				},
@@ -190,19 +200,19 @@ export default  {
 					title: '合作伙伴',
 					items: [{
 							title: 'OKEX',
-							to: ''
+							url: 'https://www.okex.me/'
 						},
 						{
 							title: '火币',
-							to: ''
+							url: 'https://www.huobi.me/'
 						},
 						{
 							title: '币安',
-							to: ''
+							url: 'https://www.binancezh.com/'
 						},
 						{
 							title: 'OTCBTC',
-							to: ''
+							url: 'https://otcbtc.io/'
 						},
 					]
 				}
@@ -224,8 +234,10 @@ export default  {
 			sccg:"删除成功",
 			tjcg:"提交成功",
 			tbcg:"提币成功",
+			fbcg:"发布成功",
+			dhcg:"兑换成功",
 			loading: "加载中...",
-			bl: "请保留一个收款方式",
+			bl: "请保留一个选择项",
 			wz: '请填写{}后提交',
 			gm: '购买',
 			usdt: "USDT",
@@ -249,7 +261,7 @@ export default  {
 			dj: "单价",
 			zje: "总金额",
 			ddh: "订单号",
-			fbsx: "放币失效",
+			fbsx: "放币时效",
 			rzdj: "认证等级",
 			cdv: "成单/成单率",
 			csqx: "{}后超时取消",
@@ -291,6 +303,7 @@ export default  {
 			zmyd:"再次下单",
 			ddmjfs:"等待卖家放币",
 			ycrzh:"USDT已存入您的账户",
+			ykczh:"USDT已从您的账户扣除",
 			ckzc:"查看资产",
 			yyz:"当前订单处于异议中，请联系客服处理.",
 			lxkf:"联系客服",
@@ -345,8 +358,8 @@ export default  {
 		sl: "数量",
 		je: '金额',
 		lj: '立即购买',
-		
-		
+		ydjy:"移动交易，随时随地",
+		xz:"下载",
 		tabs:[
 			{
 				img:require("@/assets/img/index2.png"),
@@ -762,15 +775,46 @@ export default  {
 					title: '自选委托单',
 					id: 2
 				}],
+				verifylevel:[
+					{
+						id:0,
+						title:"Lv.0未认证"
+					},
+					{
+						id:1,
+						title:"Lv.1基础认证"
+					},
+					{
+						id:2,
+						title:"Lv.2视频认证"
+					}
+				],
+				overtimetype:[
+					{
+						id:10,
+						title:"10分钟内完成付款"
+					},
+					{
+						id:15,
+						title:"15分钟内完成付款"
+					},
+					{
+						id:20,
+						title:"20分钟内完成付款"
+					},
+				],
 				//购买
-				jyjg: '交易价格(固定价格)',
+				jyjg: '交易价格',
+				jyjgg: '固定价格',
+				jyjgp: '平台定价',
 				srjy: '请输入交易价格',
 				gmsl: '购买数量',
 				gmje: '购买金额',
 				zdmr: '最低买入',
-				sjfw: '交易时间范围',
+				sjfw: '持续时间',
 				ks: '开始时间',
 				js: '结束时间',
+				fz: '分钟',
 				fkfs: '付款方式',
 				jysm: '交易说明(选填)',
 				jysmp: '交易说明50字以内',
@@ -801,51 +845,58 @@ export default  {
 								key: 'num'
 							},
 							{
-								name: '最低买入',
-								key: 'lowBuy'
+								name: '持续时间',
+								key: 'duration'
 							},
+							
 							{
-								name: '交易时间',
-								key: 'time'
+								name: '最低买入',
+								key: 'leastcoin'
 							},
 							{
 								name: '对手限制',
 								key: 'limt'
-							}
+							},
+							
+							
+							
+							
 						]
 					},
 					sell: {
 						title: '确认出售',
+						
 						list: [{
 								name: '收款方式',
-								key: 'skType'
+								key: 'payType'
 							},
 							{
 								name: '出售单价',
-								key: 'skType'
+								key: 'price'
 							},
 							{
 								name: '出售数量',
-								key: 'skType'
+								key: 'num'
 							},
 							{
-								name: '最低卖出',
-								key: 'skType'
+								name: '持续时间',
+								key: 'duration'
 							},
+							
 							{
-								name: '付款时间',
-								key: 'skType'
-							},
-							{
-								name: '交易时间',
-								key: 'skType'
+								name: '最低买入',
+								key: 'leastcoin'
 							},
 							{
 								name: '对手限制',
-								key: 'skType'
-							}
+								key: 'limt'
+							},
+							
+							
+							
+							
 						],
-						lowts: '您的出售价格低于当前盘口价格{}，是否继续发布？'
+						lowts: '当前价格与指数价格<i style="color:red;">({})</i>偏差过大，是否继续发布？'
 					}
 				}
 			},
@@ -1234,6 +1285,18 @@ export default  {
 			{
 				id:9,
 				text:'收益到账通知'
+			},
+			{
+				id:13,
+				text:"礼品卡扣除"
+			},
+			{
+				id:14,
+				text:"礼品卡增加"
+			},
+			{
+				id:15,
+				text:"礼品卡过期退还"
 			}
 		]
 	},
@@ -1622,6 +1685,66 @@ export default  {
 			}
 		]
 			
+	},
+	//礼品卡
+	gift:{
+		title:"礼品卡",
+		js:"您可以将自己的USDT打包生成兑换码，发放给好友或输入获取的兑换码领取他人赠送的USDT.",
+		dh:"去兑换",
+		sc:"生成兑换码",
+		zls:['1、兑换码一次有效，一经兑换后，不可找回，请妥善保管您的兑换码','2、点击“去兑换”，输入兑换码即可兑换USDT','3、点击“生成兑换码”，输入想要打包的USDT数量，即可将您的USDT打包成兑换码，复制兑换码发送给对方，对方即可根据您的兑换码领取相应数量的USDT'],
+		lj:"立即兑换",
+		dhm:"兑换码",
+		sr:"输入USDT数量，立即生成兑换码",
+		fz:"点击按钮，一键复制兑换码",
+		dbsl:"打包数量",
+		jymm:"交易密码",
+		tip:"兑换码一次有效，一经兑换后，不可找回，请妥善保管",
+		yj:"一键复制",
+		titler:"礼品卡记录",
+		tabs:[
+			{
+				id:1,
+				text:"我生成的"
+			},
+			{
+				id:2,
+				text:"我兑换的"
+			},
+		],
+		sctitle:[
+			{
+				title:"兑换码",
+				id:"code"
+			},
+			{
+				title:"打包数量",
+				id:'coin'
+			},
+			{
+				title:"兑换时间",
+				id:"finishtime"
+			},
+			{
+				title:"兑换码状态",
+				slot:"status"
+			}
+		],
+		dhtitle:[
+			{
+				title:"兑换码",
+				id:"code"
+			},
+			{
+				title:"兑换数量",
+				id:"coin"
+			},
+			{
+				title:"兑换时间",
+				id:"finishtime"
+			}
+		],
+		status:['未兑换','已兑换','已过期']
 	},
 	//我的订单
 	order:{

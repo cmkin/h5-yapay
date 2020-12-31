@@ -115,9 +115,8 @@
 								payPassword:true
 							}
 						})
-						setTimeout(()=>{
-							this.$router.go(-1)
-						},3000)
+						this.$router.go(-1)
+						
 					}
 					
 				})

@@ -2,6 +2,7 @@ import axios from 'axios';
 import logout from '@/uitl/logout'
 
 const instance = axios.create({
+  //baseURL: '',
   baseURL: '',
   timeout: 20000
 });

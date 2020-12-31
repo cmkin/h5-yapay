@@ -1,7 +1,7 @@
 <template>
 	<div class="view_quickSale_buy global_main">
 		<div class="main">
-			<van-tabs v-model="tabType" swipeable line-height="0" lazy-render animated>
+			<van-tabs v-model="tabType"  line-height="0" lazy-render animated>
 				<van-tab :title="$t('quickSale.quickBuySell.buy.wym')">
 					<buy @okBuySell="okBuySellM"  ref="buy"></buy>
 				</van-tab>

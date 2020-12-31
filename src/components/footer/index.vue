@@ -11,17 +11,13 @@
 
 					<p>{{ $t('global.fonter.c') }}</p>
 					<div class="icons clearfix">
-						<svg v-for="item,index in 4" :key="index" t="1596533400247" class="icon" viewBox="0 0 1024 1024" version="1.1"
-						 xmlns="http://www.w3.org/2000/svg" p-id="12628" width="18" height="18">
-							<path d="M740.693333 539.306667l0-187.733333-157.013333 0L583.68 238.933333c0 0 0-51.2 58.026667-51.2 58.026667 0 153.6 0 153.6 0L795.306667 0 549.546667 0C378.88 0 365.226667 201.386667 365.226667 201.386667l0 146.773333-136.533333 0 0 187.733333 136.533333 0L365.226667 1024l215.04 0L580.266667 539.306667 740.693333 539.306667z"
-							 p-id="12629" fill="#ffffff"></path>
-						</svg>
+						<img :src="item" alt="" v-for="item,index in $t('global.fonter.imgs')">
 					</div>
 				</li>
 				<li class="item" v-for="item in $t('global.fonter.lists')">
-					<b>{{item.title}}</b>
+					<b v-html="item.title"></b>
 					<ul>
-						<li v-for="child in item.items"> {{ child.title}} </li>
+						<li @click="golink(child)" v-for="child in item.items" v-html="child.title"> </li>
 					</ul>
 				</li>
 			</ul>
@@ -30,7 +26,7 @@
 			<van-collapse class="phone_flag" :border="false" v-model="activeName">
 				<van-collapse-item :title="item.title" :name="index" :key="index" v-for="item,index in $t('global.fonter.lists')">
 					<ul>
-						<li v-for="child in item.items"> {{ child.title}} </li>
+						<li @click="golink(child)" v-for="child in item.items" v-html="child.title"> </li>
 					</ul>
 				</van-collapse-item>
 
@@ -54,7 +50,20 @@
 
 		},
 		methods: {
-
+			golink(item){
+				//console.log(item)
+				let url = false;
+				if(item.to){
+					url = 'http://yaotc.com/index.html#'+item.to
+				}
+				if(item.url){
+					url = item.url
+				}
+				if(url){
+					window.open(url)
+				}
+				
+			}
 		}
 	}
 </script>
@@ -99,14 +108,14 @@
 
 				p {
 					margin-bottom: 20px;
-					.hover;
+					//.hover;
 				}
 
 				.icons {
 
-					svg {
+					img{
 						margin-right: 20px;
-						.hover(@blue, true);
+						
 						width: 18px;
 						height: 18px;
 						float: left;

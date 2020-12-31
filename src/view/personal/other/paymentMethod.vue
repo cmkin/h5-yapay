@@ -91,6 +91,9 @@ export default {
 	mounted() {
 		this.id = this.$route.query.id
 		this.form.type = this.id ? this.id : this.payList[0].id
+		if(this.$route.query.hasOwnProperty("type")){
+			this.form.type = this.$route.query.type
+		}
 	},
 	computed:{
 		payList(){
