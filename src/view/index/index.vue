@@ -52,7 +52,7 @@
 				<div class="title">{{ $t('index.lpk') }}</div>
 				<div class="t2">{{ $t('index.kzhy') }}</div>
 				<p class="nj">{{ $t('index.nkyj') }}</p>
-				<a href="http://yaotc.com/download.html" target="_blank">
+				<a href="javascript:;" @click="golp">
 					<span class="lj">{{ $t('index.ljty') }}</span>
 				</a>
 			</div>
@@ -171,6 +171,12 @@ export default {
 	},
 	mounted() {},
 	methods: {
+		golp(){
+			if(this.$isLogin()){
+				return
+			}
+			this.$router.push('/assets/gift')
+		},
 		replay() {
 			this.playType++;
 			if (this.playType > 2) {

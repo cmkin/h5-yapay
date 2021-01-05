@@ -10,7 +10,7 @@
 			</ul>
 		</div>
 
-		<div class="left_phone_icon" :style="{ top: tops + 'px' }" @click="leftPhone = !leftPhone"><i class="iconfont icon-shezhi"></i></div>
+		<div class="left_phone_icon" :style="{ top: 527 + 'px' }" @click="leftPhone = !leftPhone"><i class="iconfont icon-shezhi"></i></div>
 		<transition name="top" mode="out-in">
 			<div class="left_phone" :style="{ top: tops + 50 + 'px' }" v-if="leftPhone">
 				<ul @click="leftPhone = false">
@@ -29,21 +29,12 @@
 export default {
 	data() {
 		return {
-			leftPhone: false,
-			tops: 0
+			leftPhone: false
+			
 		};
 	},
 	mounted() {
-		var getTop = ()=>{
-			this.tops = document.querySelector('.view_personal_account_icon').offsetTop + 5;
-		}
-		this.$nextTick(() => {
-			setTimeout(()=>{
-				getTop()
-			},500)
-			window.addEventListener('resize', getTop);
-			window.removeEventListener("resize",getTop)
-		});
+		
 	},
 	methods: {}
 };

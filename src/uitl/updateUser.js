@@ -56,5 +56,14 @@ export default function(index){
 			}
 		})
 	})
+	//提币手续费
+	this.$http.backstageGetTibRate().then(res=>{
+		this.$store.commit('updateUserInfo',{
+			add:true,
+			obj:{
+				tibi:res.data
+			}
+		})
+	})
 	
 }

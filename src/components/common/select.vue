@@ -3,7 +3,7 @@
 		<div class="icon_s" v-if="multiple">
 			<div class="title"   :class="{'disable':disable}" @click="open">
 				<span v-if="multipleTitle">{{ multipleTitle}}</span>
-				<span v-else>{{$t('global.qxz')}}</span>
+				<span style="color: rgb(227, 227, 227);" v-else>{{$t('global.qxz')}}</span>
 				<van-icon :class="{ down: flag }" name="arrow-down" size="14" />
 			</div>
 			<transition name="top" mode="out-in">

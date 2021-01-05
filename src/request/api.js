@@ -2,9 +2,21 @@ import {post,get} from './request'
 
 //登录，注册，系统信息，用户信息等
 const logregsys = {
+	//后台获取提币费率
+	backstageGetTibRate(){
+		return post("payBusiness/backstageGetTibRate")
+	},
+	//获取币对交易行情
+	getCoinPairMarketList(){
+		return get("payuser/getCoinPairMarketList")
+	},
+	//用户申请成为服务商
+	userToMerchantApply(){
+		return get("payuser/userToMerchantApply")
+	},
 	//获取汇率
 	getExchangeRate(){
-		return get("api/getExchangeRate",{})
+		return get("api/getExchangeRate")
 	},
 	//H5获取价格
 	getCoinPrice(data){

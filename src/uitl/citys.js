@@ -1,6 +1,22 @@
 let Citylist = [{
 	"letter": "A",
 	"data": [
+		{"cityName":"中国大陆","num":"86","zh-cn":"中国大陆","en":"China","zh-tw":"中國大陸","zhArabic":"الصين"},
+		{"cityName":"中国台湾省","num":"886","zh-cn":"中国台湾省","en":"Taiwan Province of China","zh-tw":"中國台灣省","zhArabic":"مقاطعة تايوان الصينية"},
+		{"cityName":"中国香港","num":"852","zh-cn":"中国香港","en":"China Hong Kong","zh-tw":"中國香港","zhArabic":"هونغ كونغ ، الصين"},
+		{"cityName":"中国澳门","num":"853","zh-cn":"中国澳门","en":"China Macao","zh-tw":"中國澳門","zhArabic":"ماكاو ، الصين"},
+		{"cityName":"英国","num":"44","zh-cn":"英国","en":"United Kingdom","zh-tw":"英國","zhArabic":"المملكة المتحدة"},
+		{"cityName":"美国","num":"1","zh-cn":"美国","en":"United States","zh-tw":"美國","zhArabic":"الولايات المتحدة"},
+		{"cityName":"德国","num":"49","zh-cn":"德国","en":"Germany","zh-tw":"德國","zhArabic":"ألمانيا"},
+		{"cityName":"芬兰","num":"358","zh-cn":"芬兰","en":"Finland","zh-tw":"芬蘭","zhArabic":"فنلندا"},
+		{"cityName":"法国","num":"33","zh-cn":"法国","en":"France","zh-tw":"法國","zhArabic":"فرنسا"},
+		{"cityName":"菲律宾","num":"63","zh-cn":"菲律宾","en":"Philippines","zh-tw":"菲律賓","zhArabic":"الفلبين"},
+		{"cityName":"加拿大","num":"1","zh-cn":"加拿大","en":"Canada","zh-tw":"加拿大","zhArabic":"كندا"},
+		{"cityName":"日本","num":"81","zh-cn":"日本","en":"Japan","zh-tw":"日本","zhArabic":"اليابان"},
+		{"cityName":"印度","num":"91","zh-cn":"印度","en":"India","zh-tw":"印度","zhArabic":"الهند"},
+		
+		
+		{"cityName":"越南","num":"84","zh-cn":"越南","en":"Vietnam","zh-tw":"越南","zhArabic":"فيتنام"},
 		{"cityName":"安哥拉","num":"0244","zh-cn":"安哥拉","en":"Angola","zh-tw":"安哥拉","zhArabic":"أنغولا"},
 		{"cityName":"阿富汗","num":"93","zh-cn":"阿富汗","en":"Afghanistan","zh-tw":"阿富汗","zhArabic":"أفغانستان"},
 		{"cityName":"阿尔巴尼亚","num":"335","zh-cn":"阿尔巴尼亚","en":"Albania","zh-tw":"阿爾巴尼亞","zhArabic":"ألبانيا"},
@@ -55,7 +71,7 @@ let Citylist = [{
 	"letter": "D",
 	"data":[
 			{"cityName":"丹麦","num":"45","zh-cn":"丹麦","en":"Denmark","zh-tw":"丹麥","zhArabic":"الدنمارك"},
-			{"cityName":"德国","num":"49","zh-cn":"德国","en":"Germany","zh-tw":"德國","zhArabic":"ألمانيا"},
+			
 			{"cityName":"东萨摩亚(美)","num":"684","zh-cn":"东萨摩亚(美)","en":"East Samoa (US)","zh-tw":"東薩摩亞(美)","zhArabic":"ساموا الشرقية (الولايات المتحدة)"},
 			{"cityName":"多哥","num":"228","zh-cn":"多哥","en":"Togo","zh-tw":"多哥","zhArabic":"توغو"}
 	]
@@ -70,11 +86,10 @@ let Citylist = [{
 	"letter": "F",
 	"data":[
 			{"cityName":"斐济","num":"679","zh-cn":"斐济","en":"Fiji","zh-tw":"斐濟","zhArabic":"فيجي"},
-			{"cityName":"芬兰","num":"358","zh-cn":"芬兰","en":"Finland","zh-tw":"芬蘭","zhArabic":"فنلندا"},
-			{"cityName":"法国","num":"33","zh-cn":"法国","en":"France","zh-tw":"法國","zhArabic":"فرنسا"},
+			
 			{"cityName":"法属圭亚那","num":"594","zh-cn":"法属圭亚那","en":"French Guiana","zh-tw":"法屬圭亞那","zhArabic":"غيانا الفرنسية"},
 			{"cityName":"法属玻利尼西亚","num":"689","zh-cn":"法属玻利尼西亚","en":"French Polynesia","zh-tw":"法屬玻利尼西亞","zhArabic":"بولينيزيا الفرنسية"},
-			{"cityName":"菲律宾","num":"63","zh-cn":"菲律宾","en":"Philippines","zh-tw":"菲律賓","zhArabic":"الفلبين"}
+			
 	]
 },{
 	"letter": "G",
@@ -111,7 +126,7 @@ let Citylist = [{
 			{"cityName":"津巴布韦","num":"263","zh-cn":"津巴布韦","en":"Zimbabwe","zh-tw":"津巴布韋","zhArabic":"زيمبابوي"},
 			{"cityName":"捷克","num":"420","zh-cn":"捷克","en":"Czech Republic","zh-tw":"捷克","zhArabic":"جمهورية التشيك"},
 			{"cityName":"加蓬","num":"241","zh-cn":"加蓬","en":"Gabon","zh-tw":"加蓬","zhArabic":"الغابون"},
-			{"cityName":"加拿大","num":"1","zh-cn":"加拿大","en":"Canada","zh-tw":"加拿大","zhArabic":"كندا"}
+			
 	]
 },{
 	"letter": "K",
@@ -142,7 +157,7 @@ let Citylist = [{
 },{
 	"letter": "M",
 	"data":[
-			{"cityName":"美国","num":"1","zh-cn":"美国","en":"United States","zh-tw":"美國","zhArabic":"الولايات المتحدة"},
+			
 			{"cityName":"马达加斯加","num":"261","zh-cn":"马达加斯加","en":"Madagascar","zh-tw":"馬達加斯加","zhArabic":"مدغشقر"},
 			{"cityName":"马拉维","num":"265","zh-cn":"马拉维","en":"Malawi","zh-tw":"馬拉維","zhArabic":"ملاوي"},
 			{"cityName":"马来西亚","num":"60","zh-cn":"马来西亚","en":"Malaysia","zh-tw":"馬來西亞","zhArabic":"ماليزيا"},
@@ -193,7 +208,7 @@ let Citylist = [{
 	"data":[
 		{"cityName":"瑞典","num":"46","zh-cn":"瑞典","en":"Sweden","zh-tw":"瑞典","zhArabic":"السويد"},
 		{"cityName":"瑞士","num":"41","zh-cn":"瑞士","en":"Switzerland","zh-tw":"瑞士","zhArabic":"سويسرا"},
-		{"cityName":"日本","num":"81","zh-cn":"日本","en":"Japan","zh-tw":"日本","zhArabic":"اليابان"}
+		
 	]
 },{
 	"letter": "S",
@@ -260,13 +275,12 @@ let Citylist = [{
 },{
 	"letter": "Y",
 	"data":[
-			{"cityName":"英国","num":"44","zh-cn":"英国","en":"United Kingdom","zh-tw":"英國","zhArabic":"المملكة المتحدة"},
-			{"cityName":"越南","num":"84","zh-cn":"越南","en":"Vietnam","zh-tw":"越南","zhArabic":"فيتنام"},
+			
 			{"cityName":"也门","num":"967","zh-cn":"也门","en":"Yemen","zh-tw":"也門","zhArabic":"اليمن"},
 			{"cityName":"伊朗","num":"98","zh-cn":"伊朗","en":"Iran","zh-tw":"伊朗","zhArabic":"إيران"},
 			{"cityName":"伊拉克","num":"964","zh-cn":"伊拉克","en":"Iraq","zh-tw":"伊拉克","zhArabic":"العراق"},
 			{"cityName":"以色列","num":"972","zh-cn":"以色列","en":"Israel","zh-tw":"以色列","zhArabic":"إسرائيل"},
-			{"cityName":"印度","num":"91","zh-cn":"印度","en":"India","zh-tw":"印度","zhArabic":"الهند"},
+			
 			{"cityName":"印度尼西亚","num":"62","zh-cn":"印度尼西亚","en":"Indonesia","zh-tw":"印度尼西亞","zhArabic":"إندونيسيا"},
 			{"cityName":"意大利","num":"39","zh-cn":"意大利","en":"Italy","zh-tw":"意大利","zhArabic":"إيطاليا"},
 			{"cityName":"约旦","num":"962","zh-cn":"约旦","en":"Jordan","zh-tw":"約旦","zhArabic":"الأردن"},
@@ -275,10 +289,6 @@ let Citylist = [{
 },{
 	"letter": "Z",
 	"data":[
-			{"cityName":"中国大陆","num":"86","zh-cn":"中国大陆","en":"China","zh-tw":"中國大陸","zhArabic":"الصين"},
-			{"cityName":"中国台湾省","num":"886","zh-cn":"中国台湾省","en":"Taiwan Province of China","zh-tw":"中國台灣省","zhArabic":"مقاطعة تايوان الصينية"},
-			{"cityName":"中国香港","num":"852","zh-cn":"中国香港","en":"China Hong Kong","zh-tw":"中國香港","zhArabic":"هونغ كونغ ، الصين"},
-			{"cityName":"中国澳门","num":"853","zh-cn":"中国澳门","en":"China Macao","zh-tw":"中國澳門","zhArabic":"ماكاو ، الصين"},
 			{"cityName":"扎伊尔","num":"243","zh-cn":"扎伊尔","en":"Zaire","zh-tw":"扎伊爾","zhArabic":"زائير"},
 			{"cityName":"中非共和国","num":"236","zh-cn":"中非共和国","en":"Central African Republic","zh-tw":"中非共和國","zhArabic":"جمهورية إفريقيا الوسطى"},
 			{"cityName":"乍得","num":"235","zh-cn":"乍得","en":"Chad","zh-tw":"乍得","zhArabic":"تشاد"},

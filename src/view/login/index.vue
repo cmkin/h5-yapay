@@ -104,6 +104,8 @@
 			},
 			//切换语言
 			changeLanguage(id) {
+				
+				return
 				if(id==0){
 					this.$i18n.locale='zh'
 				}else{

@@ -361,6 +361,7 @@
 													/>
 												</div>
 											</div>
+											<div></div>
 											<div class="i">
 												<p class="t">{{ $t('quickSale.c2c.orderForm.gmje') }}</p>
 												<div class="input">
@@ -396,7 +397,9 @@
 
 										<li>
 											<p class="t">{{ $t('quickSale.c2c.orderForm.fkfs') }}</p>
-											<div class="input "><myselect v-model="orderForm.buy.payType" multiple :lists="$t('global.payType')"></myselect></div>
+											<div class="input ">
+												<myselect v-model="orderForm.buy.payType" multiple :lists="buyTypeShow"></myselect>
+											</div>
 										</li>
 									</ul>
 
@@ -440,7 +443,7 @@
 						<van-tab :title="$t('quickSale.c2c.typeTitle[1]')">
 							<div class="scroll">
 								<vue-scroll :ops="ops" ref="myscroll">
-									<ul class="items">
+									<ul class="items f_sell">
 										<li>
 											<p class="t">{{ $t('quickSale.c2c.orderForm.wtlxt') }}</p>
 											<div class="input">
@@ -480,6 +483,10 @@
 														:placeholder="$t('global.qsr') + $t('quickSale.c2c.orderForm.cssl')" />
 												</div>
 											</div>
+											<div class="all">
+												{{ $t('quickSale.quickBuySell.sell.ky') +  Number(userInfos.coin).toFixed(4) + 'USDT' }}
+												<span @click="changeMax">{{ $t('quickSale.quickBuySell.sell.zd') }}</span>
+											</div>
 											<div class="i">
 												<p class="t">{{ $t('quickSale.c2c.orderForm.csje') }}</p>
 												<div class="input">
@@ -487,10 +494,7 @@
 													<span class="money">{{ sysInfos.hv.dw }}</span>
 												</div>
 											</div>
-											<div class="all">
-												{{ $t('quickSale.quickBuySell.sell.ky') +  Number(userInfos.coin).toFixed(4) + 'USDT' }}
-												<span @click="changeMax">{{ $t('quickSale.quickBuySell.sell.zd') }}</span>
-											</div>
+											
 										</li>
 
 										<li v-if="orderForm.wtType == 2">
@@ -638,7 +642,7 @@ export default {
 			saleMBtnLoading: false,
 			saleOkLoading: false,
 			moneyInr: null,
-			orderFormNames: [],
+			orderFormNames: ["1","2","3","4"],
 			currentPage: 0,
 			typeActive: null,
 			minMoney: '',
@@ -748,8 +752,8 @@ export default {
 			if (this.saleDetails) {
 				let hastype = this.saleDetails.paymentType.split(',').map(x => Number(x)); //订单方式
 				let ihasType = this.userInfos.payList.map(item => Number(item.type)); //我的方式
-
-				return this.$t('global.payType')
+				let lists = this.$copy(this.$t('global.payType'))
+				return lists
 					.filter(item => {
 						return hastype.includes(item.id);
 					})
@@ -781,10 +785,10 @@ export default {
 				
 				if (this.orderForm.wtType == 2) {
 					//自选
-					return [datas.num, datas.value, datas.duration, datas.payType, datas.price, datas.leastcoin].some(item => !Boolean(item));
+					return [datas.num, datas.value, datas.duration, datas.payType.length, datas.price, datas.leastcoin].some(item => !Boolean(item));
 				} else {
 					//快捷
-					return [datas.num, datas.value, datas.duration, datas.payType].some(item => !Boolean(item));
+					return [datas.num, datas.value, datas.duration, datas.payType.length].some(item => !Boolean(item));
 				}
 			
 
@@ -814,6 +818,10 @@ export default {
 			
 			return  false
 		},
+		//购买-可用支付方式
+		buyTypeShow(){
+			return this.$t('global.payType')
+		},
 		//出售-可用支付方式
 		payTypeShow(){
 			
@@ -822,7 +830,8 @@ export default {
 			}
 			
 			let hasType = this.userInfos.payList.map(item=>Number(item.type))
-			return this.$t('global.payType').filter(item=>{
+			let lists = this.$copy(this.$t('global.payType'))
+			return lists.filter(item=>{
 				if(!this.payType.length){
 					return true
 				}
@@ -1050,7 +1059,7 @@ export default {
 						});
 					this.sell = {
 						show: true,
-						active: active,
+						active: [active],// active,
 						num: '',
 						price: ''
 					};
@@ -1140,7 +1149,7 @@ export default {
 			this.orderForm.wtType = this.userInfos.type == 2 ? 1 : 2;
 			//重置数据
 			this.orderForm.buy = {
-				payType: this.$t('global.payType').map(item => item.id),
+				payType:this.$t('global.payType').map(item => item.id), //this.$t('global.payType').map(item => item.id),
 				num: '',
 				price: '',
 				value: '',
@@ -1291,6 +1300,7 @@ export default {
 				if(this.orderForm.titleType == 1){
 					//出售时 多一个交易密码
 					json.paypassword = this.orderForm.okOrder.password
+					json.overtimetype = datas.overtimetype
 				}
 
 			post(json).then(
@@ -1849,6 +1859,7 @@ export default {
 				height: 60vh;
 			}
 			.items {
+				padding: 0 1px;
 				li {
 					margin-top: 15px;
 					.t {
@@ -1901,12 +1912,16 @@ export default {
 						float: left;
 						width:calc(50% - 10px);
 					}
-					.i:nth-child(2) {
+					.i:nth-child(3) {
 						margin-left: 20px;
 						.input {
 						}
 					}
 					.all{
+						position: absolute;
+						bottom: 0;
+						left: 0;
+						transform: translateY(30%);
 						font-size: 13px;
 						margin-top: 5px;
 						float: left;
@@ -1919,6 +1934,11 @@ export default {
 						}
 					}
 					
+				}
+			}
+			.f_sell{
+				.two{
+					padding-bottom: 20px;
 				}
 			}
 		}
@@ -1975,6 +1995,36 @@ export default {
 	.view_quickSale_c2c {
 		.dhl {
 			top: 130px;
+		}
+		.order_form{
+			.main{
+				.items{
+					.two{
+						padding: 0;
+						.i{
+							width: 100%;
+							float: none;
+						}
+						.i:nth-child(3){
+							margin-left: 0;
+							margin-top: 15px;
+						}
+						
+					}
+				}
+				.f_sell{
+					.two{
+						.i:nth-child(3){
+							margin-top: 30px;
+						}
+						.all{
+							text-align: right;
+							bottom: auto;
+							top: 60px;
+						}
+					}
+				}
+			}
 		}
 	}
 }

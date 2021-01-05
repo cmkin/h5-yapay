@@ -50,7 +50,9 @@
 		},
 		components:{buy,sell},
 		mounted() {
-			
+			if(this.$route.query.hasOwnProperty("page")){
+				this.tabType = Number(this.$route.query.page) 
+			}
 		},
 		watch:{},
 		methods: {

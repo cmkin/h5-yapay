@@ -55,8 +55,9 @@ import headerTop from '_c/common/headerTop'
 import sendCode from '_c/common/sendCode'
 import nodata from '_c/common/noData'
 import loading from '_c/common/loading'
+import upload from '_c/common/upload'
 
-const components = [tablex, dialog, copy, chat, select,headerTop,sendCode,nodata,loading]
+const components = [tablex, dialog, copy, chat, select,headerTop,sendCode,nodata,loading,upload]
 components.forEach(item => {
 	Vue.component(item.name, item)
 })
@@ -64,6 +65,24 @@ components.forEach(item => {
 
 /////////////////////////自定义方法//////////
 
+//深拷贝
+
+Vue.prototype.$copy = function (obj){
+	 let newobj = obj.constructor === Array ? [] : {};
+	  //constructor 属性返回对创建此对象的数组函数的引用。创建相同类型的空数据
+	  if (typeof obj !== 'object') {
+	    return;
+	  } else {
+	    for (var i in obj) {
+	      if (typeof obj[i] === 'object'){//判断对象的这条属性是否为对象
+	        newobj[i] = this.$copy(obj[i]);//若是对象进行嵌套调用
+	      }else{
+	        newobj[i] = obj[i];
+	      }
+	    }
+	  }
+	  return newobj;//返回深度克隆后的对象
+}
 
 //获取dom
 Vue.prototype.$dom = {

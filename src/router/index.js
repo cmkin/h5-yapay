@@ -254,9 +254,18 @@ const routes = [{
 				meta: {
 					title: "收付款账户设置"
 				}
-			}
+			}	
 		]
-	}
+	},
+	//帮助中心
+	{
+		path:'/help',
+		component: () => import('_v/help/index'),
+		meta: {
+			title: "帮助中心",
+			noCheak:true
+		}
+	}	
 
 ]
 

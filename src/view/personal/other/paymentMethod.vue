@@ -50,7 +50,7 @@
 
 				<li v-if="form.type == 1 || form.type == 2">
 					<span>{{ $t('personal.paymentMethod.skm') }}</span>
-					<div class="content"><van-uploader :after-read="afterRead" v-model="fileList" :max-count="1" /></div>
+					<div class="content"><upload :after-read="afterRead" v-model="fileList" :max-count="1" /></div>
 				</li>
 				<li>
 					<div class="content" v-if="!id">
@@ -58,7 +58,7 @@
 					</div>
 					<div v-else class="content">
 						<van-button style="width: 100px;" @click="edit" type="info">{{ $t('personal.paymentMethod.edit') }}</van-button>
-						<van-button style="width: 100px; margin-left: 20px;" @click="remove" type="danger">{{ $t('personal.paymentMethod.remove') }}</van-button>
+						<van-button style="width: 100px; margin-left: 20px;" @click="removeItem" type="danger">{{ $t('personal.paymentMethod.remove') }}</van-button>
 					</div>
 				</li>
 			</ul>
@@ -166,7 +166,7 @@ export default {
 				}
 			})
 		},
-		remove(){
+		removeItem(){
 			this.$dialog.confirm({
 			 cancelButtonText: this.$t('global.base.cancel'),
 			 confirmButtonText: this.$t('global.base.ok'),

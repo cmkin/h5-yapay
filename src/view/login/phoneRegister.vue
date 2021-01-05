@@ -43,7 +43,8 @@
 		</div>
 		
 		<div class="zcty other">
-			{{ $t('login.zcjty') }} <span> {{ $t('login.shxy') }} </span>
+			{{ $t('login.zcjty') }}<span @click="golink(1)"> {{ $t('login.shxy') }} </span>
+			{{ $t('login.he') }}<span @click="golink(2)"> {{ $t('login.ysxy') }} </span>
 		</div>
 		
 	</div>
@@ -86,6 +87,13 @@
 			
 		},
 		methods:{
+			golink(type){
+				if(type==1){
+					this.$router.push('/help?id=1&childId=100')
+				}else{
+					this.$router.push('/help?id=1&childId=101')
+				}
+			},
 			submit(){
 				let json = {
 					...this.form,

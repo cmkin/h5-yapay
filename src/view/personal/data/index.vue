@@ -9,33 +9,54 @@
 			<li class="tx clearfix">
 				<img :src="userInfos.headurl" alt="" />
 				<div class="r">
-					<span>{{ $t('personal.data.yh') }}</span>
+					<span class="b">{{ $t('personal.data.yh') }}</span>
 					<p>{{ $t('personal.data.wmz') }}</p>
 				</div>
 			</li>
 			<li class="name">
 				<div>
-					<span>{{ $t('personal.yhm') }}</span>
+					<span class="b">{{ $t('personal.yhm') }}</span>
 					<p>{{userInfos.nickname}}</p>
 				</div>
 				<div>
-					<span>{{ $t('personal.data.gj') }}</span>
+					<span class="b">{{ $t('personal.data.gj') }}</span>
 					<p>{{ getCurrency }}</p>
 				</div>
 			</li>
 			<li class="lv">
-				<span>{{ $t('personal.data.rzdj') }} {{ $t('personal.data.rzLists')[userInfos.verifyLevel] }}</span>
+				<span class="b">{{ $t('personal.data.rzdj') }} {{ $t('personal.data.rzLists')[userInfos.verifyLevel] }}</span>
 				<p v-if="userInfos.verifyLevel>0">
 					<span>{{ $t('personal.data.xm') }} &nbsp;&nbsp;&nbsp; {{userInfos.name}}</span>
 					<span>{{ $t('personal.data.zjh') }} &nbsp;&nbsp;&nbsp; {{userInfos.cardNumber}}</span>
 				</p>
 				<div class="r" @click="goRz()">{{ $t('personal.data.qts') }}</div>
 			</li>
+			<li class="serve">
+				<span class="b">
+					{{ $t('personal.data.serve') }}
+				</span>
+				<p>
+					{{ $t('personal.data.sqtj') }}
+				</p>
+				<div style="padding-left: 10px;padding-bottom: 10px;" v-if="sysInfos.config" v-html="$options.filters.language($t('personal.data.tjtip'), sysInfos.config.cointhreshold )"></div>			
+				<p>
+					{{ $t('personal.data.zswd') }}
+				</p>
+				<ul>
+					<li v-for="item in $t('personal.data.tqlist')"> {{item}} </li>
+				</ul>
+				<div class="btn">
+					<span style="color: #0466C8;" v-if="userInfos.type==2">{{ $t('personal.data.nysw') }}</span>
+					<van-button v-else :loading="sqLoading" @click="sqServe" type="info">{{ $t('personal.data.sqwf') }}</van-button>
+				</div>
+			</li>
 		</ul>
 		<ul class="edit" v-else>
 			<li>
 				<span>{{ $t('personal.data.yh') }}</span>
-				<div><van-uploader :after-read="afterRead" v-model="fileList" :max-count="1" /></div>
+				<div>
+					<upload :after-read="afterRead" v-model="fileList" :max-count="1" /> 
+				</div>
 			</li>
 			<li>
 				<span>{{ $t('personal.yhm') }}</span>
@@ -60,7 +81,8 @@ export default {
 				loading:false
 			},
 			fileList: [],
-			nickname:''
+			nickname:'',
+			sqLoading:false
 		};
 	},
 	mounted() {
@@ -100,9 +122,9 @@ export default {
 			    formData.append("file",file.file);
 			    formData.append("userid",this.$getToken(1));
 				
-				this.$http.uploadUserHead(formData).then(res=>{
+				this.$http.uploadFile(formData).then(res=>{
 					if(res.code==0){
-						this.fileList = [{ url: res.data.headurl}]
+						this.fileList = [{ url: res.data}]
 					}else{
 						file.status = 'failed';
 						file.message =  this.$t('personal.data.scs');
@@ -112,6 +134,18 @@ export default {
 		},
 		goRz(){
 			this.$router.push('/personal/account/identity')
+		},
+		sqServe(){
+			this.sqLoading = true
+			this.$http.userToMerchantApply().then(res=>{
+				this.sqLoading = false
+				if(res.code==0){
+					this.$notify({
+						type:"success",
+						message:this.$t('global.base.tjcg')
+					})
+				}
+			})
 		},
 		save(){
 			this.edit.loading = true
@@ -152,10 +186,10 @@ export default {
 	}
 	.base {
 		padding: 20px;
-		li {
+		&>li {
 			border-bottom: 1px solid #e3e3e3;
 			padding: 20px 0;
-			span {
+			span.b {
 				color: #333333;
 				display: block;
 				font-size: 16px;
@@ -165,7 +199,7 @@ export default {
 				color: #666666;
 			}
 		}
-		li:last-child {
+		&>li:last-child {
 			border: none;
 		}
 		.tx {
@@ -205,6 +239,29 @@ export default {
 				font-size: 16px;
 			}
 		}
+		.serve{
+			position: relative;
+			&>p{
+				color: #333;
+				font-size: 15px;
+				padding-bottom: 5px;
+			}
+			li{
+				margin-left: 30px;
+				list-style: disc;
+				color: #666;
+				font-size: 13px;
+			}
+			.btn{
+				position: absolute;
+				right: 0;
+				top: 20px;
+				//transform: translateY(-50%);
+				button{
+					color: #fff;
+				}
+			}
+		}
 	}
 
 	.edit {
@@ -219,6 +276,7 @@ export default {
 				font-size: 16px;
 			}
 		}
+		
 		li:last-child{
 			border: none;
 		}
@@ -227,6 +285,13 @@ export default {
 
 @media (max-width: 1023px) {
 	.view_personal_data {
+		.base{
+			.lv{
+				.r{
+					top: 85%;
+				}
+			}
+		}
 	}
 }
 </style>

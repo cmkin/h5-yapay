@@ -124,6 +124,7 @@
 			},
 			getMessage(){
 				return function(data){
+					
 					let type = 1
 					
 					//return data
@@ -138,7 +139,7 @@
 						time:null,
 						isNew:this.$store.state.message.isNew
 					}
-					
+					console.log(obj)
 					 switch(type){
 						 
 						 case 1:

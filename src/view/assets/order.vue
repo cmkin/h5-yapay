@@ -1,6 +1,6 @@
 <template>
 	<div class="view_assets_order">
-		<header-top  :title="$t('order.title')"></header-top> 
+		<header-top  :title="$t('order.title')" rlink="/entrust" :rtitle="$t('quickSale.c2c.entrust.title')"></header-top> 
 		<div class="global_main main">
 			<div class="tabs">
 				<div class="global_main">

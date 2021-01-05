@@ -5,6 +5,7 @@ import updateUser from './updateUser'
 const url = "ws://219.153.20.218:9001/ws"
 let ws = null
 let _this = null //拿到vue指向
+let restart = true
 
 const socket = {
 	//初始化连接
@@ -33,13 +34,18 @@ const socket = {
 
 				this.getMessage(JSON.parse(data))
 			};
-			ws.onclose = function(event) {
+			ws.onclose = (event) => {
 				//alert("已经与服务器断开连接\r\n当前连接状态：" + this.readyState);
-				console.log("socket断开连接")
+				console.log("socket断开连接",event)
+				if(restart){
+					_this.$notify({ type: 'primary', message: '通讯断开连接-重新中...' })
+					this.start()
+				}
 			};
 			ws.onerror = function(event) {
 				//alert("WebSocket异常！" + event.toString());
-				console.log("socket异常")
+				console.log("socket异常",event)
+				//_this.$notify({ type: 'primary', message: '测试提示-socket异常...' })
 			};
 		} catch (ex) {
 			//alert(ex.message);
@@ -47,6 +53,7 @@ const socket = {
 		}
 	},
 	close() {
+		restart = false  //手动断开，不需要重新连接。
 		ws.close()
 	},
 	//login 登录
@@ -56,13 +63,16 @@ const socket = {
 			"protocol": 0,
 			"token": _this.$getToken(),
 			"chatRecord": {
-				"userid": _this.$getToken(1)
+				"userid": _this.$getToken(1),
+				"deviceType":1 //网页登录
 			}
 		}
 		ws.send(JSON.stringify(obj))
 	},
 	ping() {
-
+		if(!restart){
+			return
+		}
 		let obj = {
 			"protocol": 3,
 			"token": _this.$getToken(),
@@ -90,7 +100,9 @@ const socket = {
 					data: data
 				})
 				break;
-
+			
+			case 12:
+			case 13:
 			case 14: //动账消息
 				_this.$store.commit('updateMessage', {
 					type: 2,
@@ -117,8 +129,8 @@ const socket = {
 				})
 				break;
 
-			case 12:
-			case 13:
+			
+			
 			case 7: //账号变化推送 系统通知
 				_this.$store.commit('updateMessage', {
 					type: 1,
@@ -141,6 +153,7 @@ const socket = {
 					_this.$store.commit('updateChatHis', {
 						...obj,
 					})
+					console.log(obj,'dasdad')
 
 					//触发订单弹窗提示处理的事件
 

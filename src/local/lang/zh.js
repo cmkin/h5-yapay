@@ -1,4 +1,5 @@
 import error from './error/zh'
+import help from './help/zh'
 
 export default  {
 	//错误
@@ -8,7 +9,7 @@ export default  {
 		logo: require("_a/img/logo.png"),
 		qsr: '请输入',
 		qxz: '请选择',
-		jyfl: '交易手续费费率:',
+		jyfl: '平台服务费:',
 		usdt: require("_a/img/usdt.png"),
 		cny: require("_a/img/cny.png"),
 		payType: [{
@@ -68,6 +69,10 @@ export default  {
 				{
 					title: "活动",
 					to: ''
+				},
+				{
+					title: "帮助中心",
+					to: '/help?id=0&childId=0'
 				}
 			],
 			language: [{
@@ -188,7 +193,7 @@ export default  {
 						},
 						{
 							title: '帮助中心',
-							to: '/apphelp"'
+							to: '/apphelp'
 						},
 						{
 							title: '执法请求指南',
@@ -329,13 +334,14 @@ export default  {
 			nzh:'没有账号',
 			yzh:'已有账号',
 			sjhm:'手机号码',
-			
 			sht:'手机号注册',
 			yxt:'电子邮箱注册',
 			yx:'邮箱',
 			ljd:'立即登录',
 			zcjty:'注册即同意',
-			shxy:'YaPay商户服务协议',
+			shxy:'YaPay用户服务协议',
+			he:"和",
+			ysxy:'YaPay隐私权政策',
 			mts:'6-20位数字或字母组成',
 			
 			wjts:'为了账号安全，需要验证后才能重置密码',
@@ -374,7 +380,7 @@ export default  {
 			{
 				img:require("@/assets/img/index4.png"),
 				text:'提现',
-				to:'/sale/c2c?type=1'
+				to:'/sale/quickBuySell?page=1'
 			},
 		],
 		
@@ -411,80 +417,25 @@ export default  {
 		
 		
 		hq: 'USDT行情',
-		hb: [{
-				key: 'USD',
-				name: 'USD',
-				fh: '$'
+		
+		tableTitle: [
+			{
+				title: '币种',
+				id: 'coinPair',
 			},
 			{
-				key: 'CNY',
-				name: 'CNY',
-				fh: '¥'
+				title: '最新价',
+				id: 'last'
+				
 			},
 			{
-				key: 'EUR',
-				name: 'EUR',
-				fh: '€'
+				title: '24H涨跌幅',
+				id: 'percent',
 			},
 			{
-				key: 'GBP',
-				name: 'GBP',
-				fh: '£'
-			},
-			{
-				key: 'JPY',
-				name: 'JPY',
-				fh: 'J¥'
-			},
-			{
-				key: 'KRW',
-				name: 'KRW',
-				fh: '₩'
-			},
-			{
-				key: 'TRY',
-				name: 'TRY',
-				fh: '₺'
-			},
-			{
-				key: 'BRL',
-				name: 'BRL',
-				fh: 'R$'
-			},
-			{
-				key: 'RUR',
-				name: 'RUR',
-				fh: '₽'
-			},
-			{
-				key: 'HKD',
-				name: 'HKD',
-				fh: 'HK$'
-			},
-		],
-		r: '日',
-		z: '周',
-		y: '月',
-		open: 'Open 24H',
-		last: 'Last price',
-		higt: 'High 24H',
-		mkt: 'Mkt.Cap',
-		vol: 'Vol 24H',
-		low: 'Low 24H',
-		tableTitle: [{
-				title: '法币',
-				slot: 'fb',
-				flex: 2
-			},
-			{
-				title: '价格',
-				id: 'price',
-			},
-			{
-				title: '涨跌幅(24H)',
-				slot: 'zdf',
-				hide: true
-			},
+				title: '24H成交量',
+				id: 'totalQtyIn24'
+			}
 		],
 	},
 
@@ -510,7 +461,7 @@ export default  {
 				fkfs: '付款方式',
 				ckdj: '参考单价',
 				ljgm: '立即购买',
-				sxf: '交易手续费费率',
+				sxf: '平台服务费',
 				km: '可买数量'
 			},
 			//卖
@@ -521,7 +472,7 @@ export default  {
 				fkfs: '收款方式',
 				ckdj: '参考单价',
 				ljgm: '立即出售',
-				sxf: '交易手续费费率',
+				sxf: '平台服务费',
 				ky: '可用资产',
 				zd: '最大'
 			},
@@ -1002,7 +953,14 @@ export default  {
 					id:0,
 					
 				}
-			]
+			],
+			serve:'YaPay服务商',
+			zswd:"专享五大特权",
+			tqlist:['专属低廉交易手续费','专属1v1大客户服务','专属授信额度','专属新产品内测优先资格','专属生日礼物'],
+			sqtj:"申请条件",
+			tjtip:'有一定市场经验，账户资产达到 <i style="color:#0046c8;">{}</i> USDT,且已通过高级实名认证',
+			sqwf:"申请服务商",
+			nysw:"您当前已是服务商"
 		},
 		//账户设置
 		account: {
@@ -1221,7 +1179,7 @@ export default  {
 			type:[ //其他
 				{
 					id:0,
-					text:'认证通过提示'
+					text:'认证结果通知'
 				},
 				{
 					id:1,
@@ -1242,6 +1200,10 @@ export default  {
 				{
 					id:5,
 					text:'系统审核提示'
+				},
+				{
+					id:9,
+					text:'服务商申请结果通知'
 				}
 			]
 		},
@@ -1692,7 +1654,7 @@ export default  {
 		js:"您可以将自己的USDT打包生成兑换码，发放给好友或输入获取的兑换码领取他人赠送的USDT.",
 		dh:"去兑换",
 		sc:"生成兑换码",
-		zls:['1、兑换码一次有效，一经兑换后，不可找回，请妥善保管您的兑换码','2、点击“去兑换”，输入兑换码即可兑换USDT','3、点击“生成兑换码”，输入想要打包的USDT数量，即可将您的USDT打包成兑换码，复制兑换码发送给对方，对方即可根据您的兑换码领取相应数量的USDT'],
+		zls:['1、兑换码一次有效，一经兑换后，不可找回，请妥善保管您的兑换码','2、点击“去兑换”，输入兑换码即可兑换USDT','3、点击“生成兑换码”，输入想要打包的USDT数量，即可将您的USDT打包成兑换码，复制兑换码发送给对方，对方即可根据您的兑换码领取相应数量的USDT','4.1年有效期，过期未使用自动退回'],
 		lj:"立即兑换",
 		dhm:"兑换码",
 		sr:"输入USDT数量，立即生成兑换码",
@@ -1818,6 +1780,9 @@ export default  {
 			},
 			
 		]
-	}
+	},
+	
+	//帮助中心
+	help:help
 	
 }

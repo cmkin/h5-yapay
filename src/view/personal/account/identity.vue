@@ -11,7 +11,7 @@
 				</div>
 				<div> {{ $t('personal.account.identity.lv1p') }} </div>
 				<div>
-					<i v-if="userInfos.verifyLevel<1 && userInfos.safetyStatus==0" @click="goRz(1)"> {{ $t('personal.account.identity.qrz') }} </i>
+					<i v-if="userInfos.verifyLevel<1 && (userInfos.safetyStatus==0 || userInfos.safetyStatus ==3)" @click="goRz(1)"> {{ $t('personal.account.identity.qrz') }} </i>
 					<i v-if="userInfos.verifyLevel==0 && userInfos.safetyStatus ==1">{{ $t('personal.account.identity.shz') }} </i>
 				</div>
 			</li>
@@ -23,7 +23,7 @@
 				</div>
 				<div> {{ $t('personal.account.identity.lv2p') }} </div>
 				<div>
-					<i v-if="userInfos.verifyLevel<2 && userInfos.safetyStatus==0" @click="goRz(2)"> {{ $t('personal.account.identity.qrz') }} </i>
+					<i v-if="userInfos.verifyLevel<2 && (userInfos.safetyStatus==0 || userInfos.safetyStatus ==3)" @click="goRz(2)"> {{ $t('personal.account.identity.qrz') }} </i>
 					<i v-if="userInfos.verifyLevel==1 && userInfos.safetyStatus ==1">{{ $t('personal.account.identity.shz') }} </i>
 				</div>
 			</li>			

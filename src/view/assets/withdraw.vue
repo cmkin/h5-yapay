@@ -35,12 +35,12 @@
 						<li class="sl">
 							<span>{{ $t('withdraw.sxf') }}</span>
 							<div class="i">
-								<input disabled="disabled"  :placeholder="Number(userInfos.tib).toFixed(4)" type="text" />
+								<input disabled="disabled"  :placeholder="ldetails.sxf" type="text" />
 								<span class="a">USDT</span>
 							</div>
 							<div class="s">
 								{{ $t('withdraw.yq') }} 
-								{{Number(num-userInfos.tib).toFixed(4)  }}  USDT
+								{{ num-ldetails.sxf > 0 ? Number(num-ldetails.sxf).toFixed(4) : '0.0000'  }}  USDT
 							</div>
 						</li>
 					</ul>
@@ -128,7 +128,14 @@
 		},
 		computed:{
 			ldetails(){
-				return this.$t('recharge.llists').filter(item=>item.id == this.lid)[0]
+				let sxf = '0.0000'
+					if(this.userInfos.tibi && this.lid){
+						sxf=Number(this.userInfos.tibi[this.lid.toLowerCase()]).toFixed(4)
+					}
+				return {
+					sxf,
+					... this.$t('recharge.llists').filter(item=>item.id == this.lid)[0]
+				}
 			},
 			getStatus(){
 				return function(id){

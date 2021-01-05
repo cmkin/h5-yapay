@@ -355,7 +355,7 @@
 			<template v-slot:content>
 				<ul class="pay_ok_content">
 					<li>{{ $t('quickSale.payment.payOk.tip') }}</li>
-					<li>{{ $t('quickSale.payment.payOk.fs') }}: {{ getPayItem.title }} ({{ getPayItem.account }})</li>
+					<li>{{ $t('quickSale.payment.payOk.fs') }}: {{ getPayItem.title }}</li>
 					<li>{{ $t('quickSale.payment.payOk.je') }}: {{ orderDetails.value | money }} {{ sysInfos.hv.dw }}</li>
 				</ul>
 			</template>
@@ -370,7 +370,7 @@
 			<template v-slot:content>
 				<ul class="pay_coin_content">
 					<li>{{ $t('quickSale.collection.payOkCoin.tips') }}</li>
-					<li>{{ $t('quickSale.collection.payOkCoin.skfs') }} : {{getPayInfos('paytype')}}</li>
+					<li>{{ $t('quickSale.collection.payOkCoin.skfs') }} : {{getPayInfos('paytype')}}({{ orderDetails.payinfos[0].account }})</li>
 					<li>{{ $t('quickSale.collection.payOkCoin.skje') }} : {{ orderDetails.value | money }} {{ sysInfos.hv.dw }} </li>
 					<li class="password clearfix">
 						{{ $t('global.base.jymm') }}
@@ -550,6 +550,12 @@ export default {
 						if(this.orderDetails.status != res.data.status && res.data.status==1){
 							this.updeteTime()
 						}
+						
+						//处理数据
+						res.data.coin = Number(res.data.coin).toFixed(4)
+						res.data.price = Number(res.data.price).toFixed(2)
+						res.data.value = Number(res.data.value).toFixed(2)
+						
 						this.orderDetails = res.data;
 						this.buy.payTypeActive = this.buy.payTypeActive ? this.buy.payTypeActive : this.buyPayType[0].id;
 						
@@ -596,10 +602,10 @@ export default {
 				if (res.code == 0) {
 					this.$notify({ type: 'success', message: this.$t('global.base.qxcg') });
 					this.getDetails(()=>{
-						setTimeout(()=>{
+						/* setTimeout(()=>{
 							clearInterval(this.testTimeInr)
 							clearInterval(this.interInr)
-						},2000)
+						},2000) */
 					});
 				}
 			});
@@ -629,10 +635,10 @@ export default {
 				
 				if (res.code == 0) {
 					this.getDetails(()=>{
-						setTimeout(()=>{
+						/* setTimeout(()=>{
 							clearInterval(this.testTimeInr)
 							clearInterval(this.interInr)
-						},2000)
+						},2000) */
 					});
 					this.openKf()
 				}
@@ -649,10 +655,10 @@ export default {
 				if (res.code == 0) {
 					this.payOkCoin.show = false
 					this.getDetails(()=>{
-						setTimeout(()=>{
+						/* setTimeout(()=>{
 							clearInterval(this.testTimeInr)
 							clearInterval(this.interInr)
-						},2000)
+						},2000) */
 					});
 				}
 			},(err)=>{

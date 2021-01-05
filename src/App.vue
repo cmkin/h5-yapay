@@ -71,7 +71,7 @@ export default {
 </script>
 
 <style>
-@import url('https://at.alicdn.com/t/font_2139670_9spnofn9k88.css');
+@import url('https://at.alicdn.com/t/font_2139670_renghch1hxi.css');
 </style>
 <style lang="less">
 //自定义样式
