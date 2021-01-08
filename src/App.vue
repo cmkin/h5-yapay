@@ -17,6 +17,7 @@ export default {
 		};
 	},
 	mounted() {
+		
 		this.appInit();
 
 		document.body.onbeforeunload = () => {

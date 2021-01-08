@@ -384,13 +384,19 @@
 				<div class="pay_ok_bleft" v-html="$options.filters.language($t('global.base.hs'), $options.filters.MS(testTime))"></div>
 			</template>
 		</dialogx>
+	
+		
+		<set-pay-pwd v-model="payPsaawordFlag" v-if="payPsaawordFlag"></set-pay-pwd>
+		
 	</div>
 </template>
 
 <script>
+	import setPayPwd from '_c/common/setPayPassword'
 export default {
 	data() {
 		return {
+			payPsaawordFlag:false,
 			//页面类型
 			pageType: 0,
 			activeName: [0, 1],
@@ -423,6 +429,9 @@ export default {
 			
 		
 		};
+	},
+	components:{
+		setPayPwd
 	},
 	computed: {
 		buyPayType() {
@@ -520,7 +529,7 @@ export default {
 			this.pageType = this.$route.meta.type;
 			this.id = this.$route.query.id;
 			this.getDetails(() => {
-				if (this.orderDetails.status ==0 || this.orderDetails.status ==1 ) {
+				if (this.orderDetails.status ==0 || this.orderDetails.status ==1  || this.orderDetails.status ==3) {
 					
 					
 					this.updeteTime()
@@ -559,7 +568,7 @@ export default {
 						this.orderDetails = res.data;
 						this.buy.payTypeActive = this.buy.payTypeActive ? this.buy.payTypeActive : this.buyPayType[0].id;
 						
-						if(res.data.status>1){
+						if(res.data.status==0 && res.data.status==3){
 							clearInterval(this.testTimeInr)
 							clearInterval(this.interInr)
 						}
@@ -679,7 +688,8 @@ export default {
 				  message: this.$t('global.base.zfts'),
 				})
 				  .then(() => {
-					this.$router.push('/editJPwd?type=0')
+					  this.payPsaawordFlag = true
+					//this.$router.push('/editJPwd?type=0')
 				  })
 				  .catch(() => {
 					// on cancel
@@ -701,9 +711,10 @@ export default {
 
 <style lang="less" scoped="scoped">
 .view_quickSale_paymentAndCollection {
+	
 	.main {
 		padding-top: 40px;
-
+		
 		.left {
 			.box_wrap(550px);
 			float: left;

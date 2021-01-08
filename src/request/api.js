@@ -270,7 +270,8 @@ const sale = {
 	//大户挂单-服务商-快捷-发布
 	openOrder(data){
 		return post('payuserorder/openOrder',{
-			data:data
+			data:data,
+			error:true
 		})
 	},
 	//生成礼品卡

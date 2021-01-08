@@ -249,7 +249,8 @@
 				  forbidClick: true,
 				});
 				this.$http.basicAuthentication({
-					...this.form
+					...this.form,
+					name:this.form.surname+this.form.name
 				}).then(res=>{
 					Toast.clear();
 					if(res.code==0){

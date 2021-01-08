@@ -103,6 +103,8 @@
 					
 					if(!this.payType.length){
 						this.$notify(this.$t('global.base.nopp'))
+						this.buy.num=''
+						this.buy.price=''
 						return
 					}
 					

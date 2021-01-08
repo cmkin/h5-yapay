@@ -151,11 +151,12 @@
 			</template>		
 		</dialogx>
 		
-		
+		<set-pay-pwd v-model="payPsaawordFlag" v-if="payPsaawordFlag"></set-pay-pwd>
 	</div>
 </template>
 
 <script>
+	import setPayPwd from '_c/common/setPayPassword'
 	export default {
 		data(){
 			return{
@@ -183,7 +184,12 @@
 					type:1
 				},
 				
+				payPsaawordFlag:false
+				
 			}
+		},
+		components:{
+			setPayPwd
 		},
 		mounted() {
 			this.getlist()
@@ -246,7 +252,8 @@
 						  message: this.$t('global.base.zfts'),
 						})
 						  .then(() => {
-							this.$router.push('/editJPwd?type=0')
+							  this.payPsaawordFlag = true
+							//this.$router.push('/editJPwd?type=0')
 						  })
 						  .catch(() => {
 							// on cancel

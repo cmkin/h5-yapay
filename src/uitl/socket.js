@@ -38,8 +38,10 @@ const socket = {
 				//alert("已经与服务器断开连接\r\n当前连接状态：" + this.readyState);
 				console.log("socket断开连接",event)
 				if(restart){
-					_this.$notify({ type: 'primary', message: '通讯断开连接-重新中...' })
-					this.start()
+					_this.$notify({ type: 'primary', message: '通讯断开连接-重新连接中...' })
+					setTimeout(()=>{
+						this.start()
+					},2000)
 				}
 			};
 			ws.onerror = function(event) {
@@ -96,7 +98,7 @@ const socket = {
 			case 8: //首页跑马灯
 				_this.$store.commit('updateMessage', {
 					type: 0,
-					isNew: true,
+					isNew:true,
 					data: data
 				})
 				break;
@@ -106,10 +108,9 @@ const socket = {
 			case 14: //动账消息
 				_this.$store.commit('updateMessage', {
 					type: 2,
-					isNew: true,
+					isNew:true,
 					data: data
 				})
-
 				//更新userinfo
 				updateUser.call(_this)
 
@@ -134,7 +135,7 @@ const socket = {
 			case 7: //账号变化推送 系统通知
 				_this.$store.commit('updateMessage', {
 					type: 1,
-					isNew: true,
+					isNew:true,
 					data: data
 				})
 				//更新userinfo

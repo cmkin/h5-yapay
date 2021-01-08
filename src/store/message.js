@@ -1,7 +1,7 @@
 export default {
 	state: {
 		//lists:{}
-		isNew:false,
+		newType: [], // 0.1.2 
 		announcement: false, //公告
 		tips: false, //系统提示
 		notice: false //动账通知
@@ -9,19 +9,31 @@ export default {
 	},
 	mutations: {
 		updateMessage(state, infos) {
-			switch (infos.type) {
-				case 0:
-					state.announcement = infos.data
-				break;
-				case 1:
-					state.tips = infos.data
-				break;
-				case 2:
-					state.notice = infos.data
-				break;
+			if(!infos.delete){
+				switch (infos.type) {
+					case 0:
+						state.announcement = infos.data
+						break;
+					case 1:
+						state.tips = infos.data
+						break;
+					case 2:
+						state.notice = infos.data
+						break;
+				}
 			}
-			state.isNew = infos.isNew || false
+			if (infos.type!=null && infos.isNew) {
+				if (state.newType.includes(infos.type)) {
+					if (infos.delete) {
+						state.newType.splice(state.newType.indexOf(infos.type), 1)
+					}
+				} else {
+					state.newType.push(infos.type)
+				}
+			}
+
 		}
+
 	}
 
 

@@ -54,7 +54,8 @@
 				//console.log(item)
 				let url = false;
 				if(item.to){
-					url = 'http://yaotc.com/index.html#'+item.to
+					this.$router.push(item.to)
+					return
 				}
 				if(item.url){
 					url = item.url
@@ -93,15 +94,15 @@
 					cursor: pointer;
 
 					img {
-						width: 40px;
-						height: 40px;
+						width: 50px;
+						height: 50px;
 						float: left;
+						margin-top: -12px;
 					}
 
 					span {
-						margin-left: 10px;
 						display: inline-block;
-						font-size: 24px;
+						font-size: 16px;
 
 					}
 				}

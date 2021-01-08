@@ -66,7 +66,6 @@ import loginInit from '@/uitl/loginInit'
 						this.$saveToken(res.data.userid,1)
 						
 						//this.$router.push("/index")
-						
 						loginInit.call(this,true)
 						
 						

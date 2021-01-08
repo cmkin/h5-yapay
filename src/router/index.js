@@ -306,8 +306,8 @@ router.beforeEach((to, from, next) => {
 	 return
   }
   if(!localStorage.getItem('token')){
-	  
-	  next('/404') 
+	  next("/login-register")
+	 // next('/404') 
 	 /* vm.$dialog.confirm({
 		 cancelButtonText: vm.$t('global.base.cancel'),
 		 confirmButtonText: vm.$t('global.base.ok'),

@@ -13,9 +13,7 @@
 					</ul>
 				</div>
 				<div class="right clearfix">
-					<div class="language">
-						<myselect @flag="languageFlag" ref="headerselect" v-model="language.active" @change="changeLanguage" hover :lists="$t('global.header.language')"></myselect>
-					</div>
+					
 
 					<div class="login" v-if="!userInfos.islogin && !isPhone">
 						<span @click="login(0)">{{ $t('global.header.login') }}</span>
@@ -50,6 +48,25 @@
 						</div>
 					</div>
 
+					
+					<div class="download" @click="downloadM">
+						<span>{{ $t('global.header.down') }}</span>
+						<transition name="top" mode="out-in">
+						<div class="code" v-if="download">
+							<img src="../../assets/img/downloadCode.png" alt="">
+							<div class="r">
+								<p>{{ $t('global.header.sd') }}</p>
+								<p>IOS & Android</p>
+								<a href="http://yaotc.com/download.html" target="_blank">{{ $t('global.header.mr') }}</a>
+							</div>
+						</div>
+						</transition>
+					</div>
+					
+					<div class="language">
+						<myselect @flag="languageFlag" ref="headerselect" v-model="language.active" @change="changeLanguage" hover :lists="$t('global.header.language')"></myselect>
+					</div>
+					
 					<div class="icons" v-if="userInfos.islogin">
 						<svg
 							@click.stop="messageFlag"
@@ -69,14 +86,14 @@
 								p-id="8571"
 							></path>
 						</svg>	
-						<i class="new" v-if="getMessage().isNew"></i>
-						<transition name="" mode="out-in">
+						<i class="new" v-if="getMessage().newType.length"></i>
+						<transition name="top" mode="out-in">
 							<ul class="message_alert" v-if="message.flag">
 								<li class="t">{{ $t('message.title') }}</li>
 								<!-- v-if="index < 2 || userInfos.islogin" -->
-								<li @click="messagem(index)" v-for="(item, index) in $t('message.tabs')">
+								<li @click="messagem(index,item)" v-for="(item, index) in $t('message.tabs')">
 									<div class="top" :class="{w:index==0}">
-										<span>[{{ item.text }}]</span>
+										<span :class=" newtClass(item.id) ">[{{ item.text }}] <i class="new"></i> </span>
 										<i>{{ getMessage(item.id).text }}</i>
 									</div>
 									
@@ -86,7 +103,8 @@
 							</ul>
 						</transition>
 					</div>
-
+					
+					
 					<div class="phone_muen"><van-icon name="wap-nav" @click="phoneMuen = true" size="30" /></div>
 				</div>
 			</div>
@@ -103,6 +121,7 @@
 				<ul class="meun clearfix">
 					<li @click="phoneGoLink(item)" v-for="(item, index) in $t('global.header.meun')">{{ item.title }}</li>
 					<!-- <router-link @click="phoneMuen = false" v-for="(item, index) in $t('global.header.meun')" :key="index" :to="item.to" tag="li">{{ item.title }}</router-link> -->
+					<li v-if="userInfos.islogin" @click="phoneGoLink({ to: '/message?type=0' })" >{{ $t('global.header.xx') }}</li>
 				</ul>
 
 				<van-collapse :border="false" v-model="activeNames">
@@ -130,17 +149,7 @@
 			</div>
 		</van-popup>
 
-		<div class="download_phone">
-			<img src="@/assets/img/logo.png" alt="" />
-			<div class="font">
-				<p>{{ $t('global.header.name') }}</p>
-				<p>{{ $t('global.header.ydjy') }}</p>
-			</div>
-			<div class="btns">
-				<span data-v-1f779937="">{{ $t('global.header.xz') }}</span>
-				<i @click="removePhone">x</i>
-			</div>
-		</div>
+		
 	</div>
 </template>
 
@@ -154,6 +163,7 @@ export default {
 				active: null
 			},
 			phoneMuen: false,
+			download: false,
 			activeNames: [],
 			loginok: {
 				flag: false,
@@ -191,7 +201,7 @@ export default {
 				let obj2 = {
 					text: this.$t('global.base.zusj'),
 					time:null,
-					isNew:this.$store.state.message.isNew
+					newType:this.$store.state.message.newType
 				}
 				
 				
@@ -224,10 +234,20 @@ export default {
 				 }
 				 return obj2
 			}
+		},
+		newtClass(){
+			return function(id){
+				return this.getMessage().newType.includes(id) ? 'newt' :''
+			}
 		}
 	},
 	methods: {
-		messagem(type) {
+		messagem(type,item) {
+			this.$store.commit('updateMessage',{
+				type:item.id,
+				delete:true,
+				isNew:true
+			})
 			this.$router.push({
 				path: '/message',
 				query: {
@@ -264,13 +284,16 @@ export default {
 				this.language.active = index;
 			}
 		},
+		downloadM(){
+			this.download = !this.download;
+			this.loginok.flag = false;
+			this.message.flag = false;
+			this.$refs.headerselect.open(false, false);
+		},
 		messageFlag() {
 			this.loginok.flag = false;
 			this.loginZc.flag = false;
 			this.message.flag = !this.message.flag;
-			this.$store.commit('updateMessage',{
-				isNew:false
-			})
 			this.$refs.headerselect.open(false, false);
 		},
 		languageFlag() {
@@ -353,10 +376,8 @@ export default {
 				.catch(() => {
 					// on cancel
 				});
-		},
-		removePhone() {
-			document.querySelector('.components_header .download_phone').remove();
 		}
+		
 	}
 };
 </script>
@@ -389,16 +410,18 @@ export default {
 
 				img {
 					float: left;
-					width: 40px;
-					height: 40px;
+					width: 50px;
+					height: 50px;
+					margin-top: -5px;
 				}
 
 				span {
 					float: left;
-					margin-left: 10px;
+					
 					margin-top: 5px;
 					font-size: 16px;
-					font-family: 'sy-b';
+					position: relative;
+					top: 2px;
 				}
 			}
 
@@ -421,7 +444,7 @@ export default {
 
 			.language {
 				display: inline-block;
-				margin-right: 30px;
+				margin-left: 30px;
 			}
 
 			.login {
@@ -522,7 +545,6 @@ export default {
 					width: 288px;
 					background: #ffffff;
 					box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-					opacity: 1;
 					border-radius: 2px;
 					color: #666;
 					.t {
@@ -538,27 +560,39 @@ export default {
 						border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 						.top {
 							position: relative;
-							padding-left: 90px;
+							padding-left: 100px;
 							min-height: 22px;
 							&>span {
 								position: absolute;
 								top: 0;
 								left: 0;
 								width: 90px;
+								padding-right: 5px;
+								box-sizing: border-box;
 								font-size: 16px;
 								color: #333333;
 								font-weight: bold;
+								i{
+									display: none;
+								}
+							}
+							.newt{
+								color: @red;
+								i{
+									display: block;
+								}
 							}
 							&>i {
 								color: #666666;
 							}
 						}
 						.w{
-							padding-left: 60px;
+							padding-left: 70px;
 							&>span{
 								width: 60px;	
 							}
 						}
+						
 						.time {
 							color: #b3b3b3;
 							font-size: 12px;
@@ -568,6 +602,7 @@ export default {
 							background-color: #f1f9ff;
 						}
 					}
+					
 					.all {
 						text-align: center;
 						cursor: pointer;
@@ -575,7 +610,53 @@ export default {
 					}
 				}
 			}
-
+			
+			.download{
+				display: inline-block;
+				position: relative;
+				margin-left: 30px;
+				&>span{
+					.hover;
+				}
+				.code{
+					padding: 10px;
+					box-sizing: border-box;
+					width: 240px;
+					position: absolute;
+					z-index: 10;
+					right: 0;
+					top: 55px;
+					box-shadow: 0 0 1px 2px #eee;
+					border-radius: 2px;
+					background-color: #fff;
+					color: #333;
+					.clearfix;
+					img{
+						float: left;
+						width: 100px;
+						height: 100px;
+						border: 1px solid #ccc;
+					}
+					.r{
+						float: left;
+						padding-left: 20px;
+						text-align: left;
+						p{
+							margin-bottom: 10px;
+						}
+						a{
+								background: #0466c8;
+							    color: #fff;
+							    display: inline-block;
+							    padding: 7px 10px;
+							    border-radius: 2px;
+							
+						}
+					}
+				}
+				
+			}
+			
 			.phone_muen {
 				float: right;
 				display: none;
@@ -589,52 +670,7 @@ export default {
 	.clear_header{
 		height: 80px;
 	}
-	.download_phone {
-		position: fixed;
-		bottom: 20px;
-		left: 0;
-		background: #0466c8;
-		width: 90%;
-		left: 5%;
-		display: flex;
-		padding: 10px;
-		box-sizing: border-box;
-		border-radius: 5px;
-		z-index: 1000;
-		display: none;
-		& > img {
-			background: #fff;
-			width: 50px;
-			height: 50px;
-			border-radius: 10px;
-			margin-right: 10px;
-		}
-		.font {
-			flex: 1;
-			p:first-child {
-				font-size: 16px;
-				margin-bottom: 10px;
-			}
-		}
-		.btns {
-			padding-top: 18px;
-			position: relative;
-			padding-right: 10px;
-			span {
-				background: #fff;
-				color: #0466c8;
-				font-size: 16px;
-				padding: 5px 20px;
-				border-radius: 3px;
-			}
-			i {
-				position: absolute;
-				top: -10px;
-				right: 0px;
-				font-style: normal;
-			}
-		}
-	}
+	
 }
 
 @media (max-width: 1023px) {
@@ -661,6 +697,9 @@ export default {
 
 				.phone_muen {
 					display: block;
+				}
+				.download{
+					display: none;
 				}
 			}
 		}
@@ -707,16 +746,13 @@ export default {
 
 			.meun {
 				li {
-					margin-top: 20px;
+					margin-top: 15px;
 					font-size: 16px;
 					color: rgba(255, 255, 255, 0.8);
 				}
 			}
 		}
 
-		/* .download_phone{
-			display: flex;
-		} */
 	}
 }
 </style>

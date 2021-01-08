@@ -24,6 +24,7 @@ export function post (url,ops){
 		instance.post(url,options.data).then((res)=>{
 			resolve(res.data)
 			if(res.data.code!=0 && !options.error){
+				//vm.$notify(url+"参数:"+options.data)
 				vm.$cheakError(res.data.code)
 			}
 			
@@ -68,6 +69,7 @@ export function get (url,ops){
 		instance.get(url).then((res)=>{
 			resolve(res.data)
 			if(res.data.code!=0 && !options.error){
+				//vm.$notify(url+"参数:"+options.data)
 				vm.$cheakError(res.data.code)
 			}
 		},(error)=>{

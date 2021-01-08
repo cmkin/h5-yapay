@@ -3,7 +3,7 @@
 	src: url('../fonts/Regular.otf');
 }
 
-@font-face {
+/* @font-face {
 	font-family: 'sy-b';
 	src: url('../fonts/Bold.otf');
 }
@@ -11,7 +11,7 @@
 @font-face {
 	font-family: 'sy-m';
 	src: url('../fonts/Medium.otf');
-}
+} */
 
 
 html {}

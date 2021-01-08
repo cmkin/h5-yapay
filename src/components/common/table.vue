@@ -5,7 +5,7 @@
 		</ul>
 		
 		<ul class="item" v-for="item in datas" v-if="datas.length">
-			<li v-for="child in nowTitles" v-if="child.isShow"  :style="{flex:child.flex}">
+			<li v-for="child in nowTitles" v-if="child.isShow" @click="$emit('itemClick',child)" :style="{flex:child.flex}">
 				<div v-if="child.slot">
 					<slot :name="child.slot" :item="item"></slot>
 				</div>

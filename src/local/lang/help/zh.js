@@ -3,6 +3,7 @@ export default {
 	meun: [{
 			title: "常见问题",
 			id: 0,
+			flag:true,
 			list: [{
 					id: 0,
 					title: "什么是USDT?"
@@ -61,6 +62,7 @@ export default {
 		}, {
 			title: "协议条款",
 			id: 1,
+			flag:true,
 			list: [{
 				id: 100,
 				title: "用户服务协议"
@@ -75,6 +77,7 @@ export default {
 		{
 			title: "执法请求指南",
 			id: 3,
+			flag:true,
 			list: [{
 				id: 1000,
 				title: "执法请求指南"
@@ -95,13 +98,13 @@ export default {
 				font: "在YaPay移动端“首页”→点击“买币”→输入您需要购买的数量或者金额→点击“一键购买”→按照订单中卖家收款方式进行付款→付款完成点击“我已付款，请放币”→卖家收到您的付款并放币到您的账户中。"
 			}, {
 				title: 1,
-				img: require("_a/img/help/buy-quick.gif")
+				img: "http://219.153.20.218:8084/help/buy-quick.gif"
 			}, {
 				title: "2、自选区买币",
 				font: "在YaPay移动端“首页”→点击底部“交易”→在顶部切换到自选区→在“我要买”列表下选择一个卖家→点击“去购买”→输入您需要购买的数量或者金额→点击“立即购买”→进入待付款界面，付款完成点击“我已付款，请放币”→卖家将确认收到您的付款并放币到您的账户中。"
 			}, {
 				title: 1,
-				img:require("_a/img/help/buy-self.gif")
+				img:"http://219.153.20.218:8084/help/buy-self.gif"
 			}, {
 				title: 2,
 				font: "<b>注意：</b>用户需阅读并同意交易须知方可进行交易，YaPay交易系统拥有严格的风控机制当YaPay发现有用于赌博、洗钱、资金盘等不法行为我们会主动将所涉信息提交给相应的执法部门，每日取消3笔订单后会被认为恶意取消订单将受到24小时不能交易的惩罚。"
@@ -115,7 +118,7 @@ export default {
 				},
 				{
 					title: 1,
-					img: require("_a/img/help/sell-quick.gif")
+					img: "http://219.153.20.218:8084/help/sell-quick.gif"
 				},
 				{
 					title: "2、自选区卖币",
@@ -123,7 +126,7 @@ export default {
 				},
 				{
 					title: 1,
-					img: require("_a/img/help/selll-self.gif")
+					img: "http://219.153.20.218:8084/help/selll-self.gif"
 				},
 				{
 					title: 2,
@@ -139,7 +142,7 @@ export default {
 				},
 				{
 					title: 1,
-					img: require("_a/img/help/tibi.gif")
+					img:"http://219.153.20.218:8084/help/tibi.gif"
 				},
 				{
 					title: 2,
@@ -239,7 +242,7 @@ export default {
 				},
 				{
 					title: 1,
-					img: require("_a/img/help/paygetway.gif")
+					img:"http://219.153.20.218:8084/help/paygetway.gif"
 				},
 			]
 		},
@@ -286,14 +289,14 @@ export default {
 				},
 				{
 					title: 1,
-					img: require("_a/img/help/weituo-buy.gif")
+					img:"http://219.153.20.218:8084/help/weituo-buy.gif"
 				},
 				{
 					title: "我要出售"
 				},
 				{
 					title: 1,
-					img: require("_a/img/help/weituo-sell.gif")
+					img: "http://219.153.20.218:8084/help/weituo-sell.gif"
 				},
 			]
 		},
@@ -305,7 +308,7 @@ export default {
 				},
 				{
 					title: 1,
-					img: require("_a/img/help/pay.gif")
+					img: "http://219.153.20.218:8084/help/pay.gif"
 				},
 			]
 		},

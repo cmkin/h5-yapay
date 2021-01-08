@@ -115,7 +115,7 @@
 
 				&>li {
 					padding-bottom: 5px;
-					margin-bottom: 20px;
+					margin-bottom: 15px;
 					border-bottom: 1px solid #E3E3E3;
 
 					.t {
@@ -162,7 +162,7 @@
 					border: none;
 					text-align: center;
 					padding-bottom: 0;
-
+					padding-top: 15px;
 					svg {
 						//.hover(@blue, true);
 						transform: rotate(90deg);

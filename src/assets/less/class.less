@@ -70,9 +70,10 @@ a {
 	height: 40px;
 }
 .van-notify {
-	width: 40%;
-	top: 10%;
-	left: 30%;
+	width: 80%;
+	top: 11%;
+	left: 50%;
+	transform: translateX(-50%);
 	border-radius: 5px;
 }
 .van-notice-bar{
@@ -161,6 +162,16 @@ a {
 }
 
 @media (min-width: 1023px) {
+	.van-notify{
+		width: auto;
+		min-width: 20%;
+		max-width: 40%;
+	}
+	.van-number-keyboard{
+		width: 40%;
+		left: 30%;
+		border-radius: 10px;
+	}
 	.van-dropdown-item--down {
 		position: absolute;
 		top: 110% !important;

@@ -75,6 +75,10 @@ export default  {
 					to: '/help?id=0&childId=0'
 				}
 			],
+			xx:"消息中心",
+			down:"下载",
+			sd:"扫码下载APP",
+			mr:"更多客户端",
 			language: [{
 					title: "简体中文",
 					key: "zh",
@@ -111,6 +115,10 @@ export default  {
 			loginZc:{
 				list:[
 					{
+						text:'我的订单',
+						to:'/entrust'
+					},
+					{
 						text:'我的资产',
 						to:'/assets/assets',
 					},
@@ -137,11 +145,7 @@ export default  {
 					{
 						text:'账单',
 						to:'/assets/bill'
-					},
-					{
-						text:'我的委托单',
-						to:'/entrust'
-					},
+					}
 				]
 			},
 			logout:'您确定要退出登录么?',
@@ -149,7 +153,7 @@ export default  {
 			xz:"下载"
 		},
 		fonter: {
-			name: "YAPAY",
+			name: "YaPay",
 			c: '© YaPay.com 2020',
 			imgs:[
 				require("_a/img/f1.png"),
@@ -169,7 +173,7 @@ export default  {
 						},
 						{
 							title: '公司地址: </br> Creative Tower, Fujairah, UAE',
-							to: '/app/introduction'
+							url: 'http://yaotc.com/index.html#/app/introduction'
 						}
 					]
 				},
@@ -177,7 +181,7 @@ export default  {
 					title: '条款说明&服务',
 					items: [{
 							title: '关于我们',
-							to: '/app/introduction'
+							url: 'http://yaotc.com/index.html#/app/introduction'
 						},
 						{
 							title: '联系客服',
@@ -185,19 +189,19 @@ export default  {
 						},
 						{
 							title: '服务条款',
-							to: '/apphelp/help/problem?itemId=1&childId=100'
+							to: '/help?id=1&childId=100'
 						},
 						{
 							title: '隐私政策',
-							to: '/apphelp/help/problem?itemId=1&childId=101'
+							to: '/help?id=1&childId=101'
 						},
 						{
 							title: '帮助中心',
-							to: '/apphelp'
+							to: '/help?id=0&childId=0'
 						},
 						{
 							title: '执法请求指南',
-							to: '/apphelp/help/problem?itemId=3&childId=1000'
+							to: '/help?id=3&childId=1000'
 						}
 					]
 				},
@@ -315,10 +319,21 @@ export default  {
 			szzf:'设置支付密码',
 			srzf:'输入支付密码',
 			zfts:"您暂未设置支付密码，是否前去设置支付密码?",
+			srzf:"请输入支付密码",
+			srzfr:"请再次输入支付密码",
 			lcbyz:"两次密码不一致",
 			szcc:"设置成功",
 			xyyz:"本次登录需要验证码,已发送至{},请注意查收",
-			allpay:'您已经添加了所有的支付方式'
+			allpay:'您已经添加了所有的支付方式',
+			jyts:"交易协议",
+			jytsl:[
+				'<p style="color:#333;">为了您的交易及资产安全，请确认您已了解以下风险:</p></br>',
+				'<div style="color:#888; text-align: left;">1.已知晓交易一旦完成，资产将自动释放至您的钱包，后续任何操作带来的投资亏损均与YaPay平台无任何关系，YaPay不承担任何责任。</br></br>',
+				'2.承诺未参与资金盘/传销盘、洗钱、赌博等违法犯罪行为。</br></br>',
+				'3.承诺没有为他人代买提币、协助他人犯罪等行为。</br></br>',
+				'4.已知晓平台将会对交易行为进行严格的风控审查，承诺交易账户为您本人的账户，一旦发现风险，将会终止交易，并主动提交至您所在地区的司法机关调查。</br></div>'
+			]
+				
 		}
 	},
 	
@@ -416,7 +431,7 @@ export default  {
 		
 		
 		
-		hq: 'USDT行情',
+		hq: '主流行情',
 		
 		tableTitle: [
 			{
@@ -629,11 +644,11 @@ export default  {
 						key: 'nickname'
 					},
 					{
-						name: '付款方式',
+						name: '收款方式',
 						key: 'paytype'
 					},
 					{
-						name: '付款姓名',
+						name: '收款姓名',
 						key: 'name'
 					},
 					{
@@ -851,9 +866,9 @@ export default  {
 					}
 				}
 			},
-			//我的委托单
+			//我的订单
 			entrust:{
-				title:'我的委托单',
+				title:'委托单',
 				tabs:[
 					/* {
 						id:0,
@@ -942,6 +957,7 @@ export default  {
 			xm:'姓名',
 			zjh:'证件号',
 			qts:'去提升认证等级',
+			ywc:'已完成最高认证',
 			scz:'上传中...',
 			scs:'上传失败',
 			dq:[
@@ -1710,7 +1726,7 @@ export default  {
 	},
 	//我的订单
 	order:{
-		title:'我的订单',
+		title:'交易订单',
 		tabs:[
 			/* {
 				id:0,

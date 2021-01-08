@@ -17,7 +17,7 @@
 						<div v-if="item.type==2" :class="item.msgType==0?'me':'to'" class="">
 							<img :src="item.msgType==0? userInfos.headurl : to.headurl " alt="">
 							<span>
-								<img class="img" @click="showImg(getUrl(item.message).url)" :src="getUrl(item.message).url" :style="{width:getUrl(item.message).width+'px',height:getUrl(item.message).height+'px'}" alt="">
+								<img  class="img" @click="showImg(getUrl(item.message).url)" :src="getUrl(item.message).url" :style="{width:getUrl(item.message).width+'px',height:getUrl(item.message).height+'px'}" alt="">
 							</span>
 						</div>
 						<div v-if="item.type==3" class="time">
@@ -35,9 +35,9 @@
 			
 			<input class="input" @keyup.enter="send" v-model="input" name="" id="" cols="30" rows="10" :placeholder="$t('global.base.qsrnr')" />
 			<div class="btns">
-				<van-button @click="send" :type="input?'info':'default'">{{ $t('global.base.send') }}</van-button>
+				<van-button @click="send" :disabled="!input" type="info">{{ $t('global.base.send') }}</van-button>
 				<div>
-					<input type="file" ref="chatFile" @change="imgUpload">
+					<input accept="image/*" type="file" ref="chatFile" @change="imgUpload">
 					<svg t="1600762734579" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4645" width="48" height="48"><path d="M432.888596 655.403778 359.342127 553.64633C349.598306 540.164971 333.800712 540.16511 324.05699 553.64633L188.471613 741.23959C178.727792 754.72095 184.541661 765.649501 201.457031 765.649501L447.704979 765.649501 822.658642 765.649501C839.583509 765.649501 845.267916 754.74485 835.42945 741.293282L620.563382 447.519305C610.659782 433.978682 594.773609 434.067737 584.935143 447.519305L432.888596 655.403778 432.888596 655.403778Z" p-id="4646"></path><path d="M273.271058 347.873852a58.4 58.4 0 1 0 119.364471 0 58.4 58.4 0 1 0-119.364471 0Z" p-id="4647"></path><path d="M109.081528 198.668263 914.918473 198.668263C906.5326 198.668263 899.934531 191.991158 899.934531 183.80075L899.934531 840.19925C899.934531 831.991651 906.565377 825.331737 914.918473 825.331737L109.081528 825.331737C117.4674 825.331737 124.065469 832.008842 124.065469 840.19925L124.065469 183.80075C124.065469 192.008349 117.434624 198.668263 109.081528 198.668263ZM64.383234 840.19925C64.383234 864.812398 84.345684 885.013972 109.081528 885.013972L914.918473 885.013972C939.585548 885.013972 959.616766 864.894939 959.616766 840.19925L959.616766 183.80075C959.616766 159.187602 939.654316 138.986028 914.918473 138.986028L109.081528 138.986028C84.414452 138.986028 64.383234 159.105061 64.383234 183.80075L64.383234 840.19925Z" p-id="4648"></path></svg>
 				</div>
 			</div>
@@ -191,6 +191,9 @@
 		},
 		methods: {
 			send(){
+				if(this.input==''){
+					return
+				}
 				let obj = {
 					"friendid": this.to.friendid,
 					"message": this.input,
@@ -226,7 +229,10 @@
 					    formData.append("file",files);
 						
 					
-						
+					const toast  = this.$toast.loading({
+					  message: this.$t('global.base.loading'),
+					  forbidClick: true,
+					});	
 					this.$http.uploadFile(formData).then(res=>{
 						//上传成功
 						if(res.code==0){
@@ -248,6 +254,7 @@
 									socket.sendMessage(obj)
 									this.$refs.chatFile.value = ''
 									this.toBottom()
+									toast.clear();
 								}
 						}
 						
@@ -356,6 +363,7 @@
 			}
 		}
 		.input_buttom{
+			width: 100%;
 			padding: 15px;
 			box-sizing: border-box;
 			border-top: 1px solid #E3E3E3;
@@ -378,11 +386,15 @@
 				transform: translateY(-50%);
 			
 				&>div{
-					margin-left: 20px;
+					width: 30px;
+					height: 30px;
+					margin-left: 15px;
 					cursor: pointer;
-					position: relative;
-					top: 6px;
+					float: right;
+					margin-right: 15px;
 					display: inline-block;
+					overflow: hidden;
+					position: relative;
 					input{
 						position: absolute;
 						top: 0;
@@ -392,12 +404,10 @@
 						cursor: pointer;
 						opacity: 0;
 						z-index: 1;
-						width: 26px;
-						height: 26px;
 					}
 					svg{
-						width: 26px;
-						height: 26px;
+						width: 30px;
+						height: 30px;
 						cursor: pointer;
 					}
 				}
@@ -413,19 +423,16 @@
 			font-size: 12px;
 			padding: 0;
 			height: auto;
-			line-height: 100%;
+			
 			padding: 8px 12px;
-			position: relative;
-			top: -5px;
+			
 		}
 		.van-button--info{
 			font-size: 12px;
 			padding: 0;
 			height: auto;
-			line-height: 100%;
 			padding: 8px 12px;
-			position: relative;
-			top: -5px;
+			
 		}
 	}
 </style>

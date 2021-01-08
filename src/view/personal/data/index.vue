@@ -29,7 +29,8 @@
 					<span>{{ $t('personal.data.xm') }} &nbsp;&nbsp;&nbsp; {{userInfos.name}}</span>
 					<span>{{ $t('personal.data.zjh') }} &nbsp;&nbsp;&nbsp; {{userInfos.cardNumber}}</span>
 				</p>
-				<div class="r" @click="goRz()">{{ $t('personal.data.qts') }}</div>
+				<div class="r" @click="goRz()" v-if="userInfos.verifyLevel<2">{{ $t('personal.data.qts') }}</div>
+				<div class="r">{{ $t('personal.data.ywc') }}</div>
 			</li>
 			<li class="serve">
 				<span class="b">
@@ -236,7 +237,6 @@ export default {
 				transform: translateY(-50%);
 				color: @blue;
 				.hover;
-				font-size: 16px;
 			}
 		}
 		.serve{
@@ -287,8 +287,10 @@ export default {
 	.view_personal_data {
 		.base{
 			.lv{
+				position: relative;
 				.r{
-					top: 85%;
+					top: 22px;
+					transform: none;
 				}
 			}
 		}

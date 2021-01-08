@@ -275,6 +275,7 @@ export default {
 							border-right: 0;
 							display: inline-block;
 							width: 100%;
+							height: 41px;
 							&:focus {
 								border-color: @blue;
 							}
@@ -520,7 +521,7 @@ export default {
 	}
 	 .download_phone  .font p:first-child{
 		font-size: 16px;
-		margin-bottom: 10px;
+		padding-bottom: 5px;
 	}
 	 .download_phone .btns{
 		padding-top: 18px;

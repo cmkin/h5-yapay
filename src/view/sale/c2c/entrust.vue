@@ -1,6 +1,6 @@
 <template>
 	<div class="view_quickSale_c2c_entrust">
-		<header-top  :title="$t('quickSale.c2c.entrust.title')" rlink="/assets/order" :rtitle="$t('order.title')"></header-top> 
+		<header-top  :title2="$t('quickSale.c2c.entrust.title')" rlink="/assets/order" :rtitle="$t('order.title')"></header-top> 
 		<div class="global_main main">
 			<div class="tabs">
 				<div class="global_main">
@@ -446,6 +446,20 @@
 					.item:nth-child(2){
 						padding-top: 0 !important;
 					}
+				}
+			}
+		}
+	}
+</style>
+
+<style lang="less">
+	.view_quickSale_c2c_entrust{
+		.global_header_top{
+			.header{
+				.main{
+					.right{
+						float: left;
+					}	
 				}
 			}
 		}

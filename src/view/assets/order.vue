@@ -21,7 +21,7 @@
 				<ul class="title">
 					<li v-for="item in $t('order.tableTitle')">{{ item.title }}</li>
 				</ul>
-				<ul v-if="datas.length" class="item" v-for="item in datas">
+				<ul v-if="datas.length" @click="goOrder(item)" class="item" v-for="item in datas">
 					<div class="l">
 						<li class="xz" :class="{sell:item.type==1}">
 							<span class="o"> {{ item.type==0 ? $t('quickSale.c2c.entrust.m1') : $t('quickSale.c2c.entrust.m2')}} </span>
@@ -43,7 +43,7 @@
 						</li>
 					</div>
 					<div class="r">
-						<li class="cx" @click="goOrder(item)">
+						<li class="cx">
 							<i> {{$t('order.tableTitle')[4].title }}: </i>
 							<span>{{item.orderid}}</span>
 						</li>
@@ -332,6 +332,7 @@
 					
 				}
 				.item {
+					cursor: pointer;
 					padding: 15px 0;
 					color: rgba(51, 51, 51, 1);
 					&>div {
@@ -432,6 +433,20 @@
 							bottom: 12px;
 						}
 					}
+				}
+			}
+		}
+	}
+</style>
+
+<style lang="less">
+	.view_assets_order{
+		.global_header_top{
+			.header{
+				.main{
+					.right{
+						float: left;
+					}	
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 <template>
 	<div class="view_help">
 		<div class="header">
-			<div class="global_main">
+			<div class="">
 				<div class="muen" @click="show = true">
 					<van-icon name="wap-nav" size="30px" />
 				</div>
@@ -17,8 +17,8 @@
 		<div class="left">
 			<ul class="lists">
 				<li v-for="item in $t('help.meun')">
-					<span class="tt">{{item.title}}</span>
-					<ul class="child">
+					<span class="tt" @click="item.flag = !item.flag">{{item.title}} <van-icon :class="item.flag?'':'down'" name="arrow-down"  size="14"/> </span>
+					<ul class="child" v-if="item.flag">
 						<li @click="changeItem(item,child)" :class="child.id==two.id?'active':''" v-for="child in item.list">
 							{{child.title}}
 						</li>
@@ -66,8 +66,8 @@
 			<div class="left p_left">
 				<ul class="lists">
 					<li v-for="item in $t('help.meun')">
-						<span class="tt">{{item.title}}</span>
-						<ul class="child">
+						<span class="tt" @click="item.flag = !item.flag">{{item.title}} <van-icon :class="item.flag?'':'down'" name="arrow-down"  size="14"/></span>
+						<ul class="child" v-if="item.flag">
 							<li @click="changeItem(item,child)" :class="child.id==two.id?'active':''" v-for="child in item.list">
 								{{child.title}}
 							</li>
@@ -146,7 +146,8 @@ export default {
 		width: 100%;
 		background-color: #fff;
 		z-index: 100;
-		padding: 10px 0;
+		padding: 10px;
+		box-sizing: border-box;
 		background: #fff;
 		border-bottom: 1px solid #ccc;
 		.muen{
@@ -159,8 +160,8 @@ export default {
 			position: relative;
 			top: 5px;
 			img {
-				margin-right: 10px;
-				width: 40px;
+				width: 50px;
+				margin-top: -5px;
 				float: left;
 			}
 			span {
@@ -178,7 +179,8 @@ export default {
 		}
 	}
 	.left{
-		box-sizing: border-box;
+			border-right: 1px solid #ccc;
+			box-sizing: border-box;
 		    padding: 15px;
 		    width: 260px;
 		    height: 92vh;
@@ -188,12 +190,20 @@ export default {
 		    background: #fff;
 		    left: 0;
 		    transition: all .5s;
-		    z-index: 1200;
+		    z-index: 90;
 			.tt{
 				font-size: 18px;
 				font-family: 'sy-r';
 				padding: 8px 0;
 				display: block;
+				cursor: pointer;
+				i{
+					margin-left: 10px;
+					display: inline-block;
+				}
+				.down{
+					transform: rotate(-180deg);
+				}
 			}
 			.lists{
 				&>li{

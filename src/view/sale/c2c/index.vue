@@ -307,7 +307,7 @@
 
 		<!-- 发布委托单 -->
 
-		<dialogx class="order_form" v-model="orderForm.show" :title="orderForm.title" :fonter="false">
+		<dialogx class="order_form"  v-model="orderForm.show" :title="orderForm.title" :fonter="false">
 			<template v-slot:content>
 				<div class="main">
 					<div class="p">
@@ -619,13 +619,19 @@
 				@confirm="timeOk"
 			/>
 		</van-popup>
+		
+		
+		<set-pay-pwd v-model="payPsaawordFlag" v-if="payPsaawordFlag"></set-pay-pwd>
+		
 	</div>
 </template>
 
 <script>
+	import setPayPwd from '_c/common/setPayPassword'
 export default {
 	data() {
 		return {
+			payPsaawordFlag:false,
 			oldtops: 0,
 			ops: {
 				vuescroll: {
@@ -634,7 +640,7 @@ export default {
 				scrollPanel: {},
 				rail: {},
 				bar: {
-					background: '#e3e3e3'
+					background: 'transition'
 				}
 			},
 			tableLoding: false,
@@ -715,6 +721,9 @@ export default {
 			//数据列表
 			dataLists: []
 		};
+	},
+	components:{
+		setPayPwd
 	},
 	computed: {
 		payTypes() {
@@ -856,6 +865,13 @@ export default {
 	},
 	mounted() {
 		//= this.orderForm.buy.payType  = this.orderForm.sell.payType
+		if(this.$route.query.hasOwnProperty('open')){
+		
+			setTimeout(()=>{
+				this.openOrderForm()
+			},500)
+		}
+		
 		this.typeActive = this.$route.query.hasOwnProperty('type') ? Number(this.$route.query.type) : 0;
 		this.buy.active = this.$t('global.payType')[0].id;
 		this.sell.active = this.$t('global.payType').map(item => item.id);
@@ -1214,7 +1230,8 @@ export default {
 				  message: this.$t('global.base.zfts'),
 				})
 				  .then(() => {
-					this.$router.push('/editJPwd?type=0')
+					    this.payPsaawordFlag = true
+					//this.$router.push('/editJPwd?type=0')
 				  })
 				  .catch(() => {
 					// on cancel
@@ -1313,6 +1330,13 @@ export default {
 							type: 'success',
 							message: this.$t('global.base.fbcg')
 						});
+						return
+					}
+					if(res.code==600205){
+						this.$notify( this.$t('error.ERROR_'+res.code) + res.msg + "USDT" )
+						//this.$cheakError(res.code)
+					}else{
+						this.$notify( this.$t('error.ERROR_'+res.code) )
 					}
 				},
 				() => {
@@ -1837,6 +1861,7 @@ export default {
 	}
 
 	.order_form {
+	
 		.main {
 			position: relative;
 			& > .p {

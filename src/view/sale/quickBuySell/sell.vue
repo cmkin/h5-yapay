@@ -141,6 +141,8 @@ export default {
 			
 			if(!this.payType.length){
 				this.$notify(this.$t('global.base.nopp'))
+				this.sell.num=''
+				this.sell.price=''
 				return
 			}
 			
