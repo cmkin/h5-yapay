@@ -29,7 +29,7 @@
 										{{ userInfos.verifytype ==1 ? userInfos.phone : userInfos.mail }}
 									</i>
 									<span>
-										<send-code :urlType="userInfos.verifytyp" :data="{ account:userInfos.verifytype ==1 ? userInfos.phone : userInfos.mail,regionCode:userInfos.areacode,type:6 }" ></send-code>
+										<send-code :urlType="userInfos.verifytype" :data="{ account:userInfos.verifytype ==1 ? userInfos.phone : userInfos.mail,regionCode:userInfos.areacode,type:6 }" ></send-code>
 									</span>
 								</div>
 							</div>
@@ -54,7 +54,7 @@
 		
 		<dialogx v-model="rmm.show" :onOk="rmmOk" :title="$t('global.base.wxts')" >
 			<template v-slot:content>
-				<div class="rmts" v-html="$options.filters.language( $t('personal.editJPwd.rts') , userInfos.verifytype ==1 ? userInfos.phone : userInfos.mail ) "></div>
+				<div class="rmts" v-html="$options.filters.language( userInfos.verifytype ==1 ? $t('personal.editJPwd.rts') : $t('personal.editJPwd.rtsx') , userInfos.verifytype ==1 ? userInfos.phone : userInfos.mail ) "></div>
 			</template>
 		</dialogx>
 		

@@ -87,7 +87,8 @@ export default {
 			}
 			
 			let hasType = this.userInfos.payList.map(item=>Number(item.type))
-			return this.$t('global.payType').filter(item=>{
+			let allType= this.$copy(this.$t('global.payType'))
+			return allType.filter(item=>{
 				if(!this.payType.length){
 					return true
 				}
@@ -134,7 +135,7 @@ export default {
 				this.$notify(this.$t('global.base.dbxew')+this.sysInfos.config.coinLimit.sellmin+'-'+this.sysInfos.config.coinLimit.sellmax+this.sysInfos.hv.dw)
 				return
 			}
-			if(Number(this.sell.num)>this.userInfos.coin){
+			if(Number(this.sell.num).toFixed(4)>Number(this.userInfos.coin).toFixed(4)){
 				this.$notify(this.$t('global.base.kyye')+Number(this.userInfos.coin).toFixed(4)+"USDT")
 				return
 			}

@@ -35,7 +35,7 @@
 			star(){
 				
 				this.setp = 1
-				this.$http.sendSmsCode(this.urlType,{
+				this.$http.sendSmsCode(Number(this.urlType),{
 					...this.data
 				}).then((res)=>{
 					if(res.code==0){

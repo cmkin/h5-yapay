@@ -12,7 +12,8 @@ import '@vant/touch-emulator';
 import '_a/css/reset.css'
 import '_a/less/class.less'
 
-
+//ie
+import './ie'
 
 //插件引入
 import vuescroll from 'vuescroll';

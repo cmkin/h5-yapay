@@ -293,6 +293,7 @@ export default {
 		messageFlag() {
 			this.loginok.flag = false;
 			this.loginZc.flag = false;
+			this.download  = false
 			this.message.flag = !this.message.flag;
 			this.$refs.headerselect.open(false, false);
 		},
@@ -300,17 +301,20 @@ export default {
 			this.loginok.flag = false;
 			this.loginZc.flag = false;
 			this.message.flag = false;
+			this.download  = false
 		},
 		loginOkFlag() {
 			this.loginok.flag = !this.loginok.flag;
 			this.loginZc.flag = false;
 			this.message.flag = false;
+			this.download  = false
 			this.$refs.headerselect.open(false, false);
 		},
 		loginZcFlag() {
 			this.loginZc.flag = !this.loginZc.flag;
 			this.loginok.flag = false;
 			this.message.flag = false;
+			this.download  = false
 			this.$refs.headerselect.open(false, false);
 		},
 		changeLogMeun() {},
@@ -626,7 +630,7 @@ export default {
 					z-index: 10;
 					right: 0;
 					top: 55px;
-					box-shadow: 0 0 1px 2px #eee;
+					box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
 					border-radius: 2px;
 					background-color: #fff;
 					color: #333;

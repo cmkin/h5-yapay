@@ -1165,7 +1165,7 @@ export default {
 			this.orderForm.wtType = this.userInfos.type == 2 ? 1 : 2;
 			//重置数据
 			this.orderForm.buy = {
-				payType:this.$t('global.payType').map(item => item.id), //this.$t('global.payType').map(item => item.id),
+				payType:[...this.$t('global.payType').map(item => item.id)], //this.$t('global.payType').map(item => item.id),
 				num: '',
 				price: '',
 				value: '',

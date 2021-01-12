@@ -52,6 +52,8 @@
 					return  (Number(value)/1000).toFixed(2) + "K"
 				}else if(value.length<=9){
 					return  (Number(value)/1000000).toFixed(2) + "M"
+				}else if(value.length<=12){
+					return  (Number(value)/1000000000).toFixed(2) + "B"
 				}else{
 					return value
 				}

@@ -60,8 +60,10 @@
 		methods:{
 			inputChange(e){
 				this.datas.file = e.target.files[0]
+				if(this.datas.file){
+					this.afterRead(this.datas)
+				}
 				
-				this.afterRead(this.datas)
 			}
 		}
 	}

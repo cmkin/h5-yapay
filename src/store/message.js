@@ -28,7 +28,9 @@ export default {
 						state.newType.splice(state.newType.indexOf(infos.type), 1)
 					}
 				} else {
-					state.newType.push(infos.type)
+					if(!infos.delete){
+						state.newType.push(infos.type)
+					}
 				}
 			}
 
