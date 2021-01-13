@@ -243,11 +243,14 @@ export default {
 	},
 	methods: {
 		messagem(type,item) {
-			this.$store.commit('updateMessage',{
-				type:item.id,
-				delete:true,
-				isNew:true
-			})
+			if(type!=0){
+				this.$store.commit('updateMessage',{
+					type:item.id,
+					delete:true,
+					isNew:true
+				})
+			}
+			
 			this.$router.push({
 				path: '/message',
 				query: {
