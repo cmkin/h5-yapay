@@ -34,7 +34,6 @@ const sql = {
 		userid = this.$getToken(1)
 
 		Idb(config).then(db => {
-
 			student_db = db
 			success(sql)
 		})

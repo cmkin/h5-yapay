@@ -7,8 +7,8 @@
 			<i v-else class="iconfont icon-shangchuan"></i>
 			<input ref="upload" @change="inputChange" type="file" :accept="accept">
 			<div class="ts" v-if="datas.status == 'uploading' || datas.status == 'failed'">
-				<van-loading color="#fff" v-if="datas.status == 'uploading'" />
-				<van-icon name="close" color="#fff" v-if="datas.status == 'failed'" />
+				<van-loading color="#fff"  v-if="datas.status == 'uploading'" />
+				<van-icon name="close" color="#fff" @click="reload" v-if="datas.status == 'failed'" />
 				<p>{{datas.message}}</p>
 			</div>
 		</div>
@@ -64,6 +64,10 @@
 					this.afterRead(this.datas)
 				}
 				
+			},
+			reload(){
+				this.datas.status = ''
+				this.$refs.upload.value = ''
 			}
 		}
 	}
@@ -108,8 +112,8 @@
 				position: absolute;
 				left: 50%;
 				top: 50%;
-				transform: translate(-50%,-50%);
-				font-size: 35px;
+				transform: translate(-50%,-20%);
+				font-size: 25px;
 				text-align: center;
 				color: @blue;
 				z-index: 1;

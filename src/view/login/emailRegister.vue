@@ -32,6 +32,11 @@
 				</i>
 			</li>
 			
+			<li>
+				<span>{{ $t('login.yqm') }}</span>
+				<input v-model="form.referralcode" type="text" :placeholder="$t('global.qsr') + $t('login.yqm') +'('+ $t('global.base.xt') +')' " />
+			</li>
+			
 		</ul>
 		
 		<div class="btns">
@@ -68,7 +73,8 @@
 					currency:1,
 					password:'',
 					email:'',
-					verifyCode:''
+					verifyCode:'',
+					referralcode:''
 				},
 				
 			}
@@ -76,7 +82,7 @@
 		computed:{
 			isSend(){
 				for(let i in this.form){
-					if(this.form[i] == ''){
+					if(this.form[i] == '' && i!='referralcode'){
 						return true
 					}
 				}
@@ -85,7 +91,7 @@
 		},
 		mounted() {
 			this.language.active = this.$t('global.header.language')[0].id;
-			
+			this.form.referralcode = this.$route.query.hasOwnProperty("referralcode")?this.$route.query.referralcode:''
 		},
 		methods:{
 			golink(type){

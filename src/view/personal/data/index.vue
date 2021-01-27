@@ -30,7 +30,7 @@
 					<span>{{ $t('personal.data.zjh') }} &nbsp;&nbsp;&nbsp; {{userInfos.cardNumber}}</span>
 				</p>
 				<div class="r" @click="goRz()" v-if="userInfos.verifyLevel<2">{{ $t('personal.data.qts') }}</div>
-				<div class="r">{{ $t('personal.data.ywc') }}</div>
+				<div class="r" style="cursor: default;" v-if="userInfos.verifyLevel==2">{{ $t('personal.data.ywc') }}</div>
 			</li>
 			<li class="serve">
 				<span class="b">

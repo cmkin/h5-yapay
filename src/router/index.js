@@ -221,6 +221,13 @@ const routes = [{
 				}
 			},
 			{
+				path:'invitation',
+				component: () => import('_v/personal/other/invitation'),
+				meta: {
+					title: "邀请好友"
+				}
+			},
+			{
 				path: 'editLPwd',
 				component: () => import('_v/personal/other/editLPwd'),
 				meta: {

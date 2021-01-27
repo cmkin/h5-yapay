@@ -359,6 +359,12 @@ const assets = {
 		return post("payuserorder/cancelOrder",{
 			data:data
 		})
+	},
+	//获取邀请信息
+	getUserProfit(data){
+		return get("payuser/getUserProfit",{
+			data:data
+		})
 	}
 }
 

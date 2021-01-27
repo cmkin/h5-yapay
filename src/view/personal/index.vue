@@ -139,6 +139,7 @@
 				margin-top: 20px;
 				ul{
 					display: block;
+					width: 100%;
 					li{
 						float: left;
 						width: 50%;

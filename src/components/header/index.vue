@@ -49,7 +49,7 @@
 					</div>
 
 					
-					<div class="download" @click="downloadM">
+					<div class="download" @click.stop="downloadM">
 						<span>{{ $t('global.header.down') }}</span>
 						<transition name="top" mode="out-in">
 						<div class="code" v-if="download">
@@ -185,6 +185,7 @@ export default {
 			this.loginok.flag = false;
 			this.loginZc.flag = false;
 			this.message.flag = false;
+			this.download = false
 		});
 		//已经登录成功之后的数据
 	},
@@ -290,6 +291,7 @@ export default {
 		downloadM(){
 			this.download = !this.download;
 			this.loginok.flag = false;
+			this.loginZc.flag = false;
 			this.message.flag = false;
 			this.$refs.headerselect.open(false, false);
 		},
@@ -489,7 +491,7 @@ export default {
 					.hover;
 					& > ul {
 						width: 170px;
-						top: 260%;
+						top: 240%;
 						margin-bottom: 0;
 
 						.router-link-active {
@@ -503,7 +505,7 @@ export default {
 					.select_down_noicon;
 					& > ul {
 						width: 170px;
-						top: 260%;
+						top: 240%;
 						.router-link-active {
 							border-color: @blue;
 							color: @blue;
@@ -547,7 +549,7 @@ export default {
 				}
 				.message_alert {
 					position: absolute;
-					top: 220%;
+					top: 200%;
 					right: 0;
 					width: 288px;
 					background: #ffffff;
@@ -806,7 +808,7 @@ export default {
 	}
 	.language {
 		.defalut_s ul {
-			top: 260%;
+			top: 240%;
 		}
 	}
 }

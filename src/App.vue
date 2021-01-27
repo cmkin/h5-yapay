@@ -1,7 +1,6 @@
 <template>
 	<div id="app">
 		<transition name="left" mode="out-in"><router-view></router-view></transition>
-
 	</div>
 </template>
 
@@ -12,19 +11,17 @@ export default {
 	name: 'App',
 	components: {},
 	data() {
-		return {
-			
-		};
+		return {};
 	},
 	mounted() {
-		
 		this.appInit();
-
+		
+		
 		document.body.onbeforeunload = () => {
 			//页面关闭之前，保存聊天记录
 			let chats = this.$store.state.chat.lists;
 			sql.update(chats);
-		}; 
+		};
 	},
 	watch: {},
 	methods: {
@@ -45,15 +42,16 @@ export default {
 					}
 				});
 			});
-			
-			if(!this.$getToken()){
-				this.$http.getCoinPrice({
-					currency:this.userInfos.currency
-				}).then(res=>{
-					this.$store.commit('updateUserPrice', res.data)
-				})
+
+			if (!this.$getToken()) {
+				this.$http
+					.getCoinPrice({
+						currency: this.userInfos.currency
+					})
+					.then(res => {
+						this.$store.commit('updateUserPrice', res.data);
+					});
 			}
-			
 		},
 		//获取用户信息
 		getUserInfo() {
