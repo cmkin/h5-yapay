@@ -220,6 +220,7 @@
 		}
 		.rz_lv{
 			padding: 20px;
+			padding-bottom: 40px;
 			.lv{
 				margin-bottom: 5px;
 				color: #666666;
@@ -261,7 +262,7 @@
 				.r{
 					position: absolute;
 					right: 0;
-					bottom: -20px;
+					text-align: right;
 					color: @blue;
 				}
 			}

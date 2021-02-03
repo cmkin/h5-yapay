@@ -388,10 +388,10 @@
 				&>div{
 					width: 30px;
 					height: 30px;
-					margin-left: 15px;
+					//margin-left: 15px;
 					cursor: pointer;
 					float: right;
-					margin-right: 15px;
+					margin-right: 10px;
 					display: inline-block;
 					overflow: hidden;
 					position: relative;

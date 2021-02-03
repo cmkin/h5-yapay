@@ -56,7 +56,7 @@ module.exports = {
 	 devServer: {
 	   https:false,
 	   proxy: 'http://219.153.20.218:8082/',
-	   //proxy: 'http://192.168.1.6:8082/',
+	   //proxy: 'https://fanyi-api.baidu.com/',
 	 }
 
 }

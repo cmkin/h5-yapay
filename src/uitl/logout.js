@@ -14,7 +14,7 @@ export default function(){
 		socket.close()
 		//清除user信息
 		this.$store.commit('updateUserInfo',false)
-		
+		localStorage.setItem('locale',localStorage.getItem('locale'))
 		
 		location.href = '/#/login-register?type=0'
 		location.reload();

@@ -66,6 +66,13 @@ components.forEach(item => {
 
 /////////////////////////自定义方法//////////
 
+//选择语言
+Vue.prototype.$locale = function(type){
+	localStorage.setItem('locale',type)
+	//this.$i18n.locale = localStorage.getItem('locale') ? localStorage.getItem('locale') : 'zh'
+	location.reload()
+}
+
 //深拷贝
 
 Vue.prototype.$copy = function (obj){

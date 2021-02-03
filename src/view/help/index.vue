@@ -100,7 +100,7 @@ export default {
 		};
 	},
 	mounted() {
-		this.language.active = this.$t('global.header.language')[0].id;
+		this.language.active = localStorage.getItem("locale") ? localStorage.getItem("locale")=='zh' ?0:1  : this.$t('global.header.language')[0].id;
 		this.filterItem()
 	},
 	watch:{
@@ -110,7 +110,10 @@ export default {
 	},
 	methods: {
 		languageFlag() {},
-		changeLanguage() {},
+		changeLanguage(id) {
+			this.language.active = id;
+			this.$locale(id==0?'zh':'en');
+		},
 		changeItem(item,child){
 			this.$router.replace({
 				path:"/help",

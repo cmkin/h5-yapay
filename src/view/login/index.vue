@@ -104,7 +104,7 @@
 			},
 			//切换语言
 			changeLanguage(id) {
-				
+				this.$locale(id==0?'zh':'en');
 				return
 				if(id==0){
 					this.$i18n.locale='zh'
@@ -161,7 +161,7 @@
 					align-items: center;
 					&>span{
 						width: 70px;
-						letter-spacing: 5px;
+						
 						text-align: right;
 						box-sizing: border-box;
 						position: absolute;

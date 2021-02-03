@@ -1,5 +1,6 @@
 <template>
 	<div id="app">
+		
 		<transition name="left" mode="out-in"><router-view></router-view></transition>
 	</div>
 </template>
@@ -11,11 +12,12 @@ export default {
 	name: 'App',
 	components: {},
 	data() {
-		return {};
+		return {
+			
+		};
 	},
 	mounted() {
 		this.appInit();
-		
 		
 		document.body.onbeforeunload = () => {
 			//页面关闭之前，保存聊天记录
@@ -29,6 +31,7 @@ export default {
 		appInit() {
 			this.getrate();
 			this.getUserInfo();
+			this.$i18n.locale = localStorage.getItem('locale') ? localStorage.getItem('locale') : 'zh'
 		},
 		//获取汇率
 		getrate() {

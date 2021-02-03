@@ -8,8 +8,8 @@
 			<span v-if="setp==3">{{ $t('login.reszmm') }}</span>
 		</div>
 		<ul class="from">
-			<li v-if="setp==0" style="padding-left: 90px;">
-				<span style="width: 90px;letter-spacing: 0;">{{ $t('login.zhp') }}</span>
+			<li v-if="setp==0" style="padding-left: 100px;">
+				<span style="width: 100px;letter-spacing: 0;">{{ $t('login.zhp') }}</span>
 				<input  type="text" v-model="form.phone" :placeholder="$t('global.qsr') + $t('login.zhp')" />
 			</li>
 			<li v-if="setp==1">

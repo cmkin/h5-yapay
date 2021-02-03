@@ -179,7 +179,7 @@ export default {
 		};
 	},
 	mounted() {
-		this.language.active = this.$t('global.header.language')[0].id;
+		this.language.active = localStorage.getItem("locale") ? localStorage.getItem("locale")=='zh' ?0:1  : this.$t('global.header.language')[0].id;
 		
 		document.addEventListener('click', e => {
 			this.loginok.flag = false;
@@ -270,7 +270,7 @@ export default {
 		},
 		changeLanguage(id) {
 			this.language.active = id;
-			
+			this.$locale(id==0?'zh':'en');
 			return;
 			if (id == 0) {
 				this.$i18n.locale = 'zh';
@@ -630,7 +630,7 @@ export default {
 				.code{
 					padding: 10px;
 					box-sizing: border-box;
-					width: 240px;
+					width: 250px;
 					position: absolute;
 					z-index: 10;
 					right: 0;

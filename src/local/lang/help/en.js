@@ -3,6 +3,7 @@ export default{
 	meun: [{
 		title: "FAQ",
 		id: 0,
+		flag:true,
 		list: [{
 				id: 0,
 				title: "What is USDT?"
@@ -61,6 +62,7 @@ export default{
 	}, {
 		title: "Terms of agreement",
 		id: 1,
+		flag:true,
 		list: [{
 			id: 100,
 			title: "User service agreement"
@@ -82,6 +84,7 @@ export default{
 	{
 		title:"Law Enforcement Request Guide",
 		id:3,
+		flag:true,
 		list:[
 			{
 				id:1000,
@@ -108,13 +111,13 @@ export default{
 				font: `Enter the “Home Page” of YaPay mobile terminal → click “I want to buy""→ enter the quantity or amount you need to buy → click “Buy Now” → select the payment method → confirm the purchase information → click “I have paid, please release currencies” after the payment→ the seller will confirm the receipt of your payment and put the currencies into your account.`
 			}, {
 				title: 1,
-				img: i("f7bae")
+				img: "http://219.153.20.218:8084/help/buy-quick_e.gif"
 			}, {
 				title: "2. Self-selection area to buy coin",
 				font: 'On the YaPay mobile terminal, "Home" → click "Transaction" at the bottom → switch to the self-selection area at the top → select a seller under the "I want to buy" list → click "Go to buy" → enter the quantity or amount you need to buy → click "Immediately Purchase" → enter the pending payment interface, click "I have paid, please deposit coins" → the seller will confirm receipt of your payment and put the coins into your account.'
 			}, {
 				title: 1,
-				img: i("zxqe")
+				img: "http://219.153.20.218:8084/help/buy-self_e.gif"
 			}, {
 				title: 2,
 				font: "<b>Note：</b> You need to read and agree to the transaction instructions before you can make a purchase. The YaPay transaction system has a strict risk control mechanism. When YaPay finds illegal behaviors such as gambling, money laundering and fund dish, we will take the initiative to submit the information to the corresponding law enforcement department. If you cancel three orders a day, you will be deemed as malicious cancellation, and you will be punished for not trading for 24 hours."
@@ -128,7 +131,7 @@ export default{
 				},
 				{
 					title: 1,
-					img: i("sellquicke")
+					img: "http://219.153.20.218:8084/help/sell-quick_e.gif"
 				},
 				{
 					title: "2. Self-selection area to sell coin",
@@ -136,7 +139,7 @@ export default{
 				},
 				{
 					title: 1,
-					img: i("selllselfe")
+					img: "http://219.153.20.218:8084/help/selll-self_e.gif"
 				},
 				{
 					title: 2,
@@ -158,7 +161,7 @@ export default{
 				},
 				{
 					title: 1,
-					img: i("tibie")
+					img: "http://219.153.20.218:8084/help/tibi_e.gif"
 				},
 				{
 					title: 2,
@@ -258,7 +261,7 @@ export default{
 			},
 			{
 				title: 1,
-				img: i("paygetwaye")
+				img:"http://219.153.20.218:8084/help/paygetway_e.gif"
 			},
 			]
 		},
@@ -305,14 +308,14 @@ export default{
 			},
 			{
 				title: 1,
-				img: i("weituobuye")
+				img: "http://219.153.20.218:8084/help/weituo-buy_e.gif"
 			},
 			{
 				title:"I want to sell"
 			},
 			{
 				title: 1,
-				img: i("weituoselle")
+				img: "http://219.153.20.218:8084/help/weituo-sell_e.gif"
 			},
 			]
 		},
@@ -324,7 +327,7 @@ export default{
 			},
 			{
 				title: 1,
-				img: i("paye")
+				img: "http://219.153.20.218:8084/help/pay_e.gif"
 			},
 			]
 		},

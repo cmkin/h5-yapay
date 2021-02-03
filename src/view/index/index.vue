@@ -297,7 +297,7 @@ export default {
 
 					.btn {
 						display: inline-block;
-						width: auto;
+						width: 100px;
 						span {
 							font-size: 12px;
 						}

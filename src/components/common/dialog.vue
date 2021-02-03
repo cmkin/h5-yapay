@@ -162,7 +162,6 @@ export default {
 				text-align: right;
 				position: relative;
 				& > button {
-					letter-spacing: 2px;
 					font-size: 14px;
 					padding: 0 16px;
 					height: 32px;
